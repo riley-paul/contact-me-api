@@ -14,7 +14,7 @@ export const UserMenu: React.FC<Props> = ({ user }) => {
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger>
-        <button className="hover:bg-gray-3 flex cursor-pointer items-center gap-3 p-3 transition-colors">
+        <button className="hover:bg-accent-2 flex cursor-pointer items-center gap-3 p-3 transition-colors">
           <Avatar
             src={user.avatarUrl ?? ""}
             alt={user.name}
