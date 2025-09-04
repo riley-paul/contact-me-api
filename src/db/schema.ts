@@ -41,23 +41,3 @@ export const UserSession = sqliteTable("userSession", {
   expiresAt: integer({ mode: "timestamp_ms" }).notNull(),
   ...timeStamps,
 });
-
-export const Drawing = sqliteTable("drawing", {
-  id,
-  userId,
-  name: text().notNull().default("Untitled"),
-  parentFolderId: text().references(() => Folder.id, { onDelete: "set null" }),
-  fileSize: integer().default(0),
-  savedAt: text(),
-  ...timeStamps,
-});
-
-export const Folder = sqliteTable("folder", {
-  id,
-  userId,
-  name: text().notNull().default("New Folder"),
-  parentFolderId: text().references((): AnySQLiteColumn => Folder.id, {
-    onDelete: "set null",
-  }),
-  ...timeStamps,
-});

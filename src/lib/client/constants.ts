@@ -1,1 +1,1 @@
-export const ACCENT_COLOR = "blue" as const;
+export const ACCENT_COLOR = "iris" as const;

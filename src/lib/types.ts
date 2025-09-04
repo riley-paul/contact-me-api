@@ -1,4 +1,4 @@
-import { Drawing, Folder, User } from "@/db/schema";
+import { User } from "@/db/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
