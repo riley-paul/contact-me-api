@@ -9,7 +9,6 @@ const RadixProvider: React.FC<ThemeProps> = (props) => {
       accentColor={ACCENT_COLOR}
       grayColor="gray"
       radius="large"
-      hasBackground={false}
       {...props}
     />
   );
