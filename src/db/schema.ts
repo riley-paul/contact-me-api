@@ -1,9 +1,4 @@
-import {
-  integer,
-  sqliteTable,
-  text,
-  type AnySQLiteColumn,
-} from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 const id = text("id")
   .primaryKey()
@@ -12,6 +7,10 @@ const id = text("id")
 const userId = text()
   .notNull()
   .references(() => User.id, { onDelete: "cascade" });
+
+const projectId = text()
+  .notNull()
+  .references(() => Project.id, { onDelete: "cascade" });
 
 const timeStamps = {
   createdAt: text()
@@ -39,5 +38,33 @@ export const UserSession = sqliteTable("userSession", {
   id,
   userId,
   expiresAt: integer({ mode: "timestamp_ms" }).notNull(),
+  ...timeStamps,
+});
+
+export const Project = sqliteTable("project", {
+  id,
+  userId,
+  name: text().notNull(),
+  description: text(),
+  identifier: text().notNull(),
+  repoUrl: text(),
+  liveUrl: text(),
+  ...timeStamps,
+});
+
+export const Message = sqliteTable("message", {
+  id,
+  projectId,
+  email: text().notNull(),
+  name: text().notNull(),
+  content: text().notNull(),
+  ...timeStamps,
+});
+
+export const ProjectEmails = sqliteTable("projectEmails", {
+  id,
+  projectId,
+  email: text().notNull(),
+  name: text().notNull(),
   ...timeStamps,
 });
