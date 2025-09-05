@@ -11,6 +11,7 @@ const zEnv = z.object({
   SITE: z.url().default("http://localhost:4321"),
   DATABASE_URL: z.url().default(""),
   DATABASE_AUTH_TOKEN: z.string().optional(),
+  RESEND_API_KEY: z.string(),
 });
 
 export type Environment = z.infer<typeof zEnv> & Env;
@@ -19,7 +20,7 @@ export function parseEnv(data: any) {
   const { data: env, error } = zEnv.safeParse(data);
   if (error) {
     const errorMessage = `Invalid environment variables:\n${z.prettifyError(
-      error
+      error,
     )}`;
     throw new Error(errorMessage);
   }

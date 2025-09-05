@@ -11,7 +11,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside className="bg-panel border-accent-7 flex h-screen w-[250px] flex-col border-r">
-      <header className="flex h-12 items-center px-3">
+      <header className="flex h-14 items-center px-3">
         <Logo />
       </header>
       <Separator size="4" />
