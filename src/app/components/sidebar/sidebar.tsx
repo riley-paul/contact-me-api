@@ -1,4 +1,4 @@
-import { Button } from "@radix-ui/themes";
+import { Button, Separator } from "@radix-ui/themes";
 import React from "react";
 import Logo from "../logo";
 import UserMenu from "./user-menu";
@@ -10,18 +10,20 @@ const AppSidebar: React.FC = () => {
   if (!user) return null;
 
   return (
-    <aside className="flex h-screen w-[250px] flex-col px-3">
-      <header className="flex h-12 items-center">
+    <aside className="bg-panel border-accent-7 flex h-screen w-[250px] flex-col border-r">
+      <header className="flex h-12 items-center px-3">
         <Logo />
       </header>
-      <article className="flex flex-1 flex-col gap-1">
-        <Button variant="ghost" className="justify-start! text-left! m-0!">
+      <Separator size="4" />
+      <article className="flex flex-1 flex-col gap-1 overflow-y-auto p-3">
+        <Button variant="ghost" className="m-0! justify-start! text-left!">
           Messages
         </Button>
-        <Button variant="ghost" className="justify-start! text-left! m-0!">
+        <Button variant="ghost" className="m-0! justify-start! text-left!">
           Projects
         </Button>
       </article>
+      <Separator size="4" />
       <footer>
         <UserMenu user={user} />
       </footer>

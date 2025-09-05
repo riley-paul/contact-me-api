@@ -1,5 +1,5 @@
 import type { UserSelect } from "@/lib/types";
-import { Avatar, DropdownMenu, Text } from "@radix-ui/themes";
+import { Avatar, Button, DropdownMenu, Text } from "@radix-ui/themes";
 import { ChevronsUpDownIcon, LogOutIcon } from "lucide-react";
 
 type Props = { user: UserSelect };
@@ -14,15 +14,21 @@ export const UserMenu: React.FC<Props> = ({ user }) => {
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger>
-        <button className="hover:bg-accent-2 flex cursor-pointer items-center gap-3 p-3 transition-colors">
+        <Button
+          variant="ghost"
+          radius="none"
+          color="gray"
+          className="m-0! box-border! w-full! gap-2! px-3! py-2!"
+        >
           <Avatar
             src={user.avatarUrl ?? ""}
             alt={user.name}
             fallback={fallback}
+            size="2"
             radius="full"
           />
           <div className="grid flex-1 text-left">
-            <Text size="2" weight="medium" truncate>
+            <Text size="2" weight="medium" className="text-gray-12" truncate>
               {user.name}
             </Text>
             <Text size="1" color="gray" truncate>
@@ -30,8 +36,9 @@ export const UserMenu: React.FC<Props> = ({ user }) => {
             </Text>
           </div>
           <ChevronsUpDownIcon className="size-4 opacity-70" />
-        </button>
+        </Button>
       </DropdownMenu.Trigger>
+
       <DropdownMenu.Content side="right" className="grid gap-3">
         <header className="flex items-center gap-2 p-2">
           <Avatar
@@ -39,6 +46,7 @@ export const UserMenu: React.FC<Props> = ({ user }) => {
             alt={user.name}
             fallback={fallback}
             radius="full"
+            size="4"
           />
           <div className="grid flex-1 leading-0.5">
             <Text weight="medium" truncate>

@@ -13,7 +13,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootComponent() {
   return (
-    <main className="container2 flex">
+    <main className="flex">
       <AppSidebar />
       <Outlet />
     </main>
