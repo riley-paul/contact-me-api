@@ -31,3 +31,8 @@
 .container2 {
   @apply mx-auto max-w-5xl px-4 sm:px-6 lg:px-8;
 }
+
+body,
+html {
+  overscroll-behavior: none;
+}
