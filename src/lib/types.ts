@@ -1,6 +1,6 @@
-import { User } from "@/db/schema";
+import { Message, Project, User } from "@/db/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod/v4";
+import { z } from "astro/zod";
 
 export const zUserSelect = createSelectSchema(User);
 export const zUserInsert = createInsertSchema(User);
@@ -12,3 +12,13 @@ export type UserSessionInfo = {
   userId: string;
   expiresAt: Date;
 };
+
+export const zProjectSelect = createSelectSchema(Project);
+export const zProjectInsert = createInsertSchema(Project);
+export type ProjectSelect = z.infer<typeof zProjectSelect>;
+export type ProjectInsert = z.infer<typeof zProjectInsert>;
+
+export const zMessageSelect = createSelectSchema(Message);
+export const zMessageInsert = createInsertSchema(Message);
+export type MessageSelect = z.infer<typeof zMessageSelect>;
+export type MessageInsert = z.infer<typeof zMessageInsert>;

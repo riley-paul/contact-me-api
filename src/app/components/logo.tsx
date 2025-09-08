@@ -9,7 +9,7 @@ const Logo: React.FC = () => {
       <span className="flex items-center gap-1.5">
         <SendIcon className="text-accent-10 size-5" />
         <Heading size="3" weight="bold">
-          Contact Me
+          Contactulator
         </Heading>
       </span>
     </Link>
