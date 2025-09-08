@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import AlertSystem from "@/app/components/alert-system/alert-system";
 import RadixProvider from "@/app/components/radix-provider";
 import CustomToaster from "@/app/components/custom-toaster";
+import { Spinner } from "@radix-ui/themes";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 1000 * 60 * 5 } },
@@ -30,6 +31,11 @@ const router = createRouter({
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
   scrollRestoration: true,
+  defaultPendingComponent: () => (
+    <div className="flex h-full w-full items-center justify-center">
+      <Spinner />
+    </div>
+  ),
 });
 
 declare module "@tanstack/react-router" {
