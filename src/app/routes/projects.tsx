@@ -1,6 +1,14 @@
-import { Heading, IconButton, Separator, Tooltip } from "@radix-ui/themes";
+import {
+  Button,
+  Heading,
+  IconButton,
+  ScrollArea,
+  Separator,
+  TextField,
+  Tooltip,
+} from "@radix-ui/themes";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, SearchIcon } from "lucide-react";
 
 export const Route = createFileRoute("/projects")({
   component: RouteComponent,
@@ -13,14 +21,20 @@ function RouteComponent() {
         <Heading as="h2" size="4">
           Projects
         </Heading>
-        <Tooltip content="New Project" side="left">
-          <IconButton variant="surface" radius="full">
-            <PlusIcon className="size-4" />
+        <section className="flex items-center gap-2">
+          <IconButton variant="soft">
+            <SearchIcon className="size-4" />
           </IconButton>
-        </Tooltip>
+          <Button variant="solid">
+            <PlusIcon className="size-4" />
+            Add Project
+          </Button>
+        </section>
       </header>
       <Separator size="4" />
-      <Outlet />
+      <div className="h-[calc(100vh-3.5rem-1px)] overflow-y-auto">
+        <Outlet />
+      </div>
     </div>
   );
 }

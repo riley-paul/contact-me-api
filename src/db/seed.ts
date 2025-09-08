@@ -23,7 +23,7 @@ export default async function seed() {
   const projects = await db
     .insert(Project)
     .values(
-      Array.from({ length: 10 }).map((_, idx) => ({
+      Array.from({ length: 30 }).map((_, idx) => ({
         userId,
         identifier: `my-project-${idx + 1}`,
         name: `My Project ${idx + 1}`,

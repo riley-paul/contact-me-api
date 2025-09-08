@@ -17,6 +17,7 @@ const columns = [
   columnHelper.accessor("identifier", {
     header: "Identifier",
     cell: (info) => <Text className="font-mono">{info.getValue()}</Text>,
+    size: 100,
   }),
   columnHelper.accessor("name", {
     header: "Name",
