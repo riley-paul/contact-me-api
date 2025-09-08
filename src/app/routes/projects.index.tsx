@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ProjectList from "../components/projects/project-list";
 import {
   createColumnHelper,
   getCoreRowModel,
@@ -10,6 +9,7 @@ import Table from "../components/table";
 import { qProjects } from "@/lib/client/queries";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Text } from "@radix-ui/themes";
+import EmptyState from "../components/empty-state";
 
 const columnHelper = createColumnHelper<ProjectSelect>();
 
@@ -31,19 +31,21 @@ const columns = [
 
 export const Route = createFileRoute("/projects/")({
   component: RouteComponent,
-  loader: ({ context }) => {
-    context.queryClient.ensureQueryData(qProjects);
-  },
 });
 
 function RouteComponent() {
-  const { data } = useSuspenseQuery(qProjects);
+  const { search } = Route.useSearch();
+  const { data } = useSuspenseQuery(qProjects(search));
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (data.length === 0) {
+    return <EmptyState isSearching={Boolean(search)} />;
+  }
 
   return <Table table={table} />;
 }

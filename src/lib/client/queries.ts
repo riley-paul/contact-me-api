@@ -6,10 +6,11 @@ export const qCurrentUser = queryOptions({
   queryFn: actions.users.getMe.orThrow,
 });
 
-export const qProjects = queryOptions({
-  queryKey: ["projects"],
-  queryFn: actions.projects.getAll.orThrow,
-});
+export const qProjects = (search?: string) =>
+  queryOptions({
+    queryKey: ["projects", search],
+    queryFn: () => actions.projects.getAll.orThrow({ search }),
+  });
 
 export const qProject = (projectId: string) =>
   queryOptions({

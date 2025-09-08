@@ -4,19 +4,34 @@ import type { ProjectSelect } from "@/lib/types";
 import { createDb } from "@/db";
 import { isAuthorized } from "../helpers";
 import { Project } from "@/db/schema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, like, or } from "drizzle-orm";
 
 export const getAll: ActionHandler<
   typeof inputs.getAll,
   ProjectSelect[]
-> = async (_, c) => {
+> = async ({ search }, c) => {
   const db = createDb(c.locals.runtime.env);
   const userId = isAuthorized(c).id;
+
+  const searchTerm = `%${search}%`;
 
   const projects = await db
     .select()
     .from(Project)
-    .where(eq(Project.userId, userId));
+    .where(
+      and(
+        eq(Project.userId, userId),
+        search
+          ? or(
+              like(Project.name, searchTerm),
+              like(Project.identifier, searchTerm),
+              like(Project.description, searchTerm),
+              like(Project.liveUrl, searchTerm),
+              like(Project.repoUrl, searchTerm),
+            )
+          : undefined,
+      ),
+    );
 
   return projects;
 };

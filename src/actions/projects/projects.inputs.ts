@@ -1,7 +1,9 @@
 import { zProjectInsert } from "@/lib/types";
 import { z } from "astro/zod";
 
-export const getAll = z.any();
+export const getAll = z.object({
+  search: z.string().optional(),
+});
 export const getOne = z.object({ projectId: z.string().uuid() });
 export const create = zProjectInsert.pick({
   name: true,
