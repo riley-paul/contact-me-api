@@ -29,5 +29,22 @@ export default function useMutations() {
     },
   });
 
-  return { deleteProject, createProject };
+  const updateProject = useMutation({
+    mutationFn: actions.projects.update.orThrow,
+    onSuccess: (updatedProject) => {
+      queryClient.setQueryData(
+        qProject(updatedProject.id).queryKey,
+        updatedProject,
+      );
+      queryClient.setQueryData(qProjects().queryKey, (prev) => {
+        if (!prev) return prev;
+        return prev.map((project) =>
+          project.id === updatedProject.id ? updatedProject : project,
+        );
+      });
+      toast.success("Project updated");
+    },
+  });
+
+  return { deleteProject, createProject, updateProject };
 }

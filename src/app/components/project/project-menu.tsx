@@ -12,6 +12,7 @@ import {
 import React from "react";
 import { alertSystemAtom } from "../alert-system/alert-system.store";
 import { useNavigate } from "@tanstack/react-router";
+import { projectEditorAtom } from "./project-editor.store";
 
 type Props = {
   project: ProjectSelect;
@@ -20,7 +21,8 @@ type Props = {
 const ProjectMenu: React.FC<Props> = ({ project }) => {
   const { deleteProject } = useMutations();
   const navigate = useNavigate();
-  const [_, dispatchAlert] = useAtom(alertSystemAtom);
+  const [, dispatchAlert] = useAtom(alertSystemAtom);
+  const [, dispatchProjectEditor] = useAtom(projectEditorAtom);
 
   const handleDelete = () => {
     dispatchAlert({
@@ -34,6 +36,17 @@ const ProjectMenu: React.FC<Props> = ({ project }) => {
     });
   };
 
+  const handleEdit = () => {
+    dispatchProjectEditor({ type: "open", project });
+  };
+
+  const handleView = () => {
+    navigate({
+      to: "/projects/$projectId",
+      params: { projectId: project.id },
+    });
+  };
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
@@ -41,19 +54,12 @@ const ProjectMenu: React.FC<Props> = ({ project }) => {
           <MoreHorizontalIcon className="size-4" />
         </IconButton>
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content side="bottom" align="end" className="min-w-32">
-        <DropdownMenu.Item
-          onSelect={() =>
-            navigate({
-              to: "/projects/$projectId",
-              params: { projectId: project.id },
-            })
-          }
-        >
+      <DropdownMenu.Content side="bottom" align="end" className="min-w-40">
+        <DropdownMenu.Item onSelect={handleView}>
           <ViewIcon className="size-4 opacity-70" />
           <span>View</span>
         </DropdownMenu.Item>
-        <DropdownMenu.Item>
+        <DropdownMenu.Item onSelect={handleEdit}>
           <Edit2Icon className="size-4 opacity-70" />
           <span>Edit</span>
         </DropdownMenu.Item>
