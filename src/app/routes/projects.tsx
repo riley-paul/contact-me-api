@@ -1,9 +1,11 @@
 import { Button, Heading, Separator } from "@radix-ui/themes";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { PlusIcon } from "lucide-react";
 import SearchBar from "../components/search-bar";
 import { z } from "astro/zod";
 import { useDebounceCallback } from "usehooks-ts";
+import { useAtom } from "jotai/react";
+import { projectEditorAtom } from "../components/project/project-editor.store";
 
 export const Route = createFileRoute("/projects")({
   component: RouteComponent,
@@ -13,6 +15,8 @@ export const Route = createFileRoute("/projects")({
 function RouteComponent() {
   const { search } = Route.useSearch();
   const navigate = Route.useNavigate();
+
+  const [_, dispatch] = useAtom(projectEditorAtom);
 
   const debouncedSetSearch = useDebounceCallback((search) =>
     navigate({ search: { search } }),
@@ -26,7 +30,7 @@ function RouteComponent() {
         </Heading>
         <section className="flex items-center gap-2">
           <SearchBar search={search} setSearch={debouncedSetSearch} />
-          <Button variant="solid">
+          <Button variant="solid" onClick={() => dispatch({ type: "open" })}>
             <PlusIcon className="size-4" />
             Add Project
           </Button>

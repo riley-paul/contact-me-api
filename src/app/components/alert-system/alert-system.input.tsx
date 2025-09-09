@@ -3,7 +3,8 @@ import type { InputAlertProps } from "./alert-system.types";
 import { Dialog, Button, Text, TextField } from "@radix-ui/themes";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod/v4";
+import { z } from "zod";
+import AlertSystemTitleMessage from "./alert-system-title-message";
 
 type Schema = { value: string };
 
@@ -25,8 +26,7 @@ const AlertSystemContentInput: React.FC<InputAlertProps> = ({
   return (
     <>
       <form onSubmit={onSubmit}>
-        <Dialog.Title>{title}</Dialog.Title>
-        <Dialog.Description>{message}</Dialog.Description>
+        <AlertSystemTitleMessage title={title} message={message} />
         <Controller
           name="value"
           control={form.control}

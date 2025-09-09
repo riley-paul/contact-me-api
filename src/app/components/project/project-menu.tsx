@@ -7,9 +7,11 @@ import {
   Edit2Icon,
   DeleteIcon,
   CopyPlusIcon,
+  ViewIcon,
 } from "lucide-react";
 import React from "react";
 import { alertSystemAtom } from "../alert-system/alert-system.store";
+import { useNavigate } from "@tanstack/react-router";
 
 type Props = {
   project: ProjectSelect;
@@ -17,6 +19,7 @@ type Props = {
 
 const ProjectMenu: React.FC<Props> = ({ project }) => {
   const { deleteProject } = useMutations();
+  const navigate = useNavigate();
   const [_, dispatchAlert] = useAtom(alertSystemAtom);
 
   const handleDelete = () => {
@@ -39,6 +42,17 @@ const ProjectMenu: React.FC<Props> = ({ project }) => {
         </IconButton>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content side="bottom" align="end" className="min-w-32">
+        <DropdownMenu.Item
+          onSelect={() =>
+            navigate({
+              to: "/projects/$projectId",
+              params: { projectId: project.id },
+            })
+          }
+        >
+          <ViewIcon className="size-4 opacity-70" />
+          <span>View</span>
+        </DropdownMenu.Item>
         <DropdownMenu.Item>
           <Edit2Icon className="size-4 opacity-70" />
           <span>Edit</span>

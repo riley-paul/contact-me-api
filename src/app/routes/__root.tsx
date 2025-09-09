@@ -2,6 +2,7 @@ import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import AppSidebar from "../components/sidebar/sidebar";
 import type { QueryClient } from "@tanstack/react-query";
 import { qCurrentUser } from "@/lib/client/queries";
+import ProjectEditor from "../components/project/project-editor";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   {
@@ -16,6 +17,7 @@ function RootComponent() {
     <main className="flex overflow-hidden">
       <AppSidebar />
       <Outlet />
+      <ProjectEditor />
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import type { ErrorAlertProps } from "./alert-system.types";
 import { Dialog, Button } from "@radix-ui/themes";
+import AlertSystemTitleMessage from "./alert-system-title-message";
 
 const AlertSystemContentError: React.FC<ErrorAlertProps> = ({
   title,
@@ -8,8 +9,7 @@ const AlertSystemContentError: React.FC<ErrorAlertProps> = ({
 }) => {
   return (
     <>
-      <Dialog.Title>{title}</Dialog.Title>
-      <Dialog.Description>{message}</Dialog.Description>
+      <AlertSystemTitleMessage title={title} message={message} />
       <footer className="mt-4 flex justify-end gap-3">
         <Dialog.Close>
           <Button>Ok</Button>

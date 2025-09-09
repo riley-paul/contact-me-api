@@ -10,7 +10,7 @@ export default function useMutations() {
   const { projectId: currentProjectId } = useParams({ strict: false });
 
   const deleteProject = useMutation({
-    mutationFn: actions.projects.remove,
+    mutationFn: actions.projects.remove.orThrow,
     onSuccess: (_, { projectId }) => {
       if (currentProjectId === projectId) navigate({ to: "/projects" });
       queryClient.setQueryData(qProjects().queryKey, (prev) => {
@@ -21,5 +21,13 @@ export default function useMutations() {
     },
   });
 
-  return { deleteProject };
+  const createProject = useMutation({
+    mutationFn: actions.projects.create.orThrow,
+    onSuccess: (newProject) => {
+      toast.success("Project created");
+      navigate({ to: `/projects/${newProject.id}` });
+    },
+  });
+
+  return { deleteProject, createProject };
 }
