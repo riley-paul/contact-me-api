@@ -12,10 +12,18 @@ import AlertSystem from "@/app/components/alert-system/alert-system";
 import RadixProvider from "@/app/components/radix-provider";
 import CustomToaster from "@/app/components/custom-toaster";
 import { Spinner } from "@radix-ui/themes";
+import { alertSystemAtom } from "./components/alert-system/alert-system.store";
+import { getDefaultStore } from "jotai/vanilla";
+
+const store = getDefaultStore();
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 1000 * 60 * 5 } },
   mutationCache: new MutationCache({
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+      store.set(alertSystemAtom, { type: "close" });
+    },
     onError: (error) => {
       console.error(error);
       toast.error(error.message ?? "Server Error");
@@ -25,9 +33,7 @@ const queryClient = new QueryClient({
 
 const router = createRouter({
   routeTree,
-  context: {
-    queryClient,
-  },
+  context: { queryClient },
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
   scrollRestoration: true,

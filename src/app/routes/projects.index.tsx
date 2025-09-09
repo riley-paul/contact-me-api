@@ -8,8 +8,10 @@ import type { ProjectSelect } from "@/lib/types";
 import Table from "../components/table";
 import { qProjects } from "@/lib/client/queries";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Text } from "@radix-ui/themes";
+import { DropdownMenu, IconButton, Text } from "@radix-ui/themes";
 import EmptyState from "../components/empty-state";
+import { DeleteIcon, Edit2Icon, MoreHorizontalIcon } from "lucide-react";
+import ProjectMenu from "../components/project/project-menu";
 
 const columnHelper = createColumnHelper<ProjectSelect>();
 
@@ -26,6 +28,14 @@ const columns = [
   columnHelper.accessor("description", {
     header: "Description",
     cell: (info) => info.getValue(),
+  }),
+  columnHelper.display({
+    id: "context-menu",
+    cell: (info) => (
+      <div className="flex justify-end">
+        <ProjectMenu project={info.row.original} />
+      </div>
+    ),
   }),
 ];
 
