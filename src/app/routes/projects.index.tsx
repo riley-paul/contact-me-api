@@ -8,7 +8,13 @@ import type { ProjectSelect } from "@/lib/types";
 import Table from "../components/table";
 import { qProjects } from "@/lib/client/queries";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { DropdownMenu, IconButton, Text } from "@radix-ui/themes";
+import {
+  Code,
+  DropdownMenu,
+  IconButton,
+  Text,
+  Tooltip,
+} from "@radix-ui/themes";
 import EmptyState from "../components/empty-state";
 import { DeleteIcon, Edit2Icon, MoreHorizontalIcon } from "lucide-react";
 import ProjectMenu from "../components/project/project-menu";
@@ -18,7 +24,16 @@ const columnHelper = createColumnHelper<ProjectSelect>();
 const columns = [
   columnHelper.accessor("identifier", {
     header: "Identifier",
-    cell: (info) => <Text className="font-mono">{info.getValue()}</Text>,
+    cell: (info) => (
+      <Tooltip content={info.getValue()} side="right">
+        <Code
+          color="gray"
+          className="block w-fit max-w-40 truncate px-2! py-1!"
+        >
+          {info.getValue()}
+        </Code>
+      </Tooltip>
+    ),
     size: 100,
   }),
   columnHelper.accessor("name", {
@@ -29,6 +44,14 @@ const columns = [
     header: "Description",
     cell: (info) => info.getValue(),
   }),
+  columnHelper.accessor("repoUrl", {
+    header: "Repo URL",
+    cell: (info) => info.getValue(),
+  }),
+  columnHelper.accessor("liveUrl", {
+    header: "Live URL",
+    cell: (info) => info.getValue(),
+  }),
   columnHelper.display({
     id: "context-menu",
     cell: (info) => (
@@ -36,6 +59,7 @@ const columns = [
         <ProjectMenu project={info.row.original} />
       </div>
     ),
+    maxSize: 50,
   }),
 ];
 

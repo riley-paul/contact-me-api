@@ -14,8 +14,8 @@ const schema = z.object({
   name: z.string().min(1, "Name is required"),
   identifier: z.string().min(1, "Identifier is required"),
   description: z.string().nullable(),
-  liveUrl: z.string().url().nullable(),
-  repoUrl: z.string().url().nullable(),
+  liveUrl: z.string().url().nullable().or(z.literal("")),
+  repoUrl: z.string().url().nullable().or(z.literal("")),
 });
 type Schema = z.infer<typeof schema>;
 
