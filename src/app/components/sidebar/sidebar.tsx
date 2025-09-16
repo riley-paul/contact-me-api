@@ -1,13 +1,16 @@
-import { Button, Separator } from "@radix-ui/themes";
+import { Button, ScrollArea, Separator } from "@radix-ui/themes";
 import React from "react";
 import Logo from "../logo";
 import UserMenu from "./user-menu";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { qCurrentUser } from "@/lib/client/queries";
+import { qCurrentUser, qProjects } from "@/lib/client/queries";
 import { Link } from "@tanstack/react-router";
+import SidebarItem from "./sidebar-item";
+import SidebarHeader from "./sidebar-header";
 
 const AppSidebar: React.FC = () => {
   const { data: user } = useSuspenseQuery(qCurrentUser);
+  const { data: projects } = useSuspenseQuery(qProjects());
   if (!user) return null;
 
   return (
@@ -16,22 +19,25 @@ const AppSidebar: React.FC = () => {
         <Logo />
       </header>
       <Separator size="4" />
-      <article className="flex flex-1 flex-col gap-1 overflow-y-auto p-3">
-        <Button
-          variant="ghost"
-          className="m-0! justify-start! text-left!"
-          asChild
-        >
-          <Link to="/messages">Messages</Link>
-        </Button>
-        <Button
-          variant="ghost"
-          className="m-0! justify-start! text-left!"
-          asChild
-        >
-          <Link to="/projects">Projects</Link>
-        </Button>
-      </article>
+      <ScrollArea>
+        <article className="flex flex-1 flex-col gap-6 overflow-y-auto py-3">
+          <SidebarItem linkOptions={{ to: "/messages" }}>Messages</SidebarItem>
+          <section className="grid gap-2">
+            <SidebarHeader>Projects</SidebarHeader>
+            {projects.map((projects) => (
+              <SidebarItem
+                key={projects.id}
+                linkOptions={{
+                  to: "/projects/$projectId",
+                  params: { projectId: projects.id },
+                }}
+              >
+                {projects.name}
+              </SidebarItem>
+            ))}
+          </section>
+        </article>
+      </ScrollArea>
       <Separator size="4" />
       <footer>
         <UserMenu user={user} />
