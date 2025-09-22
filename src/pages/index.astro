@@ -2,14 +2,31 @@
 import { getProjects } from "@/lib/server/helpers";
 import AppLayout from "./_app-layout.astro";
 import RootLayout from "./_root-layout.astro";
+import MarkdownLayout from "./_markdown-layout.astro";
 import ProjectCard from "@/components/project-card";
+import { Button } from "@radix-ui/themes";
+import { PlusIcon } from "lucide-react";
 
 const projects = await getProjects(Astro);
 ---
 
 <RootLayout>
   <AppLayout>
-    <div class="grid gap-4 grid-cols-4">
+    <MarkdownLayout>
+      <h1>
+        <div class="flex items-center justify-between">
+          Projects
+          <Button variant="surface">
+            <PlusIcon className="size-4" />
+            Add Project
+          </Button>
+        </div>
+      </h1>
+      <p>Click on a project to see details and messages</p>
+    </MarkdownLayout>
+    <div
+      class="grid gap-4 grid-cols-[repeat(auto-fit,_minmax(250px,1fr))] py-4"
+    >
       {projects.map((project) => <ProjectCard project={project} />)}
     </div>
   </AppLayout>
