@@ -1,4 +1,23 @@
+---
+import AlertSystem from "@/components/alert-system/alert-system";
+import Logo from "@/components/logo";
+import UserLink from "@/components/user-link";
+import { getUser } from "@/lib/server/helpers";
+import { Separator } from "@radix-ui/themes";
+
+const user = await getUser(Astro);
+if (!user) return Astro.redirect("/welcome");
+---
+
 <main class="flex h-[100dvh]">
-  <aside class="w-[300px] bg-panel">sideabr</aside>
-  <slot />
+  <aside class="w-[250px] bg-panel border-r border-gray-7 flex flex-col h-full">
+    <header class="px-3 h-14 shrink-0 flex items-center">
+      <Logo />
+    </header>
+    <Separator size="4" />
+    <section class="flex-1">hello</section>
+    <Separator size="4" />
+    <UserLink client:load user={user} />
+  </aside>
+  <AlertSystem client:load />
 </main>
