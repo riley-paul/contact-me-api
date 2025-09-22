@@ -12,7 +12,7 @@ export const UserMenu: React.FC<Props> = ({ user }) => {
     .toUpperCase();
 
   return (
-    <a href="/settings/profile">
+    <a href="/settings">
       <Avatar
         src={user.avatarUrl ?? ""}
         alt={user.name}
