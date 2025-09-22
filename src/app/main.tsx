@@ -8,11 +8,11 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { toast } from "sonner";
-import AlertSystem from "@/app/components/alert-system/alert-system";
-import RadixProvider from "@/app/components/radix-provider";
-import CustomToaster from "@/app/components/custom-toaster";
+import AlertSystem from "@/components/alert-system/alert-system
+import RadixProvider from "@/components/radix-provider
+import CustomToaster from "@/components/custom-toaster
 import { Spinner } from "@radix-ui/themes";
-import { alertSystemAtom } from "./components/alert-system/alert-system.store";
+import { alertSystemAtom } from "../components/alert-system/alert-system.store";
 import { getDefaultStore } from "jotai/vanilla";
 
 const store = getDefaultStore();

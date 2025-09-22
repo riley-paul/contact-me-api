@@ -1,7 +1,6 @@
 ---
-import LoginCard from "@/app/components/login-card";
-import RadixProvider from "@/app/components/radix-provider";
-import RootLayout from "./_root-layout.astro";
+import LoginCard from "@/components/login-card
+import RootLayout from "./_@/components/radix-provider
 
 const { user } = Astro.locals;
 if (user) {
@@ -10,9 +9,7 @@ if (user) {
 ---
 
 <RootLayout>
-  <RadixProvider>
-    <main class="flex items-center justify-center h-screen">
-      <LoginCard />
-    </main>
-  </RadixProvider>
+  <main class="flex items-center justify-center h-screen">
+    <LoginCard />
+  </main>
 </RootLayout>

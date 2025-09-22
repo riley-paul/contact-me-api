@@ -4,6 +4,7 @@ import "@fontsource-variable/noto-sans-tc";
 
 import "@radix-ui/themes/styles.css";
 import "@/styles/global.css";
+import RadixProvider from "@/components/radix-provider";
 ---
 
 <html lang="en">
@@ -15,6 +16,8 @@ import "@/styles/global.css";
     <title>Contactulator</title>
   </head>
   <body>
-    <slot />
+    <RadixProvider client:load>
+      <slot />
+    </RadixProvider>
   </body>
 </html>
