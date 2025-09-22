@@ -1,13 +1,13 @@
 ---
 import AlertSystem from "@/components/alert-system/alert-system";
-import Logo from "@/components/logo";
-import UserLink from "@/components/user-link";
-import { getUser } from "@/lib/server/helpers";
-import { Separator, Button, Heading } from "@radix-ui/themes";
-import { PlusIcon } from "lucide-react";
+import AppSidebar from "@/components/app-sidebar";
+import { getUser, getProjects } from "@/lib/server/helpers";
+import { Separator, Heading } from "@radix-ui/themes";
 
 const user = await getUser(Astro);
 if (!user) return Astro.redirect("/welcome");
+
+const projects = await getProjects(Astro);
 
 export interface Props {
   title?: string;
@@ -17,23 +17,12 @@ const { title } = Astro.props;
 ---
 
 <main class="flex h-[100dvh]">
-  <aside class="w-[250px] bg-panel flex flex-col h-full">
-    <header class="px-3 h-14 shrink-0 flex items-center justify-between">
-      <Logo />
-      <UserLink client:load user={user} />
-    </header>
-    <Separator size="4" />
-    <section class="flex-1">hello</section>
-    <Separator size="4" />
-    <footer class="px-3 h-14 shrink-0 flex items-center w-full">
-      <a href="/projects/new" class="w-full">
-        <Button className="w-full!" variant="surface">
-          <PlusIcon className="size-4" />
-          New Project
-        </Button>
-      </a>
-    </footer>
-  </aside>
+  <AppSidebar
+    client:load
+    user={user}
+    projects={projects}
+    pathname={Astro.url.pathname}
+  />
   <Separator orientation="vertical" size="4" />
   <article class="flex-1 flex flex-col">
     <header class="h-14 shrink-0 container2 flex items-center">

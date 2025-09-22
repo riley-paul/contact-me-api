@@ -1,0 +1,10 @@
+---
+import AppLayout from "../_app-layout.astro";
+import RootLayout from "../_root-layout.astro";
+
+const { id } = Astro.params;
+---
+
+<RootLayout>
+  <AppLayout title="New Project"> {id} </AppLayout>
+</RootLayout>
