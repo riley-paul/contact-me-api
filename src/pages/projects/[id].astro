@@ -1,10 +1,15 @@
 ---
 import AppLayout from "../_app-layout.astro";
 import RootLayout from "../_root-layout.astro";
+import { getProject } from "@/lib/server/helpers";
 
 const { id } = Astro.params;
+if (!id) return Astro.redirect("/projects");
+
+const project = await getProject(Astro, id);
+if (!project) return Astro.redirect("/projects");
 ---
 
 <RootLayout>
-  <AppLayout title="New Project"> {id} </AppLayout>
+  <AppLayout title={project.name}> {id} </AppLayout>
 </RootLayout>

@@ -1,8 +1,16 @@
 ---
+import { getProjects } from "@/lib/server/helpers";
 import AppLayout from "./_app-layout.astro";
 import RootLayout from "./_root-layout.astro";
+import ProjectCard from "@/components/project-card";
+
+const projects = await getProjects(Astro);
 ---
 
 <RootLayout>
-  <AppLayout> main page </AppLayout>
+  <AppLayout>
+    <div class="grid gap-4 grid-cols-4">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </AppLayout>
 </RootLayout>

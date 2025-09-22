@@ -6,7 +6,7 @@ const Logo: React.FC = () => {
   return (
     <a href="/">
       <span className="flex items-center gap-1.5">
-        <SendIcon className="text-accent-10 size-5" />
+        <SendIcon className="text-accent-10 size-6 mt-0.5" />
         <Heading size="3" weight="bold">
           Contactulator
         </Heading>

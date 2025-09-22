@@ -48,3 +48,15 @@ export const getProjects = async (
 
   return projects;
 };
+
+export const getProject = async (c: APIContext, projectId: string) => {
+  const db = createDb(c.locals.runtime.env);
+  const userId = isAuthorized(c).id;
+
+  const [project] = await db
+    .select()
+    .from(Project)
+    .where(and(eq(Project.userId, userId), eq(Project.id, projectId)));
+
+  return project;
+};
