@@ -1,0 +1,23 @@
+---
+import AppLayout from "@/pages/_app-layout.astro";
+import MarkdownLayout from "@/pages/_markdown-layout.astro";
+import RootLayout from "@/pages/_root-layout.astro";
+import { Button } from "@radix-ui/themes";
+import { Edit3Icon, SaveIcon } from "lucide-react";
+---
+
+<RootLayout>
+  <AppLayout>
+    <MarkdownLayout>
+      <h1>
+        <div class="flex items-center justify-between">
+          Edit Project
+          <Button variant="surface">
+            <SaveIcon className="size-4" />
+            Save Changes
+          </Button>
+        </div>
+      </h1>
+    </MarkdownLayout>
+  </AppLayout>
+</RootLayout>

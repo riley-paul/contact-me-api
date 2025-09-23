@@ -1,0 +1,33 @@
+---
+import AppLayout from "@/pages/_app-layout.astro";
+import RootLayout from "@/pages/_root-layout.astro";
+import { getProject } from "@/lib/server/helpers";
+import MarkdownLayout from "@/pages/_markdown-layout.astro";
+import { Button } from "@radix-ui/themes";
+import { Edit3Icon } from "lucide-react";
+
+const { id } = Astro.params;
+if (!id) return Astro.redirect("/projects");
+
+const project = await getProject(Astro, id);
+if (!project) return Astro.redirect("/projects");
+---
+
+<RootLayout>
+  <AppLayout>
+    <MarkdownLayout>
+      <h1>
+        <div class="flex items-center justify-between">
+          {project.name}
+          <a href={`/projects/${project.id}/edit`}>
+            <Button variant="surface">
+              <Edit3Icon className="size-4" />
+              Edit Project
+            </Button>
+          </a>
+        </div>
+      </h1>
+      <p>{project.description}</p>
+    </MarkdownLayout>
+  </AppLayout>
+</RootLayout>

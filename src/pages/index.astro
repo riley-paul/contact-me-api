@@ -16,10 +16,12 @@ const projects = await getProjects(Astro);
       <h1>
         <div class="flex items-center justify-between">
           Projects
-          <Button variant="surface">
-            <PlusIcon className="size-4" />
-            Add Project
-          </Button>
+          <a href="/projects/add">
+            <Button variant="surface">
+              <PlusIcon className="size-4" />
+              Add Project
+            </Button>
+          </a>
         </div>
       </h1>
       <p>Click on a project to see details and messages</p>
