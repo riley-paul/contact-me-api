@@ -17,9 +17,11 @@ const ProjectCard: React.FC<Props> = ({ project }) => {
             <Text as="div" size="2" weight="bold">
               {project.name}
             </Text>
-            <Text as="div" size="2" color="gray">
-              {project.description}
-            </Text>
+            {project.description && (
+              <Text as="div" size="2" color="gray">
+                {project.description}
+              </Text>
+            )}
           </section>
         </article>
       </a>

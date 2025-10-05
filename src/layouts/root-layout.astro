@@ -1,12 +1,11 @@
 ---
-import "@fontsource-variable/noto-sans-tc";
-import '@fontsource-variable/overpass';
-import '@fontsource-variable/aleo';
-import '@fontsource-variable/radio-canada';
+import "@fontsource-variable/aleo";
+import "@fontsource-variable/radio-canada";
 
 import "@radix-ui/themes/styles.css";
 import "@/styles/global.css";
 import RadixProvider from "@/components/radix-provider";
+import CustomToaster from "@/components/custom-toaster";
 ---
 
 <html lang="en">
@@ -21,5 +20,6 @@ import RadixProvider from "@/components/radix-provider";
     <RadixProvider client:load>
       <slot />
     </RadixProvider>
+    <CustomToaster client:load />
   </body>
 </html>
