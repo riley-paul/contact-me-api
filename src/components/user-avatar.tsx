@@ -1,9 +1,9 @@
 import type { UserSelect } from "@/lib/types";
-import { Avatar } from "@radix-ui/themes";
+import { Avatar, type AvatarProps } from "@radix-ui/themes";
 
-type Props = { user: UserSelect };
+type Props = { user: UserSelect; avatarProps?: AvatarProps };
 
-export const UserAvatar: React.FC<Props> = ({ user }) => {
+export const UserAvatar: React.FC<Props> = ({ user, avatarProps }) => {
   const fallback = user.name
     .split(" ")
     .map((n) => n[0])
@@ -14,9 +14,10 @@ export const UserAvatar: React.FC<Props> = ({ user }) => {
     <Avatar
       src={user.avatarUrl ?? ""}
       alt={user.name}
-      fallback={fallback}
-      size="2"
+      size="3"
       radius="full"
+      {...avatarProps}
+      fallback={fallback}
     />
   );
 };
