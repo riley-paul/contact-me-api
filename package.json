@@ -22,6 +22,7 @@
     "@fontsource-variable/aleo": "^5.2.7",
     "@fontsource-variable/noto-sans-tc": "^5.2.6",
     "@fontsource-variable/overpass": "^5.2.8",
+    "@fontsource-variable/radio-canada": "^5.2.10",
     "@hookform/resolvers": "^5.2.1",
     "@libsql/client": "^0.15.14",
     "@radix-ui/themes": "^3.2.1",

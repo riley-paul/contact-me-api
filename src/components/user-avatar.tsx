@@ -1,7 +1,7 @@
 import type { UserSelect } from "@/lib/types";
 import { Avatar, type AvatarProps } from "@radix-ui/themes";
 
-type Props = { user: UserSelect; avatarProps?: AvatarProps };
+type Props = { user: UserSelect; avatarProps?: Omit<AvatarProps, "fallback"> };
 
 export const UserAvatar: React.FC<Props> = ({ user, avatarProps }) => {
   const fallback = user.name
@@ -14,10 +14,9 @@ export const UserAvatar: React.FC<Props> = ({ user, avatarProps }) => {
     <Avatar
       src={user.avatarUrl ?? ""}
       alt={user.name}
-      size="3"
       radius="full"
-      {...avatarProps}
       fallback={fallback}
+      {...avatarProps}
     />
   );
 };
