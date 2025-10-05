@@ -13,7 +13,8 @@
 @import "radix-themes-tw";
 
 .radix-themes {
-  --default-font-family: "Noto Sans TC Variable", sans-serif;
+  --default-font-family: "Overpass Variable", sans-serif;
+  --heading-font-family: "Aleo Variable", serif;
   --cursor-button: pointer;
   --cursor-checkbox: pointer;
   --cursor-disabled: default;

@@ -9,7 +9,7 @@ const Logo: React.FC = () => {
         <div className="bg-accent-3 flex size-9 items-center justify-center rounded-full">
           <SendIcon className="text-accent-10 mt-0.5 mr-0.5 size-5" />
         </div>
-        <Heading size="3" weight="bold">
+        <Heading size="4" weight="bold" trim="both" className="mt-1!">
           Contactulator
         </Heading>
       </span>
