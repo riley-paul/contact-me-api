@@ -1,4 +1,3 @@
-import React from "react";
 import { flexRender, type Table as TableType } from "@tanstack/react-table";
 import { ScrollArea, Table as TableComponent } from "@radix-ui/themes";
 import { cn } from "@/lib/client/utils";

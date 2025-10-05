@@ -1,4 +1,4 @@
-import { zProjectInsert, type ProjectSelect } from "@/lib/types";
+import { type ProjectSelect } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, TextArea, TextField } from "@radix-ui/themes";
 import { z } from "astro/zod";
