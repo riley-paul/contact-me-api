@@ -11,17 +11,7 @@ export default defineConfig({
     platformProxy: { enabled: true },
     imageService: "cloudflare",
   }),
-  vite: {
-    plugins: [
-      tailwindcss(),
-      tanstackRouter({
-        target: "react",
-        autoCodeSplitting: true,
-        routesDirectory: "./src/app/routes",
-        generatedRouteTree: "./src/app/routeTree.gen.ts",
-      }),
-    ],
-  },
+  vite: { plugins: [tailwindcss()] },
   output: "server",
   integrations: [react()],
 });
