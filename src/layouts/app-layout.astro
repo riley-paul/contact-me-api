@@ -1,12 +1,11 @@
 ---
-import { getUser } from "@/lib/server/helpers";
 import { Separator } from "@radix-ui/themes";
 import Logo from "@/components/logo";
 import { ACCENT_COLOR } from "@/lib/client/constants";
-import UserAvatar from "@/components/user-avatar";
 import UserMenu from "@/components/user-menu";
+import { actions } from "astro:actions";
 
-const user = await getUser(Astro);
+const { data: user } = await Astro.callAction(actions.users.getMe, {});
 if (!user) return Astro.redirect("/welcome");
 ---
 

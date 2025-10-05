@@ -1,13 +1,17 @@
 ---
-import { getProjects } from "@/lib/server/helpers";
 import AppLayout from "@/layouts/app-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import ProjectCard from "@/components/project-card";
 import { Button } from "@radix-ui/themes";
 import { PlusIcon } from "lucide-react";
+import { actions } from "astro:actions";
 
-const projects = await getProjects(Astro);
+const { data: projects, error } = await Astro.callAction(
+  actions.projects.getAll,
+  {},
+);
+if (error) return new Response(error.message);
 ---
 
 <RootLayout>

@@ -1,16 +1,19 @@
 ---
 import AppLayout from "@/layouts/app-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
-import { getProject } from "@/lib/server/helpers";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import { Button } from "@radix-ui/themes";
 import { Edit3Icon } from "lucide-react";
+import { actions } from "astro:actions";
 
 const { id } = Astro.params;
 if (!id) return Astro.redirect("/projects");
 
-const project = await getProject(Astro, id);
-if (!project) return Astro.redirect("/projects");
+const { data: project, error } = await Astro.callAction(
+  actions.projects.getOne,
+  { projectId: id },
+);
+if (error) return Astro.redirect("/projects");
 ---
 
 <RootLayout>

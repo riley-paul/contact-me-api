@@ -1,6 +1,6 @@
 import type { UserSelect } from "@/lib/types";
-import { Avatar, Button, DropdownMenu, Text } from "@radix-ui/themes";
-import { ChevronsUpDownIcon, LogOutIcon } from "lucide-react";
+import { DropdownMenu, Text } from "@radix-ui/themes";
+import { LogOutIcon } from "lucide-react";
 import RadixProvider from "./radix-provider";
 import UserAvatar from "./user-avatar";
 
