@@ -6,6 +6,7 @@ import RootLayout from "@/layouts/root-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import PageHeader from "@/components/page-header";
 import ProjectEditor from "@/components/project-editor";
+import ProjectDelete from "@/components/project-delete";
 
 const { projectId } = Astro.params;
 if (!projectId) return Astro.redirect("/projects");
@@ -33,7 +34,8 @@ if (!project) return Astro.redirect("/projects");
         },
       ]}
     >
-      <ProjectEditor client:load />
+      <ProjectDelete />
+      <ProjectEditor client:load project={project} />
     </PageHeader>
     <MarkdownLayout>
       <h1>{project.name}</h1>

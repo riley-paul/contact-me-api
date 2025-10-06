@@ -28,14 +28,16 @@ const ProjectEditor: React.FC<Props> = ({ project }) => {
             )}
           </Button>
         </Dialog.Trigger>
-        <Dialog.Content>
+        <Dialog.Content className="grid gap-6">
           <header>
-            <Dialog.Title>Edit Project</Dialog.Title>
-            <Dialog.Description>
+            <Dialog.Title trim="both">
+              {project ? "Edit" : "New"} Project
+            </Dialog.Title>
+            <Dialog.Description color="gray" size="2">
               Make changes to your project here. Click save when you're done.
             </Dialog.Description>
           </header>
-          <ProjectForm />
+          <ProjectForm project={project} />
         </Dialog.Content>
       </Dialog.Root>
     </RadixProvider>
