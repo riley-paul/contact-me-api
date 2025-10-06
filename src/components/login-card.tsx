@@ -1,17 +1,18 @@
 import React from "react";
 import LoginButton from "./login-button";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardTitle, CardHeader, CardFooter } from "./ui/card";
 
 const LoginCard: React.FC = () => {
   return (
-    <article className="">
-      <Card>
-        <CardContent>
-          <LoginButton provider="google" />
-          <LoginButton provider="github" />
-        </CardContent>
-      </Card>
-    </article>
+    <Card className="w-full max-w-sm">
+      <CardHeader>
+        <CardTitle>Welcome</CardTitle>
+      </CardHeader>
+      <CardFooter className="grid gap-2">
+        <LoginButton provider="google" />
+        <LoginButton provider="github" />
+      </CardFooter>
+    </Card>
   );
 };
 
