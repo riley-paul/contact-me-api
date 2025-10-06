@@ -1,13 +1,15 @@
 import React from "react";
 import LoginButton from "./login-button";
-import { Card } from "@radix-ui/themes";
+import { Card, CardContent } from "./ui/card";
 
 const LoginCard: React.FC = () => {
   return (
     <article className="">
-      <Card size="3" className="grid! w-full max-w-sm gap-3">
-        <LoginButton provider="google" />
-        <LoginButton provider="github" />
+      <Card>
+        <CardContent>
+          <LoginButton provider="google" />
+          <LoginButton provider="github" />
+        </CardContent>
       </Card>
     </article>
   );

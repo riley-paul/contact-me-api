@@ -2,10 +2,8 @@
 import "@fontsource-variable/aleo";
 import "@fontsource-variable/radio-canada";
 
-import "@radix-ui/themes/styles.css";
 import "@/styles/global.css";
-import RadixProvider from "@/components/radix-provider";
-import CustomToaster from "@/components/custom-toaster";
+import { Toaster } from "@/components/ui/sonner";
 ---
 
 <html lang="en">
@@ -17,9 +15,7 @@ import CustomToaster from "@/components/custom-toaster";
     <title>Contactulator</title>
   </head>
   <body>
-    <RadixProvider client:load>
-      <slot />
-    </RadixProvider>
-    <CustomToaster client:load />
+    <slot />
+    <Toaster client:load />
   </body>
 </html>
