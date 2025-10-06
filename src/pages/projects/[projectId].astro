@@ -4,21 +4,18 @@ import getProjectsStore from "@/stores/project-store";
 import AppLayout from "@/layouts/app-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
-import { Button } from "@radix-ui/themes";
-import { Edit3Icon } from "lucide-react";
 import PageHeader from "@/components/page-header";
 import ProjectEditor from "@/components/project-editor";
-import SearchBar from "@/components/search-bar";
 
-const { id } = Astro.params;
-if (!id) return Astro.redirect("/projects");
+const { projectId } = Astro.params;
+if (!projectId) return Astro.redirect("/projects");
 
 const db = createDb(Astro.locals.runtime.env);
 const userId = Astro.locals.user?.id;
 if (!userId) return Astro.redirect("/welcome");
 
 const projectsStore = getProjectsStore(db, userId);
-const project = await projectsStore.getOne(id);
+const project = await projectsStore.getOne(projectId);
 if (!project) return Astro.redirect("/projects");
 ---
 
