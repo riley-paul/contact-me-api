@@ -15,6 +15,7 @@ export const getOne = defineAction({
 export const create = defineAction({
   handler: handlers.create,
   input: inputs.create,
+  accept: "form",
 });
 
 export const update = defineAction({
