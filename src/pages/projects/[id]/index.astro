@@ -6,6 +6,9 @@ import RootLayout from "@/layouts/root-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import { Button } from "@radix-ui/themes";
 import { Edit3Icon } from "lucide-react";
+import PageHeader from "@/components/page-header";
+import ProjectEditor from "@/components/project-editor";
+import SearchBar from "@/components/search-bar";
 
 const { id } = Astro.params;
 if (!id) return Astro.redirect("/projects");
@@ -21,18 +24,22 @@ if (!project) return Astro.redirect("/projects");
 
 <RootLayout>
   <AppLayout>
+    <PageHeader
+      breadcrumbs={[
+        {
+          text: "Projects",
+          href: "/",
+        },
+        {
+          text: project.name,
+          href: `/projects/${project.id}`,
+        },
+      ]}
+    >
+      <ProjectEditor client:load />
+    </PageHeader>
     <MarkdownLayout>
-      <h1>
-        <div class="flex items-center justify-between">
-          {project.name}
-          <a href={`/projects/${project.id}/edit`}>
-            <Button variant="surface">
-              <Edit3Icon className="size-4" />
-              Edit Project
-            </Button>
-          </a>
-        </div>
-      </h1>
+      <h1>{project.name}</h1>
       <p>{project.description}</p>
     </MarkdownLayout>
   </AppLayout>

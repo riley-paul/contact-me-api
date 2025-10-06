@@ -1,4 +1,4 @@
-import { Button, IconButton, TextField } from "@radix-ui/themes";
+import { IconButton, TextField } from "@radix-ui/themes";
 import { CornerDownLeftIcon, SearchIcon, XIcon } from "lucide-react";
 import React from "react";
 
@@ -11,6 +11,7 @@ const SearchBar: React.FC<Props> = ({ search, pathname }) => {
         name="search"
         placeholder="Search..."
         defaultValue={search}
+        variant="soft"
       >
         <TextField.Slot side="left">
           <SearchIcon className="size-4" />

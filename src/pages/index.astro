@@ -6,8 +6,9 @@ import RootLayout from "@/layouts/root-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import ProjectCard from "@/components/project-card";
 import SearchBar from "@/components/search-bar";
-import { Button } from "@radix-ui/themes";
-import { PlusIcon } from "lucide-react";
+import ProjectEditor from "@/components/project-editor";
+import Breadcrumbs from "@/components/breadcrumbs";
+import PageHeader from "@/components/page-header";
 
 const db = createDb(Astro.locals.runtime.env);
 const userId = Astro.locals.user?.id;
@@ -21,21 +22,19 @@ const projects = await projectsStore.getAll(search);
 
 <RootLayout>
   <AppLayout>
+    <PageHeader
+      breadcrumbs={[
+        {
+          text: "Projects",
+          href: "/",
+        },
+      ]}
+    >
+      <SearchBar search={search} pathname={Astro.url.pathname} />
+      <ProjectEditor client:load />
+    </PageHeader>
     <MarkdownLayout>
-      <h1>
-        <div class="flex items-center justify-between">
-          Projects
-          <div class="flex items-center gap-3">
-            <SearchBar search={search} pathname={Astro.url.pathname} />
-            <a href="/projects/add">
-              <Button variant="surface">
-                <PlusIcon className="size-4" />
-                Add Project
-              </Button>
-            </a>
-          </div>
-        </div>
-      </h1>
+      <h1>Projects</h1>
       <p>Click on a project to see details and messages</p>
     </MarkdownLayout>
     <div

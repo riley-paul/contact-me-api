@@ -11,7 +11,7 @@ export const UserMenu: React.FC<Props> = ({ user }) => {
     <RadixProvider asChild>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <button>
+          <button className="cursor-pointer">
             <UserAvatar user={user} avatarProps={{ size: "3" }} />
           </button>
         </DropdownMenu.Trigger>
