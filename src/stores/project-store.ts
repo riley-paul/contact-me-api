@@ -1,9 +1,10 @@
 import type { ProjectInsert, ProjectSelect } from "@/lib/types";
-import type { Store } from "./types";
+import { dummyStore, type Store } from "./types";
 import { and, eq, like, or } from "drizzle-orm";
 import { Project } from "@/db/schema";
 
-const projectStore: Store<ProjectSelect, ProjectInsert> = (db, userId) => ({
+const getProjectStore: Store<ProjectSelect, ProjectInsert> = (db, userId) => ({
+  ...dummyStore(db, userId),
   getAll: async (search) => {
     const searchTerm = `%${search}%`;
     return db
@@ -56,4 +57,4 @@ const projectStore: Store<ProjectSelect, ProjectInsert> = (db, userId) => ({
   },
 });
 
-export default projectStore;
+export default getProjectStore;

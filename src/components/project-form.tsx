@@ -1,6 +1,5 @@
 import type { ProjectSelect } from "@/lib/types";
 import { Button, Text, TextArea, TextField } from "@radix-ui/themes";
-import { actions } from "astro:actions";
 import React from "react";
 
 type Props = {
@@ -9,10 +8,7 @@ type Props = {
 
 const ProjectForm: React.FC<Props> = ({ project }) => {
   return (
-    <form
-      className="grid gap-6"
-      action={project ? actions.projects.update : actions.projects.create}
-    >
+    <form className="grid gap-6">
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Text as="label" size="2" weight="medium" className="grid gap-1">
           <span>Name</span>

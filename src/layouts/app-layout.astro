@@ -3,9 +3,15 @@ import { Separator } from "@radix-ui/themes";
 import Logo from "@/components/logo";
 import { ACCENT_COLOR } from "@/lib/client/constants";
 import UserMenu from "@/components/user-menu";
-import { actions } from "astro:actions";
+import { createDb } from "@/db";
+import getUserStore from "@/stores/user-store";
 
-const { data: user } = await Astro.callAction(actions.users.getMe, {});
+const db = createDb(Astro.locals.runtime.env);
+const userId = Astro.locals.user?.id;
+if (!userId) return Astro.redirect("/welcome");
+
+const userStore = getUserStore(db, userId);
+const user = await userStore.getOne(userId);
 if (!user) return Astro.redirect("/welcome");
 ---
 
