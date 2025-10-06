@@ -1,23 +1,29 @@
 import { IconButton, TextField } from "@radix-ui/themes";
 import { SearchIcon, XIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useDebounceCallback, useIsClient } from "usehooks-ts";
 
-type Props = {
-  search: string | undefined;
-  setSearch: (search: string | undefined) => void;
-};
-
-const SearchBar: React.FC<Props> = ({ search, setSearch }) => {
-  const [value, setValue] = useState(search);
-
-  useEffect(() => {
-    setValue(search);
-  }, [search]);
-
-  const handleClose = () => {
-    setSearch(undefined);
-    setValue(undefined);
+const SearchBar: React.FC = () => {
+  const isClient = useIsClient();
+  const getSearch = () => {
+    if (!isClient) return undefined;
+    const url = new URL(window.location.href);
+    return url.searchParams.get("search") ?? undefined;
   };
+
+  const search = getSearch();
+
+  const setSearch = (search: string | undefined) => {
+    const url = new URL(window.location.href);
+    if (search && search.length > 0) {
+      url.searchParams.set("search", search);
+    } else {
+      url.searchParams.delete("search");
+    }
+    window.location.href = url.toString();
+  };
+
+  const handleSearch = useDebounceCallback(setSearch, 500);
 
   return (
     <TextField.Root
@@ -29,11 +35,8 @@ const SearchBar: React.FC<Props> = ({ search, setSearch }) => {
         }
       }}
       placeholder="Search..."
-      value={value ?? ""}
-      onChange={(e) => {
-        setValue(e.target.value);
-        setSearch(e.target.value);
-      }}
+      defaultValue={search}
+      onChange={(e) => handleSearch(e.target.value)}
     >
       <TextField.Slot side="left">
         <SearchIcon className="size-4" />
@@ -45,7 +48,7 @@ const SearchBar: React.FC<Props> = ({ search, setSearch }) => {
             variant="soft"
             color="red"
             radius="full"
-            onClick={handleClose}
+            onClick={() => setSearch(undefined)}
           >
             <XIcon className="size-3" />
           </IconButton>
