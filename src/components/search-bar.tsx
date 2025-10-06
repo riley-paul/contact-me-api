@@ -1,60 +1,42 @@
-import { IconButton, TextField } from "@radix-ui/themes";
-import { SearchIcon, XIcon } from "lucide-react";
+import { Button, IconButton, TextField } from "@radix-ui/themes";
+import { CornerDownLeftIcon, SearchIcon, XIcon } from "lucide-react";
 import React from "react";
-import { useDebounceCallback, useIsClient } from "usehooks-ts";
 
-const SearchBar: React.FC = () => {
-  const isClient = useIsClient();
-  const getSearch = () => {
-    if (!isClient) return undefined;
-    const url = new URL(window.location.href);
-    return url.searchParams.get("search") ?? undefined;
-  };
+type Props = { search: string | undefined; pathname: string };
 
-  const search = getSearch();
-
-  const setSearch = (search: string | undefined) => {
-    const url = new URL(window.location.href);
-    if (search && search.length > 0) {
-      url.searchParams.set("search", search);
-    } else {
-      url.searchParams.delete("search");
-    }
-    window.location.href = url.toString();
-  };
-
-  const handleSearch = useDebounceCallback(setSearch, 500);
-
+const SearchBar: React.FC<Props> = ({ search, pathname }) => {
   return (
-    <TextField.Root
-      ref={(el) => {
-        if (search && el) {
-          el.focus();
-          const length = el.value.length;
-          el.setSelectionRange(length, length);
-        }
-      }}
-      placeholder="Search..."
-      defaultValue={search}
-      onChange={(e) => handleSearch(e.target.value)}
-    >
-      <TextField.Slot side="left">
-        <SearchIcon className="size-4" />
-      </TextField.Slot>
-      {search && (
+    <form>
+      <TextField.Root
+        name="search"
+        placeholder="Search..."
+        defaultValue={search}
+      >
+        <TextField.Slot side="left">
+          <SearchIcon className="size-4" />
+        </TextField.Slot>
         <TextField.Slot side="right">
-          <IconButton
-            size="1"
-            variant="soft"
-            color="red"
-            radius="full"
-            onClick={() => setSearch(undefined)}
-          >
-            <XIcon className="size-3" />
+          {search && (
+            <IconButton
+              type="reset"
+              size="1"
+              variant="ghost"
+              color="red"
+              radius="full"
+              asChild
+            >
+              <a href={pathname}>
+                <XIcon className="size-3" />
+              </a>
+            </IconButton>
+          )}
+          <IconButton type="submit" size="1" variant="ghost">
+            <CornerDownLeftIcon className="size-4" />
           </IconButton>
         </TextField.Slot>
-      )}
-    </TextField.Root>
+      </TextField.Root>
+      <input type="submit" hidden />
+    </form>
   );
 };
 
