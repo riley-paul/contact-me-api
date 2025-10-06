@@ -5,18 +5,16 @@ import AppLayout from "@/layouts/app-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import ProjectCard from "@/components/project-card";
-import SearchBar from "@/components/search-bar";
-import { Button } from "@radix-ui/themes";
-import { PlusIcon } from "lucide-react";
+import ProjectActions from "@/components/project-actions";
 
 const db = createDb(Astro.locals.runtime.env);
 const userId = Astro.locals.user?.id;
 if (!userId) return Astro.redirect("/welcome");
 
-const search = Astro.url.searchParams.get("search");
+const search = Astro.url.searchParams.get("search") ?? undefined;
 
 const projectsStore = getProjectsStore(db, userId);
-const projects = await projectsStore.getAll(search ?? undefined);
+const projects = await projectsStore.getAll(search);
 ---
 
 <RootLayout>
@@ -25,13 +23,7 @@ const projects = await projectsStore.getAll(search ?? undefined);
       <h1>
         <div class="flex items-center justify-between">
           Projects
-          <SearchBar client:load />
-          <a href="/projects/add">
-            <Button variant="surface">
-              <PlusIcon className="size-4" />
-              Add Project
-            </Button>
-          </a>
+          <ProjectActions client:load search={search} />
         </div>
       </h1>
       <p>Click on a project to see details and messages</p>
