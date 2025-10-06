@@ -1,10 +1,13 @@
 import type { Db } from "@/db";
 
-export type Store<T> = (db: Db) => Partial<{
-  getOne: (id: string) => Promise<T | null>;
-  getAll: () => Promise<T[]>;
-  create: (data: Partial<T>) => Promise<T>;
-  update: (id: string, data: Partial<T>) => Promise<T | null>;
-  duplicate: (id: string) => Promise<T | null>;
+export type Store<S, I = S> = (
+  db: Db,
+  userId: string,
+) => Partial<{
+  getOne: (id: string) => Promise<S | null>;
+  getAll: (search?: string) => Promise<S[]>;
+  create: (data: I) => Promise<S>;
+  update: (id: string, data: Partial<I>) => Promise<S | null>;
+  duplicate: (id: string) => Promise<S | null>;
   remove: (id: string) => Promise<boolean>;
 }>;

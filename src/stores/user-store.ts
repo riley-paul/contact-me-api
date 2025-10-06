@@ -1,16 +1,18 @@
 import { User } from "@/db/schema";
-import type { UserSelect } from "@/lib/types";
+import type { UserInsert, UserSelect } from "@/lib/types";
 import { eq } from "drizzle-orm";
 import type { Store } from "./types";
 
-const userStore: Store<UserSelect> = (db) => ({
-  getOne: async (userId: string) => {
-    const [user] = await db.select().from(User).where(eq(User.id, userId));
+const userStore: Store<UserSelect, UserInsert> = (db, userId) => ({
+  getOne: async (id: string) => {
+    if (id !== userId) return null;
+    const [user] = await db.select().from(User).where(eq(User.id, id));
     if (!user) return null;
     return user;
   },
-  remove: async (userId: string) => {
-    const { rowsAffected } = await db.delete(User).where(eq(User.id, userId));
+  remove: async (id: string) => {
+    if (id !== userId) return false;
+    const { rowsAffected } = await db.delete(User).where(eq(User.id, id));
     return rowsAffected > 0;
   },
 });
