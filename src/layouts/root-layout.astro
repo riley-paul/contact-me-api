@@ -4,6 +4,7 @@ import "@fontsource-variable/radio-canada";
 
 import "@/styles/global.css";
 import { Toaster } from "@/components/ui/sonner";
+import { ClientRouter } from "astro:transitions";
 ---
 
 <html lang="en">
@@ -13,6 +14,7 @@ import { Toaster } from "@/components/ui/sonner";
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>Contactulator</title>
+    <ClientRouter />
   </head>
   <body class="dark">
     <slot />
