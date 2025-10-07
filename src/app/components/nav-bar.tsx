@@ -37,8 +37,8 @@ const NavBar: React.FC = () => {
           </div>
         </Link>
       </header>
-      <Separator orientation="horizontal" size="2" />
-      <section className="flex flex-col items-center gap-3 py-3">
+      <Separator orientation="horizontal" size="4" />
+      <section className="flex flex-col items-center gap-2 py-3">
         <NavLink title="Projects" linkOptions={{ to: "/projects" }}>
           <DraftingCompassIcon className="size-4" />
         </NavLink>
