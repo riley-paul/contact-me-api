@@ -1,6 +1,19 @@
 import type { ProjectSelect } from "@/lib/types";
 import { Button, Text, TextArea, TextField } from "@radix-ui/themes";
 import React from "react";
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 type Props = {
   project?: ProjectSelect;
@@ -9,26 +22,25 @@ type Props = {
 const ProjectForm: React.FC<Props> = ({ project }) => {
   return (
     <form className="grid gap-6">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <Text as="label" size="2" weight="medium" className="grid gap-1">
-          <span>Name</span>
-          <TextField.Root
-            placeholder="Cool Project"
-            name="name"
-            defaultValue={project?.name}
-            required
-          />
-        </Text>
-        <Text as="label" size="2" weight="medium" className="grid gap-1">
-          <span>Identifier</span>
-          <TextField.Root
-            placeholder="cool-project"
-            name="identifier"
-            defaultValue={project?.identifier}
-            required
-          />
-        </Text>
-      </div>
+      <Field>
+        <FieldLabel>Name</FieldLabel>
+        <Input
+          placeholder="Cool Project"
+          name="name"
+          defaultValue={project?.name}
+          required
+        />
+      </Field>
+
+      <Field>
+        <FieldLabel>Identifier </FieldLabel>
+        <Input
+          placeholder="cool-project"
+          name="identifier"
+          defaultValue={project?.identifier}
+          required
+        />
+      </Field>
 
       <Text as="label" size="2" weight="medium" className="grid gap-1">
         <span>Description</span>
@@ -42,7 +54,7 @@ const ProjectForm: React.FC<Props> = ({ project }) => {
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Text as="label" size="2" weight="medium" className="grid gap-1">
           <span>Live URL</span>
-          <TextField.Root
+          <Input
             placeholder="https://example.com"
             name="liveUrl"
             defaultValue={project?.liveUrl ?? undefined}
@@ -50,7 +62,7 @@ const ProjectForm: React.FC<Props> = ({ project }) => {
         </Text>
         <Text as="label" size="2" weight="medium" className="grid gap-1">
           <span>Repository URL</span>
-          <TextField.Root
+          <Input
             placeholder="https://github.com/username/repo"
             name="repoUrl"
             defaultValue={project?.repoUrl ?? undefined}

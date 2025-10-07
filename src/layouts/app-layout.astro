@@ -1,10 +1,10 @@
 ---
-import { Separator } from "@radix-ui/themes";
 import Logo from "@/components/logo";
 import { ACCENT_COLOR } from "@/lib/client/constants";
 import UserMenu from "@/components/user-menu";
 import { createDb } from "@/db";
 import getUserStore from "@/stores/user-store";
+import { Separator } from "@/components/ui/separator";
 
 const db = createDb(Astro.locals.runtime.env);
 const userId = Astro.locals.user?.id;
@@ -22,7 +22,7 @@ if (!user) return Astro.redirect("/welcome");
   </div>
 </header>
 <div class="container2">
-  <Separator size="4" color={ACCENT_COLOR} />
+  <Separator />
 </div>
 
 <main class="container2 py-6">

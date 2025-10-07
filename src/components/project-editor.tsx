@@ -1,9 +1,17 @@
-import { Button, Dialog } from "@radix-ui/themes";
 import { Edit2Icon, PlusIcon } from "lucide-react";
 import React from "react";
 import ProjectForm from "./project-form";
 import RadixProvider from "./radix-provider";
 import type { ProjectSelect } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type Props = {
   project?: ProjectSelect;
@@ -12,8 +20,8 @@ type Props = {
 const ProjectEditor: React.FC<Props> = ({ project }) => {
   return (
     <RadixProvider asChild>
-      <Dialog.Root>
-        <Dialog.Trigger>
+      <Dialog>
+        <DialogTrigger>
           <Button>
             {project ? (
               <React.Fragment>
@@ -27,19 +35,17 @@ const ProjectEditor: React.FC<Props> = ({ project }) => {
               </React.Fragment>
             )}
           </Button>
-        </Dialog.Trigger>
-        <Dialog.Content className="grid gap-6">
+        </DialogTrigger>
+        <DialogContent className="grid gap-6">
           <header>
-            <Dialog.Title trim="both">
-              {project ? "Edit" : "New"} Project
-            </Dialog.Title>
-            <Dialog.Description color="gray" size="2">
+            <DialogTitle>{project ? "Edit" : "New"} Project</DialogTitle>
+            <DialogDescription>
               Make changes to your project here. Click save when you're done.
-            </Dialog.Description>
+            </DialogDescription>
           </header>
           <ProjectForm project={project} />
-        </Dialog.Content>
-      </Dialog.Root>
+        </DialogContent>
+      </Dialog>
     </RadixProvider>
   );
 };
