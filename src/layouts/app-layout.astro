@@ -11,7 +11,6 @@ if (!userId) return Astro.redirect("/welcome");
 
 const userStore = getUserStore(db, userId);
 const user = await userStore.getOne(userId);
-if (!user) return Astro.redirect("/welcome");
 ---
 
 <header class="shrink-0 container2">
