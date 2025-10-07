@@ -20,20 +20,21 @@ const ProjectListItem: React.FC<Props> = ({ project }) => {
     <Link
       {...link}
       className={cn(
-        "hover:bg-gray-2 rounded-3 flex items-center gap-1 px-3 py-2",
+        "hover:bg-gray-2 rounded-3 flex items-center gap-2 px-3 py-2",
         "transition-colors ease-in",
         isActive && "bg-accent-9 hover:bg-accent-10",
       )}
     >
       <section className="grid">
-        <Heading size="3" weight="medium">
+        <Heading size="2" as="h2" weight="medium">
           {project.name}
         </Heading>
-        <Text size="1" color="gray" truncate>
+        <Text size="2" color="gray" truncate>
           {project.description}
         </Text>
       </section>
       <Badge
+        size="1"
         variant={isActive ? "solid" : "soft"}
         color={isActive ? ACCENT_COLOR : "gray"}
       >

@@ -29,7 +29,7 @@ const NavLink: React.FC<
 
 const NavBar: React.FC = () => {
   return (
-    <aside className="bg-panel flex h-screen w-14 flex-col items-center">
+    <aside className="bg-panel flex h-screen w-14 shrink-0 flex-col items-center">
       <header className="flex h-14 items-center justify-center">
         <Link to="/">
           <div className="bg-accent-3 flex size-10 items-center justify-center rounded-full">

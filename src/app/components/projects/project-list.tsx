@@ -15,7 +15,7 @@ const ProjectList: React.FC = () => {
   );
 
   return (
-    <aside className="flex w-[250px] flex-col">
+    <aside className="flex w-[300px] shrink-0 flex-col">
       <header className="h-14">
         <TextField.Root
           size="3"

@@ -31,7 +31,7 @@ const router = createRouter({
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
   defaultPendingComponent: () => (
-    <section className="flex h-full items-center justify-center gap-2 py-32">
+    <section className="flex h-full w-full items-center justify-center gap-2 py-32">
       <Spinner size="3" />
     </section>
   ),
