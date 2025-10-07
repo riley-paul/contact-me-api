@@ -2,9 +2,8 @@
 import "@fontsource-variable/aleo";
 import "@fontsource-variable/radio-canada";
 
+import "@radix-ui/themes/styles.css";
 import "@/styles/global.css";
-import { Toaster } from "@/components/ui/sonner";
-import { ClientRouter } from "astro:transitions";
 ---
 
 <html lang="en">
@@ -14,10 +13,8 @@ import { ClientRouter } from "astro:transitions";
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>Contactulator</title>
-    <ClientRouter />
   </head>
-  <body class="dark">
+  <body>
     <slot />
-    <Toaster client:load />
   </body>
 </html>
