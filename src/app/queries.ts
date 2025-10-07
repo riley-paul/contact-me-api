@@ -6,3 +6,9 @@ export const qUser = queryOptions({
   retry: false,
   queryFn: actions.users.getOne.orThrow,
 });
+
+export const qProjects = (search?: string) =>
+  queryOptions({
+    queryKey: ["projects", search],
+    queryFn: () => actions.projects.getAll.orThrow({ search }),
+  });
