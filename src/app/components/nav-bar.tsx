@@ -1,6 +1,11 @@
 import { IconButton, Separator, Tooltip } from "@radix-ui/themes";
 import { Link, type LinkOptions } from "@tanstack/react-router";
-import { DraftingCompassIcon, MailIcon, MessageCircleIcon } from "lucide-react";
+import {
+  DraftingCompassIcon,
+  HomeIcon,
+  MailIcon,
+  MessageCircleIcon,
+} from "lucide-react";
 import React from "react";
 import { ACCENT_COLOR } from "../lib/constants";
 import UserMenu from "./user-menu";
@@ -40,6 +45,9 @@ const NavBar: React.FC = () => {
       </header>
       <Separator orientation="horizontal" size="4" />
       <section className="flex flex-1 flex-col items-center gap-2 py-3">
+        <NavLink title="Dashboard" linkOptions={{ to: "/" }}>
+          <HomeIcon className="size-4" />
+        </NavLink>
         <NavLink title="Projects" linkOptions={{ to: "/projects" }}>
           <DraftingCompassIcon className="size-4" />
         </NavLink>

@@ -20,7 +20,7 @@ const ProjectList: React.FC = () => {
           size="3"
           radius="none"
           variant="soft"
-          className="h-full bg-transparent outline-none"
+          className="h-full bg-transparent outline-none px-3"
           placeholder="Search projects..."
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
