@@ -3,6 +3,7 @@ import { dummyStore, type Store } from "./types";
 import { and, count, eq, like, or } from "drizzle-orm";
 import { Message, Project } from "@/db/schema";
 import type { Db } from "@/db";
+import { ActionError } from "astro:actions";
 
 const getMessageCount = async (db: Db, projectId: string) => {
   const [{ messageCount }] = await db
@@ -16,23 +17,17 @@ const getProjectStore: Store<ProjectSelect, ProjectInsert> = (db, userId) => ({
   ...dummyStore(db, userId),
   getAll: async (search) => {
     const searchTerm = `%${search}%`;
+    const searchQuery = or(
+      like(Project.name, searchTerm),
+      like(Project.identifier, searchTerm),
+      like(Project.description, searchTerm),
+      like(Project.liveUrl, searchTerm),
+      like(Project.repoUrl, searchTerm),
+    );
     return db
       .select()
       .from(Project)
-      .where(
-        and(
-          eq(Project.userId, userId),
-          search
-            ? or(
-                like(Project.name, searchTerm),
-                like(Project.identifier, searchTerm),
-                like(Project.description, searchTerm),
-                like(Project.liveUrl, searchTerm),
-                like(Project.repoUrl, searchTerm),
-              )
-            : undefined,
-        ),
-      )
+      .where(and(eq(Project.userId, userId), search ? searchQuery : undefined))
       .then((rows) =>
         Promise.all(
           rows.map(async (project) => {
@@ -47,7 +42,11 @@ const getProjectStore: Store<ProjectSelect, ProjectInsert> = (db, userId) => ({
       .select()
       .from(Project)
       .where(and(eq(Project.userId, userId), eq(Project.id, id)));
-    if (!project) return null;
+    if (!project)
+      throw new ActionError({
+        code: "NOT_FOUND",
+        message: "Project not found.",
+      });
 
     const messageCount = await getMessageCount(db, id);
     return { ...project, messageCount };
@@ -67,7 +66,12 @@ const getProjectStore: Store<ProjectSelect, ProjectInsert> = (db, userId) => ({
       .set({ ...data })
       .where(and(eq(Project.userId, userId), eq(Project.id, id)))
       .returning();
-    if (!project) return null;
+    if (!project)
+      throw new ActionError({
+        code: "NOT_FOUND",
+        message: "Project not found.",
+      });
+
     const messageCount = await getMessageCount(db, project.id);
     return { ...project, messageCount };
   },
@@ -75,7 +79,14 @@ const getProjectStore: Store<ProjectSelect, ProjectInsert> = (db, userId) => ({
     const { rowsAffected } = await db
       .delete(Project)
       .where(and(eq(Project.userId, userId), eq(Project.id, id)));
-    return rowsAffected > 0;
+    const didSomething = rowsAffected > 0;
+    if (!didSomething)
+      throw new ActionError({
+        code: "NOT_FOUND",
+        message: "Project not found.",
+      });
+
+    return didSomething;
   },
 });
 
