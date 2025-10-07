@@ -24,7 +24,7 @@ export default async function seed() {
   const projects = await db
     .insert(Project)
     .values(
-      Array.from({ length: 7 }).map((_, idx) => ({
+      Array.from({ length: 7 }).map(() => ({
         userId,
         identifier: faker.lorem.slug(faker.number.int({ min: 1, max: 3 })),
         name: faker.lorem
@@ -45,7 +45,7 @@ export default async function seed() {
     const length = faker.number.int({ min: 0, max: 70 });
     if (length > 0) {
       await db.insert(Message).values(
-        Array.from({ length }).map((_, idx) => ({
+        Array.from({ length }).map(() => ({
           projectId: project.id,
           name: faker.person.fullName(),
           email: faker.internet.email(),
