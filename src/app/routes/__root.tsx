@@ -10,7 +10,7 @@ const RootLayout = () => (
     <div className="flex-1">
       <Outlet />
     </div>
-    <TanStackRouterDevtools />
+    <TanStackRouterDevtools position="bottom-right" />
   </main>
 );
 

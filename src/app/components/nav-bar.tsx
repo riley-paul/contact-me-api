@@ -3,6 +3,7 @@ import { Link, type LinkOptions } from "@tanstack/react-router";
 import { DraftingCompassIcon, MailIcon, MessageCircleIcon } from "lucide-react";
 import React from "react";
 import { ACCENT_COLOR } from "../lib/constants";
+import UserMenu from "./user-menu";
 
 const NavLink: React.FC<
   React.PropsWithChildren<{
@@ -38,7 +39,7 @@ const NavBar: React.FC = () => {
         </Link>
       </header>
       <Separator orientation="horizontal" size="4" />
-      <section className="flex flex-col items-center gap-2 py-3">
+      <section className="flex flex-1 flex-col items-center gap-2 py-3">
         <NavLink title="Projects" linkOptions={{ to: "/projects" }}>
           <DraftingCompassIcon className="size-4" />
         </NavLink>
@@ -46,6 +47,9 @@ const NavBar: React.FC = () => {
           <MessageCircleIcon className="size-4" />
         </NavLink>
       </section>
+      <footer className="flex h-14 items-center justify-center">
+        <UserMenu />
+      </footer>
     </aside>
   );
 };

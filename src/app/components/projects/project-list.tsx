@@ -5,14 +5,13 @@ import React, { useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
 import { qProjects } from "@/app/queries";
 import ProjectListItem from "./project-list-item";
+import CenteredSpinner from "@/app/components/ui/centered-spinner";
 
 const ProjectList: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearch] = useDebounceValue(searchValue, 300);
 
-  const { data: projects = [], isLoading } = useQuery(
-    qProjects(debouncedSearch),
-  );
+  const { data: projects, isLoading } = useQuery(qProjects(debouncedSearch));
 
   return (
     <aside className="flex w-[300px] shrink-0 flex-col">
@@ -33,17 +32,20 @@ const ProjectList: React.FC = () => {
       </header>
       <Separator size="4" />
       <section className="flex-1 overflow-auto">
-        <ScrollArea>
-          <ul className="flex flex-col gap-1 overflow-auto p-3">
-            {projects.map((project) => (
-              <ProjectListItem key={project.id} project={project} />
-            ))}
-          </ul>
-        </ScrollArea>
+        {isLoading && <CenteredSpinner />}
+        {projects !== undefined && (
+          <ScrollArea>
+            <ul className="flex flex-col gap-1 overflow-auto p-3">
+              {projects.map((project) => (
+                <ProjectListItem key={project.id} project={project} />
+              ))}
+            </ul>
+          </ScrollArea>
+        )}
       </section>
       <Separator size="4" />
-      <footer className="grid p-3">
-        <Button variant="surface">
+      <footer className="flex h-14 items-center justify-center px-3">
+        <Button variant="surface" className="w-full">
           <PlusIcon className="size-4" />
           New Project
         </Button>

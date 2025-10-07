@@ -11,6 +11,7 @@ import {
 // import { handleMutationError } from "@/app/hooks/use-mutations";
 import CustomToaster from "@/app/components/ui/custom-toaster";
 import { Spinner } from "@radix-ui/themes";
+import CenteredSpinner from "./components/ui/centered-spinner";
 // import ErrorPage from "@/app/components/error-page";
 
 const queryClient = new QueryClient({
@@ -30,11 +31,7 @@ const router = createRouter({
   context: { queryClient },
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
-  defaultPendingComponent: () => (
-    <section className="flex h-full w-full items-center justify-center gap-2 py-32">
-      <Spinner size="3" />
-    </section>
-  ),
+  defaultPendingComponent: CenteredSpinner,
   // defaultErrorComponent: ({ error }) => <ErrorPage error={error} goHome />,
 });
 
