@@ -1,48 +1,44 @@
 import type { UserSelect } from "@/lib/types";
-import { DropdownMenu, Text } from "@radix-ui/themes";
 import { LogOutIcon } from "lucide-react";
-import RadixProvider from "./radix-provider";
 import UserAvatar from "./user-avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type Props = { user: UserSelect };
 
 export const UserMenu: React.FC<Props> = ({ user }) => {
   return (
-    <RadixProvider asChild>
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <button className="cursor-pointer">
-            <UserAvatar user={user} avatarProps={{ size: "3" }} />
-          </button>
-        </DropdownMenu.Trigger>
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <UserAvatar user={user} />
+      </DropdownMenuTrigger>
 
-        <DropdownMenu.Content
-          side="bottom"
-          align="end"
-          className="grid gap-3"
-          onCloseAutoFocus={(e) => e.preventDefault()}
-        >
-          <header className="flex items-center gap-2 p-2">
-            <UserAvatar user={user} avatarProps={{ size: "5" }} />
-            <div className="grid flex-1 leading-0.5">
-              <Text weight="medium" truncate>
-                {user.name}
-              </Text>
-              <Text color="gray" size="2">
-                {user.email}
-              </Text>
-            </div>
-          </header>
-          <DropdownMenu.Separator />
+      <DropdownMenuContent
+        side="bottom"
+        align="end"
+        onCloseAutoFocus={(e) => e.preventDefault()}
+      >
+        <header className="flex items-center gap-2 p-2">
+          <UserAvatar user={user} className="size-12" />
+          <div>
+            <div className="font-bold">{user.name}</div>
+            <div className="text-muted-foreground text-sm">{user.email}</div>
+          </div>
+        </header>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem variant="destructive" asChild>
           <a href="/logout">
-            <DropdownMenu.Item color="amber">
-              <LogOutIcon className="size-4 opacity-70" />
-              <span>Log out</span>
-            </DropdownMenu.Item>
+            <LogOutIcon />
+            <span>Log out</span>
           </a>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
-    </RadixProvider>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

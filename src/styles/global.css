@@ -9,6 +9,8 @@
 }
 
 @theme inline {
+  --font-sans: "Radio Canada Variable", sans-serif;
+  --font-serif: "Aleo Variable", serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
