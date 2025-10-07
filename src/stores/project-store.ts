@@ -1,7 +1,16 @@
 import type { ProjectInsert, ProjectSelect } from "@/lib/types";
 import { dummyStore, type Store } from "./types";
-import { and, eq, like, or } from "drizzle-orm";
-import { Project } from "@/db/schema";
+import { and, count, eq, like, or } from "drizzle-orm";
+import { Message, Project } from "@/db/schema";
+import type { Db } from "@/db";
+
+const getMessageCount = async (db: Db, projectId: string) => {
+  const [{ messageCount }] = await db
+    .select({ messageCount: count(Message.id) })
+    .from(Message)
+    .where(eq(Message.projectId, projectId));
+  return messageCount;
+};
 
 const getProjectStore: Store<ProjectSelect, ProjectInsert> = (db, userId) => ({
   ...dummyStore(db, userId),
@@ -23,6 +32,14 @@ const getProjectStore: Store<ProjectSelect, ProjectInsert> = (db, userId) => ({
               )
             : undefined,
         ),
+      )
+      .then((rows) =>
+        Promise.all(
+          rows.map(async (project) => {
+            const messageCount = await getMessageCount(db, project.id);
+            return { ...project, messageCount };
+          }),
+        ),
       );
   },
   getOne: async (id) => {
@@ -31,14 +48,18 @@ const getProjectStore: Store<ProjectSelect, ProjectInsert> = (db, userId) => ({
       .from(Project)
       .where(and(eq(Project.userId, userId), eq(Project.id, id)));
     if (!project) return null;
-    return project;
+
+    const messageCount = await getMessageCount(db, id);
+    return { ...project, messageCount };
   },
   create: async (data) => {
     const [project] = await db
       .insert(Project)
       .values({ ...data, userId })
       .returning();
-    return project;
+
+    const messageCount = await getMessageCount(db, project.id);
+    return { ...project, messageCount };
   },
   update: async (id, data) => {
     const [project] = await db
@@ -47,7 +68,8 @@ const getProjectStore: Store<ProjectSelect, ProjectInsert> = (db, userId) => ({
       .where(and(eq(Project.userId, userId), eq(Project.id, id)))
       .returning();
     if (!project) return null;
-    return project;
+    const messageCount = await getMessageCount(db, project.id);
+    return { ...project, messageCount };
   },
   remove: async (id) => {
     const { rowsAffected } = await db

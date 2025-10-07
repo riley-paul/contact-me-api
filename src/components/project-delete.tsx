@@ -1,10 +1,10 @@
-import { Button } from "@radix-ui/themes";
 import { Trash2Icon } from "lucide-react";
 import React from "react";
+import { Button } from "./ui/button";
 
 const ProjectDelete: React.FC = () => {
   return (
-    <Button color="red" variant="surface">
+    <Button variant="destructive">
       <Trash2Icon className="size-4" />
       Delete
     </Button>

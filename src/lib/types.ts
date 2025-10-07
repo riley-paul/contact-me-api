@@ -13,7 +13,9 @@ export type UserSessionInfo = {
   expiresAt: Date;
 };
 
-export const zProjectSelect = createSelectSchema(Project);
+export const zProjectSelect = createSelectSchema(Project).extend({
+  messageCount: z.number(),
+});
 export const zProjectInsert = createInsertSchema(Project);
 export type ProjectSelect = z.infer<typeof zProjectSelect>;
 export type ProjectInsert = z.infer<typeof zProjectInsert>;
