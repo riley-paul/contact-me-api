@@ -53,7 +53,11 @@ function RouteComponent() {
         </section>
       </header>
       <Separator size="4" />
-      <section className="flex-1 overflow-auto p-6">
+      <section className="flex flex-1 flex-col gap-8 overflow-auto p-6">
+        <Heading as="h1" size="7">
+          {project.name}
+        </Heading>
+
         <div className="grid gap-4">
           <Heading as="h2" size="4">
             Messages •{" "}
