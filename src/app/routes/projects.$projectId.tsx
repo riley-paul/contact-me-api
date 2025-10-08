@@ -24,7 +24,7 @@ function RouteComponent() {
   const { data: messages = [] } = useQuery(qMessages(projectId));
 
   return (
-    <article className="flex-1">
+    <article className="flex h-screen flex-1 flex-col">
       <header className="flex h-14 items-center justify-between px-6">
         <Breadcrumb>
           <BreadcrumbList>
@@ -46,7 +46,7 @@ function RouteComponent() {
       </header>
       <Separator size="4" />
       <section className="flex-1 overflow-auto p-6">
-        <MessageTable messages={messages} />
+        <MessageTable messages={messages} className="max-h-[500px]" />
       </section>
     </article>
   );
