@@ -1,4 +1,4 @@
-import { Button, Separator } from "@radix-ui/themes";
+import { Button, Heading, Separator } from "@radix-ui/themes";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { qMessages, qProject } from "../queries";
@@ -46,7 +46,12 @@ function RouteComponent() {
       </header>
       <Separator size="4" />
       <section className="flex-1 overflow-auto p-6">
-        <MessageTable messages={messages} className="max-h-[500px]" />
+        <div className="grid gap-4">
+          <Heading as="h2" size="4">
+            Messages • {messages.length}
+          </Heading>
+          <MessageTable messages={messages} className="max-h-[500px]" />
+        </div>
       </section>
     </article>
   );

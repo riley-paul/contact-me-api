@@ -16,6 +16,7 @@ import {
 
 import { Button, Separator } from "@radix-ui/themes";
 import { DraftingCompassIcon, PlusIcon } from "lucide-react";
+import HeaderContainer from "../components/ui/header-container";
 
 export const Route = createFileRoute("/projects/")({
   component: RouteComponent,
@@ -24,7 +25,7 @@ export const Route = createFileRoute("/projects/")({
 function RouteComponent() {
   return (
     <article className="flex-1">
-      <header className="flex h-14 items-center justify-between px-6">
+      <HeaderContainer>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -32,8 +33,7 @@ function RouteComponent() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-      </header>
-      <Separator size="4" />
+      </HeaderContainer>
       <Empty className="h-full">
         <EmptyHeader>
           <EmptyMedia variant="icon">
