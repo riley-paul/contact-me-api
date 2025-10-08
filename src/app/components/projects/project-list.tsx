@@ -1,57 +1,89 @@
-import { Button, ScrollArea, Separator, TextField } from "@radix-ui/themes";
+import { Button } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
-import { PlusIcon, SearchIcon } from "lucide-react";
-import React, { useState } from "react";
-import { useDebounceValue } from "usehooks-ts";
+import {
+  DraftingCompassIcon,
+  SearchIcon,
+  SearchXIcon,
+} from "lucide-react";
+import React from "react";
 import { qProjects } from "@/app/queries";
 import ProjectListItem from "./project-list-item";
 import CenteredSpinner from "@/app/components/ui/centered-spinner";
 
-const ProjectList: React.FC = () => {
-  const [searchValue, setSearchValue] = useState("");
-  const [debouncedSearch] = useDebounceValue(searchValue, 300);
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/app/components/ui/empty";
 
-  const { data: projects, isLoading } = useQuery(qProjects(debouncedSearch));
+type Props = {
+  search: string;
+  clearSearch: () => void;
+};
 
-  return (
-    <aside className="flex w-[300px] shrink-0 flex-col">
-      <header className="h-14">
-        <TextField.Root
-          size="3"
-          radius="none"
-          variant="soft"
-          className="h-full bg-transparent outline-none px-3"
-          placeholder="Search projects..."
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-        >
-          <TextField.Slot side="left">
-            <SearchIcon className="text-accent-10 size-4" />
-          </TextField.Slot>
-        </TextField.Root>
-      </header>
-      <Separator size="4" />
-      <section className="flex-1 overflow-auto">
-        {isLoading && <CenteredSpinner />}
-        {projects !== undefined && (
-          <ScrollArea>
-            <ul className="flex flex-col gap-1 overflow-auto p-3">
-              {projects.map((project) => (
-                <ProjectListItem key={project.id} project={project} />
-              ))}
-            </ul>
-          </ScrollArea>
-        )}
-      </section>
-      <Separator size="4" />
-      <footer className="flex h-14 items-center justify-center px-3">
-        <Button variant="surface" className="w-full">
-          <PlusIcon className="size-4" />
-          New Project
-        </Button>
-      </footer>
-    </aside>
-  );
+const ProjectList: React.FC<Props> = ({ search, clearSearch }) => {
+  const { data: projects, status } = useQuery(qProjects(search));
+
+  switch (status) {
+    case "pending":
+      return <CenteredSpinner />;
+    case "error":
+      return "error loading projects";
+    case "success":
+      if (projects?.length === 0) {
+        if (search) {
+          return (
+            <Empty className="h-full">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <SearchIcon />
+                </EmptyMedia>
+                <EmptyTitle>No Search Results</EmptyTitle>
+                <EmptyDescription>
+                  We couldn&apos;t find any projects matching &quot;{search}
+                  &quot;.
+                </EmptyDescription>
+              </EmptyHeader>
+              <EmptyContent>
+                <Button
+                  onClick={clearSearch}
+                  variant="outline"
+                  color="gray"
+                  size="1"
+                >
+                  <SearchXIcon className="size-3" />
+                  Clear search
+                </Button>
+              </EmptyContent>
+            </Empty>
+          );
+        }
+
+        return (
+          <Empty className="h-full">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <DraftingCompassIcon />
+              </EmptyMedia>
+              <EmptyTitle>No Search Results</EmptyTitle>
+              <EmptyDescription>
+                You haven&apos;t created any projects yet.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        );
+      }
+      return (
+        <ul className="flex flex-col gap-1 overflow-auto p-3">
+          {projects.map((project) => (
+            <ProjectListItem key={project.id} project={project} />
+          ))}
+        </ul>
+      );
+  }
 };
 
 export default ProjectList;

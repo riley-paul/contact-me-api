@@ -2,15 +2,8 @@ import { Edit2Icon, PlusIcon } from "lucide-react";
 import React from "react";
 import ProjectForm from "./project-form";
 import type { ProjectSelect } from "@/lib/types";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Button, Dialog } from "@radix-ui/themes";
+
 
 type Props = {
   project?: ProjectSelect;
@@ -18,8 +11,8 @@ type Props = {
 
 const ProjectEditor: React.FC<Props> = ({ project }) => {
   return (
-    <Dialog>
-      <DialogTrigger>
+    <Dialog.Root>
+      <Dialog.Trigger>
         <Button>
           {project ? (
             <React.Fragment>
@@ -33,19 +26,19 @@ const ProjectEditor: React.FC<Props> = ({ project }) => {
             </React.Fragment>
           )}
         </Button>
-      </DialogTrigger>
-      <DialogContent className="w-full max-w-4xl">
-        <DialogHeader>
-          <DialogTitle>{project ? "Edit" : "New"} Project</DialogTitle>
-          <DialogDescription>
+      </Dialog.Trigger>
+      <Dialog.Content className="w-full max-w-4xl">
+        <header>
+          <Dialog.Title>{project ? "Edit" : "New"} Project</Dialog.Title>
+          <Dialog.Description>
             {project
               ? "Make changes to your project here"
               : "Create a new project here"}
-          </DialogDescription>
-        </DialogHeader>
+          </Dialog.Description>
+        </header>
         <ProjectForm project={project} />
-      </DialogContent>
-    </Dialog>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 };
 

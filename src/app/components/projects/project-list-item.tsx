@@ -2,7 +2,7 @@ import useIsLinkActive from "@/app/hooks/use-is-link-active";
 import { ACCENT_COLOR } from "@/app/lib/constants";
 import { cn } from "@/lib/client/utils";
 import type { ProjectSelect } from "@/lib/types";
-import { Badge, Button, Heading, Text } from "@radix-ui/themes";
+import { Badge, Heading, Text } from "@radix-ui/themes";
 import { Link, linkOptions } from "@tanstack/react-router";
 import React from "react";
 
