@@ -18,3 +18,9 @@ export const qProject = (projectId: string) =>
     queryKey: ["project", projectId],
     queryFn: () => actions.projects.getOne.orThrow({ projectId }),
   });
+
+export const qMessages = (projectId?: string) =>
+  queryOptions({
+    queryKey: ["messages", projectId],
+    queryFn: () => actions.messages.getAll.orThrow({ projectId }),
+  });

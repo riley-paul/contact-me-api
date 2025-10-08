@@ -1,7 +1,7 @@
 import { Button, Separator } from "@radix-ui/themes";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { qProject } from "../queries";
+import { qMessages, qProject } from "../queries";
 
 import {
   Breadcrumb,
@@ -11,6 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/app/components/ui/breadcrumb";
+import MessageTable from "../components/messages/message-table";
 
 export const Route = createFileRoute("/projects/$projectId")({
   component: RouteComponent,
@@ -20,9 +21,10 @@ function RouteComponent() {
   const { projectId } = Route.useParams();
 
   const { data: project } = useSuspenseQuery(qProject(projectId));
+  const { data: messages = [] } = useQuery(qMessages(projectId));
 
   return (
-    <div className="w-full">
+    <article className="flex-1">
       <header className="flex h-14 items-center justify-between px-6">
         <Breadcrumb>
           <BreadcrumbList>
@@ -43,6 +45,9 @@ function RouteComponent() {
         </section>
       </header>
       <Separator size="4" />
-    </div>
+      <section className="flex-1 overflow-auto p-6">
+        <MessageTable messages={messages} />
+      </section>
+    </article>
   );
 }

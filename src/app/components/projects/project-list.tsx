@@ -68,7 +68,7 @@ const ProjectList: React.FC<Props> = ({ search, clearSearch }) => {
               <EmptyMedia variant="icon">
                 <DraftingCompassIcon />
               </EmptyMedia>
-              <EmptyTitle>No Search Results</EmptyTitle>
+              <EmptyTitle>No Projects</EmptyTitle>
               <EmptyDescription>
                 You haven&apos;t created any projects yet.
               </EmptyDescription>
