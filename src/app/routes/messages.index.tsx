@@ -9,13 +9,14 @@ import {
   BreadcrumbPage,
 } from "@/app/components/ui/breadcrumb";
 import MessageTable from "../components/messages/message-table";
+import { Skeleton } from "@radix-ui/themes";
 
 export const Route = createFileRoute("/messages/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { data: messages = [] } = useQuery(qMessages());
+  const { data: messages = [], isLoading } = useQuery(qMessages());
   return (
     <article className="flex-1">
       <HeaderContainer>
@@ -28,7 +29,12 @@ function RouteComponent() {
         </Breadcrumb>
       </HeaderContainer>
       <section className="p-6">
-        <MessageTable messages={messages} className="max-h-[calc(100vh-3rem-3.5rem-1px)]" />
+        <Skeleton loading={isLoading}>
+          <MessageTable
+            messages={messages}
+            className="h-[calc(100vh-3rem-3.5rem-1px)]"
+          />
+        </Skeleton>
       </section>
     </article>
   );

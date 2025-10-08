@@ -1,7 +1,8 @@
 import { Separator } from "@radix-ui/themes";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import NavBar from "../components/nav-bar";
+import type { QueryClient } from "@tanstack/react-query";
 
 const RootLayout = () => (
   <main className="flex h-screen overflow-hidden">
@@ -14,4 +15,6 @@ const RootLayout = () => (
   </main>
 );
 
-export const Route = createRootRoute({ component: RootLayout });
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  component: RootLayout,
+});

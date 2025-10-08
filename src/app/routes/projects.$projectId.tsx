@@ -1,4 +1,4 @@
-import { Button, Heading, Separator } from "@radix-ui/themes";
+import { Button, Heading, Separator, Skeleton } from "@radix-ui/themes";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { qMessages, qProject } from "../queries";
@@ -15,13 +15,21 @@ import MessageTable from "../components/messages/message-table";
 
 export const Route = createFileRoute("/projects/$projectId")({
   component: RouteComponent,
+  loader: async ({ params, context }) => {
+    await Promise.all([
+      context.queryClient.ensureQueryData(qProject(params.projectId)),
+      context.queryClient.ensureQueryData(qMessages(params.projectId)),
+    ]);
+  },
 });
 
 function RouteComponent() {
   const { projectId } = Route.useParams();
 
   const { data: project } = useSuspenseQuery(qProject(projectId));
-  const { data: messages = [] } = useQuery(qMessages(projectId));
+  const { data: messages, isLoading: messagesLoading } = useQuery(
+    qMessages(projectId),
+  );
 
   return (
     <article className="flex h-screen flex-1 flex-col">
@@ -48,9 +56,14 @@ function RouteComponent() {
       <section className="flex-1 overflow-auto p-6">
         <div className="grid gap-4">
           <Heading as="h2" size="4">
-            Messages • {messages.length}
+            Messages •{" "}
+            <Skeleton loading={messagesLoading}>
+              {messages?.length ?? "50"}
+            </Skeleton>
           </Heading>
-          <MessageTable messages={messages} className="max-h-[500px]" />
+          <Skeleton loading={messagesLoading}>
+            <MessageTable messages={messages ?? []} className="h-[500px]" />
+          </Skeleton>
         </div>
       </section>
     </article>
