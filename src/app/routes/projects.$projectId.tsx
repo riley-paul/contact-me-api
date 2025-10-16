@@ -16,10 +16,11 @@ import MessageTable from "../components/messages/message-table";
 export const Route = createFileRoute("/projects/$projectId")({
   component: RouteComponent,
   loader: async ({ params, context }) => {
-    await Promise.all([
+    const [project, messages] = await Promise.all([
       context.queryClient.ensureQueryData(qProject(params.projectId)),
       context.queryClient.ensureQueryData(qMessages(params.projectId)),
     ]);
+    return { project, messages };
   },
 });
 
@@ -27,9 +28,7 @@ function RouteComponent() {
   const { projectId } = Route.useParams();
 
   const { data: project } = useSuspenseQuery(qProject(projectId));
-  const { data: messages, isLoading: messagesLoading } = useQuery(
-    qMessages(projectId),
-  );
+  const { data: messages } = useSuspenseQuery(qMessages(projectId));
 
   return (
     <article className="flex h-screen flex-1 flex-col">
@@ -60,14 +59,9 @@ function RouteComponent() {
 
         <div className="grid gap-4">
           <Heading as="h2" size="4">
-            Messages •{" "}
-            <Skeleton loading={messagesLoading}>
-              {messages?.length ?? "50"}
-            </Skeleton>
+            Messages • {project.messageCount}
           </Heading>
-          <Skeleton loading={messagesLoading}>
-            <MessageTable messages={messages ?? []} className="h-[500px]" />
-          </Skeleton>
+          <MessageTable messages={messages} className="h-[500px]" />
         </div>
       </section>
     </article>

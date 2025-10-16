@@ -38,9 +38,7 @@ const NavBar: React.FC = () => {
     <aside className="bg-panel flex h-screen w-14 shrink-0 flex-col items-center">
       <header className="flex h-14 items-center justify-center">
         <Link to="/">
-          <div className="bg-accent-3 flex size-10 items-center justify-center rounded-full">
-            <MailIcon className="text-accent-10 size-5" />
-          </div>
+          <MailIcon className="text-accent-10 size-6" />
         </Link>
       </header>
       <Separator orientation="horizontal" size="4" />

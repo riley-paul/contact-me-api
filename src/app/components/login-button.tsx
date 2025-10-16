@@ -1,3 +1,4 @@
+import { cn } from "@/lib/client/utils";
 import { Button } from "@radix-ui/themes";
 import React from "react";
 
@@ -5,6 +6,7 @@ type ProviderDetails = {
   name: string;
   icon: React.ReactNode;
   url: string;
+  className?: string;
 };
 
 const providers: Record<string, ProviderDetails> = {
@@ -37,6 +39,7 @@ const providers: Record<string, ProviderDetails> = {
       </svg>
     ), // Replace with actual icon
     url: "/login/google",
+    className: "bg-white text-gray-900",
   },
   github: {
     name: "GitHub",
@@ -54,6 +57,7 @@ const providers: Record<string, ProviderDetails> = {
       </svg>
     ), // Replace with actual icon
     url: "/login/github",
+    className: "bg-black text-white",
   },
 };
 
@@ -62,13 +66,13 @@ type Props = {
 };
 
 const LoginButton: React.FC<Props> = ({ provider }) => {
-  const { name, icon, url } = providers[provider];
+  const { name, icon, url, className } = providers[provider];
   return (
-    <Button asChild>
-      <a href={url}>
+    <a href={url}>
+      <Button className={cn(className, "w-full")}>
         <span>Login with {name}</span> <span className="size-4">{icon}</span>
-      </a>
-    </Button>
+      </Button>
+    </a>
   );
 };
 

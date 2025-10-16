@@ -25,11 +25,11 @@ const ProjectListItem: React.FC<Props> = ({ project }) => {
         isActive && "bg-accent-9 hover:bg-accent-10",
       )}
     >
-      <section className="grid">
+      <section className="grid flex-1">
         <Heading size="2" as="h2" weight="medium">
           {project.name}
         </Heading>
-        <Text size="2" color="gray" truncate>
+        <Text size="2" color="gray" className="line-clamp-2">
           {project.description}
         </Text>
       </section>
