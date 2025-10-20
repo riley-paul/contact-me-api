@@ -1,6 +1,5 @@
 ---
 import LoginButton from "@/app/components/login-button";
-import RadixProvider from "@/app/components/radix-provider";
 import RootLayout from "@/layouts/root-layout.astro";
 import { Card, Heading, Text } from "@radix-ui/themes";
 
@@ -11,20 +10,18 @@ if (user) {
 ---
 
 <RootLayout>
-  <RadixProvider>
-    <main class="flex flex-col items-center h-screen">
-      <div class="flex-1"></div>
-      <section class="flex flex-col items-center gap-2 mb-12">
-        <Heading size="9"> Contactulator </Heading>
-        <Text size="2" color="gray">
-          The best way to keep on top of your user's needs and wants
-        </Text>
-      </section>
-      <Card className="grid w-full max-w-xs gap-4" size="2">
-        <LoginButton provider="google" />
-        <LoginButton provider="github" />
-      </Card>
-      <div class="flex-2"></div>
-    </main>
-  </RadixProvider>
+  <main class="flex flex-col items-center h-screen">
+    <div class="flex-1"></div>
+    <section class="flex flex-col items-center gap-2 mb-12">
+      <Heading size="9"> Contactulator </Heading>
+      <Text size="2" color="gray">
+        The best way to keep on top of your user's needs and wants
+      </Text>
+    </section>
+    <Card className="grid w-full max-w-xs gap-4" size="2">
+      <LoginButton provider="google" />
+      <LoginButton provider="github" />
+    </Card>
+    <div class="flex-2"></div>
+  </main>
 </RootLayout>

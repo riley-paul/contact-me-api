@@ -1,0 +1,21 @@
+---
+import { Heading, Link, Separator } from "@radix-ui/themes";
+import { MailIcon } from "lucide-react";
+---
+
+<main class="container2">
+  <header class="h-14 flex items-center justify-between gap-4">
+    <a href="/" class="flex items-center gap-3">
+      <MailIcon className="size-6 text-accent-10" />
+      <Heading size="4" className="leading-tight"> Contactulator </Heading>
+    </a>
+    <section class="flex items-center gap-6">
+      <Link size="2" href="/messages">Messages</Link>
+      <Link size="2" href="/projects">Projects</Link>
+    </section>
+  </header>
+  <Separator size="4" />
+  <article>
+    <slot />
+  </article>
+</main>

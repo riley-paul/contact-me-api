@@ -4,6 +4,7 @@ import "@fontsource-variable/radio-canada";
 
 import "@radix-ui/themes/styles.css";
 import "@/styles/global.css";
+import RadixProvider from "@/app/components/radix-provider";
 ---
 
 <html lang="en">
@@ -15,6 +16,8 @@ import "@/styles/global.css";
     <title>Contactulator</title>
   </head>
   <body>
-    <slot />
+    <RadixProvider>
+      <slot />
+    </RadixProvider>
   </body>
 </html>
