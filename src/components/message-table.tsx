@@ -37,7 +37,7 @@ const MessageTable: React.FC<Props> = ({
 
         <Table.Body>
           {messages.map((message) => (
-            <Table.Row>
+            <Table.Row key={message.id}>
               <Table.RowHeaderCell>{message.name}</Table.RowHeaderCell>
               <Table.Cell>{message.email}</Table.Cell>
               <Table.Cell>
