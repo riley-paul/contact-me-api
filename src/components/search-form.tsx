@@ -8,7 +8,7 @@ const SearchForm: React.FC<Props> = ({ search, url }) => {
   return (
     <form className="flex gap-2">
       <TextField.Root
-        variant="soft"
+        variant="surface"
         name="search"
         defaultValue={search ?? ""}
         placeholder="Search..."

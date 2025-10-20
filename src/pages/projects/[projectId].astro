@@ -1,6 +1,7 @@
 ---
 import MessageTable from "@/components/message-table";
 import ProjectTags from "@/components/project-tags";
+import SearchForm from "@/components/search-form";
 import AppLayout from "@/layouts/app-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
@@ -12,9 +13,15 @@ if (!projectId) return Astro.redirect("/projects");
 const pageParam = Astro.url.searchParams.get("page");
 const page = pageParam ? parseInt(pageParam, 10) : 1;
 
+const search = Astro.url.searchParams.get("search") ?? undefined;
+
 const [project, messages] = await Promise.all([
   Astro.callAction(actions.projects.getOne.orThrow, { projectId }),
-  Astro.callAction(actions.messages.getAll.orThrow, { projectId, page }),
+  Astro.callAction(actions.messages.getAll.orThrow, {
+    projectId,
+    page,
+    search,
+  }),
 ]);
 ---
 
@@ -28,7 +35,10 @@ const [project, messages] = await Promise.all([
       <p>
         This project has received <strong>{project.messageCount}</strong> emails.
       </p>
-      <h2>Messages</h2>
+      <header class="flex items-baseline justify-between">
+        <h2>Messages</h2>
+        <SearchForm search={search} url={Astro.url} />
+      </header>
       <section class="not-prose">
         <MessageTable
           messages={messages.messages}
