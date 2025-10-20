@@ -33,12 +33,12 @@ function RootComponent() {
   return (
     <main className="container2">
       <header className="flex h-16 items-center justify-between gap-4">
-        <a href="/" className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3">
           <PhoneIcon className="text-accent-10 size-6" />
           <Heading size="4" className="leading-tight">
             Contactulator
           </Heading>
-        </a>
+        </Link>
         <section className="flex items-center gap-6">
           {links.map(({ label, options }) => (
             <Link {...options} key={label}>

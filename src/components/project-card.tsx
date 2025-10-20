@@ -2,13 +2,14 @@ import type { ProjectSelect } from "@/lib/types";
 import { Card, Heading, Text } from "@radix-ui/themes";
 import React from "react";
 import ProjectTags from "./project-tags";
+import { Link } from "@tanstack/react-router";
 
 type Props = { project: ProjectSelect };
 
 const ProjectCard: React.FC<Props> = ({ project }) => {
   return (
     <Card asChild size="2">
-      <a href={`/projects/${project.id}`}>
+      <Link to="/projects/$projectId" params={{ projectId: project.id }}>
         <Heading as="h2" size="4">
           {project.name}
         </Heading>
@@ -16,7 +17,7 @@ const ProjectCard: React.FC<Props> = ({ project }) => {
           {project.description}
         </Text>
         <ProjectTags className="pt-4" project={project} />
-      </a>
+      </Link>
     </Card>
   );
 };
