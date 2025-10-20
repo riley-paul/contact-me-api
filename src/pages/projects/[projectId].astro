@@ -1,5 +1,6 @@
 ---
 import MessageTable from "@/components/message-table";
+import ProjectEmailTable from "@/components/project-email-table";
 import ProjectTags from "@/components/project-tags";
 import SearchForm from "@/components/search-form";
 import AppLayout from "@/layouts/app-layout.astro";
@@ -32,9 +33,9 @@ const [project, messages] = await Promise.all([
       <ProjectTags project={project} />
       <p>{project.description}</p>
       <h2>Emails</h2>
-      <p>
-        This project has received <strong>{project.messageCount}</strong> emails.
-      </p>
+      <section class="not-prose">
+        <ProjectEmailTable projectEmails={project.emails} />
+      </section>
       <header class="flex items-baseline justify-between">
         <h2>Messages</h2>
         <SearchForm search={search} url={Astro.url} />
