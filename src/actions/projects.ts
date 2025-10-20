@@ -1,10 +1,10 @@
 import { and, count, eq, like, or } from "drizzle-orm";
-import { Message, Project } from "@/db/schema";
+import { Message, Project, ProjectEmail } from "@/db/schema";
 import { createDb, type Db } from "@/db";
 import { ActionError, defineAction } from "astro:actions";
 import { ensureAuthorized } from "./helpers";
 import { z } from "astro:schema";
-import { zProjectInsert } from "@/lib/types";
+import { zProjectInsert, type ProjectSelect } from "@/lib/types";
 
 const getMessageCount = async (db: Db, projectId: string) => {
   const [{ messageCount }] = await db
@@ -14,9 +14,16 @@ const getMessageCount = async (db: Db, projectId: string) => {
   return messageCount;
 };
 
+const getProjectEmails = async (db: Db, projectId: string) => {
+  return db
+    .select()
+    .from(ProjectEmail)
+    .where(eq(ProjectEmail.projectId, projectId));
+};
+
 export const getAll = defineAction({
   input: z.object({ search: z.string().optional() }),
-  handler: async ({ search }, c) => {
+  handler: async ({ search }, c): Promise<ProjectSelect[]> => {
     const db = createDb(c.locals.runtime.env);
     const userId = ensureAuthorized(c).id;
 
@@ -36,7 +43,8 @@ export const getAll = defineAction({
         Promise.all(
           rows.map(async (project) => {
             const messageCount = await getMessageCount(db, project.id);
-            return { ...project, messageCount };
+            const emails = await getProjectEmails(db, project.id);
+            return { ...project, messageCount, emails };
           }),
         ),
       );
@@ -45,7 +53,7 @@ export const getAll = defineAction({
 
 export const getOne = defineAction({
   input: z.object({ projectId: z.string() }),
-  handler: async ({ projectId }, c) => {
+  handler: async ({ projectId }, c): Promise<ProjectSelect> => {
     const db = createDb(c.locals.runtime.env);
     const userId = ensureAuthorized(c).id;
 
@@ -60,7 +68,8 @@ export const getOne = defineAction({
       });
 
     const messageCount = await getMessageCount(db, projectId);
-    return { ...project, messageCount };
+    const emails = await getProjectEmails(db, project.id);
+    return { ...project, messageCount, emails };
   },
 });
 

@@ -61,7 +61,7 @@ export const Message = sqliteTable("message", {
   ...timeStamps,
 });
 
-export const ProjectEmails = sqliteTable("projectEmails", {
+export const ProjectEmail = sqliteTable("projectEmail", {
   id,
   projectId,
   email: text().notNull(),
