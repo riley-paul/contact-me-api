@@ -1,12 +1,14 @@
 ---
 import MessageTable from "@/components/message-table";
 import ProjectEmailTable from "@/components/project-email-table";
+import ProjectEmailAdd from "@/components/project-email-add";
 import ProjectTags from "@/components/project-tags";
 import SearchForm from "@/components/search-form";
 import AppLayout from "@/layouts/app-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
 import { actions } from "astro:actions";
+import { Heading, Text } from "@radix-ui/themes";
 
 const { projectId } = Astro.params;
 if (!projectId) return Astro.redirect("/projects");
@@ -28,25 +30,30 @@ const [project, messages] = await Promise.all([
 
 <RootLayout>
   <AppLayout>
-    <MarkdownLayout>
-      <h1>{project.name}</h1>
-      <ProjectTags project={project} />
-      <p>{project.description}</p>
-      <h2>Emails</h2>
-      <section class="not-prose">
-        <ProjectEmailTable projectEmails={project.emails} />
-      </section>
-      <header class="flex items-baseline justify-between">
-        <h2>Messages</h2>
+    <Heading size="8">{project.name}</Heading>
+    <ProjectTags project={project} />
+    <Text size="2" color="gray">{project.description}</Text>
+    <section class="grid gap-4">
+      <header class="flex items-center justify-between">
+        <Heading as="h2">Emails</Heading>
+        <ProjectEmailAdd client:load projectId={project.id} />
+      </header>
+      <ProjectEmailTable projectEmails={project.emails} />
+      <Text color="gray" size="2">
+        Messages sent to this project will be forwarded to all of the emails
+        above.
+      </Text>
+    </section>
+    <section class="grid gap-4">
+      <header class="flex items-center justify-between">
+        <Heading>Messages</Heading>
         <SearchForm search={search} url={Astro.url} />
       </header>
-      <section class="not-prose">
-        <MessageTable
-          messages={messages.messages}
-          pagination={messages.pagination}
-          url={Astro.url}
-        />
-      </section>
-    </MarkdownLayout>
+      <MessageTable
+        messages={messages.messages}
+        pagination={messages.pagination}
+        url={Astro.url}
+      />
+    </section>
   </AppLayout>
 </RootLayout>

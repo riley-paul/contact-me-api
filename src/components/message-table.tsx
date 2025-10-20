@@ -39,8 +39,8 @@ const MessageTable: React.FC<Props> = ({ messages, pagination, url }) => {
                   {intlFormatDistance(message.createdAt, new Date())}
                 </span>
               </Table.Cell>
-              <Table.Cell>
-                <IconButton radius="full" variant="soft" asChild>
+              <Table.Cell className="text-end align-middle">
+                <IconButton radius="full" variant="ghost" asChild>
                   <a href={`/messages/${message.id}`}>
                     <ArrowRightIcon className="size-4" />
                   </a>
