@@ -5,16 +5,19 @@ import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
 import { actions } from "astro:actions";
 
-const messages = await Astro.callAction(actions.messages.getAll.orThrow, {});
+const { messageId } = Astro.params;
+if (!messageId) return Astro.redirect("/messages");
+
+const message = await Astro.callAction(actions.messages.getOne.orThrow, {
+  messageId,
+});
 ---
 
 <RootLayout>
   <AppLayout>
     <MarkdownLayout>
-      <h1>Messages</h1>
-      <section class="not-prose">
-        <MessageTable messages={messages} />
-      </section>
+      <h1>Message</h1>
+      <p>{message.content}</p>
     </MarkdownLayout>
   </AppLayout>
 </RootLayout>

@@ -1,5 +1,5 @@
-import { Button, Heading, Separator, Skeleton } from "@radix-ui/themes";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { Button, Heading, Separator } from "@radix-ui/themes";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { qMessages, qProject } from "../queries";
 

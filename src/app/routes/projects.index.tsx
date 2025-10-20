@@ -14,7 +14,7 @@ import {
   EmptyTitle,
 } from "@/app/components/ui/empty";
 
-import { Button, Separator } from "@radix-ui/themes";
+import { Button } from "@radix-ui/themes";
 import { DraftingCompassIcon, PlusIcon } from "lucide-react";
 import HeaderContainer from "../components/ui/header-container";
 

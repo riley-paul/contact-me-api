@@ -1,7 +1,5 @@
 import { LogOutIcon } from "lucide-react";
 import { Avatar, DropdownMenu, Text } from "@radix-ui/themes";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { qUser } from "@/app/queries";
 import type { UserSelect } from "@/lib/types";
 import RadixProvider from "./radix-provider";
 
