@@ -1,30 +1,32 @@
 ---
+import ProjectAddLink from "@/components/project-add-link";
 import ProjectCard from "@/components/project-card";
+import SearchForm from "@/components/search-form";
 import AppLayout from "@/layouts/app-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
-import { Button } from "@radix-ui/themes";
 import { actions } from "astro:actions";
-import { PlusIcon } from "lucide-react";
 
-const projects = await Astro.callAction(actions.projects.getAll.orThrow, {});
+const search = Astro.url.searchParams.get("search") ?? undefined;
+
+const projects = await Astro.callAction(actions.projects.getAll.orThrow, {
+  search,
+});
 ---
 
 <RootLayout>
   <AppLayout>
     <MarkdownLayout>
-      <header class="flex items-start justify-between">
+      <header class="flex items-baseline justify-between">
         <h1>Projects</h1>
-        <a href="/projects/new">
-          <Button variant="solid">
-            <PlusIcon className="size-4" />
-            New Project
-          </Button>
-        </a>
+        <section class="flex items-center gap-4">
+          <SearchForm search={search} url={Astro.url} />
+          <ProjectAddLink />
+        </section>
       </header>
       <section class="not-prose grid gap-4">
         {projects.map((project) => <ProjectCard project={project} />)}
       </section>
     </MarkdownLayout>
-  </AppLayout>
-</RootLayout>
+  </AppLayout></RootLayout
+>

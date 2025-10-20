@@ -2,7 +2,7 @@ import { Button, IconButton, TextField } from "@radix-ui/themes";
 import { SearchIcon, XIcon } from "lucide-react";
 import React from "react";
 
-type Props = { search: string | null; url: URL };
+type Props = { search: string | undefined; url: URL };
 
 const SearchForm: React.FC<Props> = ({ search, url }) => {
   return (
@@ -33,7 +33,6 @@ const SearchForm: React.FC<Props> = ({ search, url }) => {
         )}
       </TextField.Root>
       <input type="submit" hidden />
-      <Button value="surface">Go</Button>
     </form>
   );
 };
