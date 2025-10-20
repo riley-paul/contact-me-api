@@ -3,6 +3,7 @@ import AppLayout from "@/layouts/app-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
 import { actions } from "astro:actions";
+import { ChevronRightIcon } from "lucide-react";
 
 const { projectId } = Astro.params;
 if (!projectId) return Astro.redirect("/projects");
@@ -16,6 +17,7 @@ const project = await Astro.callAction(actions.projects.getOne.orThrow, {
   <AppLayout>
     <MarkdownLayout>
       <h1>{project.name}</h1>
+      <p>{project.description}</p>
     </MarkdownLayout>
   </AppLayout>
 </RootLayout>

@@ -12,7 +12,7 @@ const projects = await Astro.callAction(actions.projects.getAll.orThrow, {});
   <AppLayout>
     <MarkdownLayout>
       <h1>Projects</h1>
-      <section class="not-prose">
+      <section class="not-prose grid gap-4">
         {projects.map((project) => <ProjectCard project={project} />)}
       </section>
     </MarkdownLayout>
