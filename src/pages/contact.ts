@@ -1,5 +1,5 @@
 import { createDb } from "@/db";
-import { Project, ProjectEmails } from "@/db/schema";
+import { Project, ProjectEmail } from "@/db/schema";
 import { createResend } from "@/lib/server/resend";
 import type { APIRoute } from "astro";
 import { z } from "astro/zod";
@@ -37,8 +37,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   const projectEmails = await db
     .select()
-    .from(ProjectEmails)
-    .where(eq(ProjectEmails.projectId, project.id))
+    .from(ProjectEmail)
+    .where(eq(ProjectEmail.projectId, project.id))
     .then((rows) => rows.map((r) => r.email));
 
   const emailResponse = await resend.emails.send({

@@ -1,4 +1,4 @@
-import { Button, IconButton, TextField } from "@radix-ui/themes";
+import { IconButton, TextField } from "@radix-ui/themes";
 import { SearchIcon, XIcon } from "lucide-react";
 import React from "react";
 

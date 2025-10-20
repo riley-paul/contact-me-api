@@ -2,8 +2,8 @@
 import MessageTable from "@/components/message-table";
 import SearchForm from "@/components/search-form";
 import AppLayout from "@/layouts/app-layout.astro";
-import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
+import { Heading } from "@radix-ui/themes";
 import { actions } from "astro:actions";
 
 const pageParam = Astro.url.searchParams.get("page");
@@ -19,18 +19,10 @@ const { messages, pagination } = await Astro.callAction(
 
 <RootLayout>
   <AppLayout>
-    <MarkdownLayout>
-      <header class="flex items-baseline justify-between">
-        <h1>Messages</h1>
-        <SearchForm search={search} url={Astro.url} />
-      </header>
-      <section class="not-prose">
-        <MessageTable
-          messages={messages}
-          pagination={pagination}
-          url={Astro.url}
-        />
-      </section>
-    </MarkdownLayout>
+    <header class="flex items-center justify-between">
+      <Heading size="8">Messages</Heading>
+      <SearchForm search={search} url={Astro.url} />
+    </header>
+    <MessageTable messages={messages} pagination={pagination} url={Astro.url} />
   </AppLayout>
 </RootLayout>
