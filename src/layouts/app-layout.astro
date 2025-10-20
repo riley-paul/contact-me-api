@@ -1,10 +1,15 @@
 ---
+import UserMenu from "@/app/components/user-menu";
+import { ACCENT_COLOR } from "@/app/lib/constants";
 import { Heading, Link, Separator } from "@radix-ui/themes";
+import { actions } from "astro:actions";
 import { MailIcon } from "lucide-react";
+
+const user = await Astro.callAction(actions.users.getOne.orThrow, {});
 ---
 
 <main class="container2">
-  <header class="h-14 flex items-center justify-between gap-4">
+  <header class="h-16 flex items-center justify-between gap-4">
     <a href="/" class="flex items-center gap-3">
       <MailIcon className="size-6 text-accent-10" />
       <Heading size="4" className="leading-tight"> Contactulator </Heading>
@@ -12,10 +17,11 @@ import { MailIcon } from "lucide-react";
     <section class="flex items-center gap-6">
       <Link size="2" href="/messages">Messages</Link>
       <Link size="2" href="/projects">Projects</Link>
+      <UserMenu client:load user={user} />
     </section>
   </header>
-  <Separator size="4" />
-  <article>
+  <Separator size="4" color={ACCENT_COLOR} />
+  <article class="py-4">
     <slot />
   </article>
 </main>
