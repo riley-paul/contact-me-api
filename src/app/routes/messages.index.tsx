@@ -6,6 +6,7 @@ import { z } from "astro:schema";
 import { qMessages } from "../queries";
 import React from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useDebounceCallback } from "usehooks-ts";
 
 export const Route = createFileRoute("/messages/")({
   component: RouteComponent,
@@ -30,9 +31,9 @@ function RouteComponent() {
 
   const navigate = Route.useNavigate();
 
-  const setSearch = (search: string | undefined) => {
+  const setSearch = useDebounceCallback((search: string | undefined) => {
     navigate({ to: ".", search: (old) => ({ ...old, search }) });
-  };
+  });
 
   const setPage = (page: number) => {
     navigate({ search: (old) => ({ ...old, page }) });

@@ -1,6 +1,7 @@
 import { IconButton, TextField } from "@radix-ui/themes";
 import { SearchIcon, XIcon } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+import { useDebounceCallback } from "usehooks-ts";
 
 type Props = {
   search: string | undefined;
@@ -8,12 +9,18 @@ type Props = {
 };
 
 const SearchForm: React.FC<Props> = ({ search, setSearch }) => {
+  const [value, setValue] = useState(search ?? "");
+
   return (
     <TextField.Root
       variant="surface"
       name="search"
-      value={search}
-      onChange={(e) => setSearch(e.target.value)}
+      value={value}
+      onChange={(e) => {
+        const { value } = e.target;
+        setValue(value);
+        setSearch(value.length > 0 ? value : undefined);
+      }}
       placeholder="Search..."
     >
       <TextField.Slot side="left">
@@ -26,7 +33,10 @@ const SearchForm: React.FC<Props> = ({ search, setSearch }) => {
             variant="ghost"
             radius="full"
             size="1"
-            onClick={() => setSearch(undefined)}
+            onClick={() => {
+              setValue("");
+              setSearch(undefined);
+            }}
           >
             <XIcon className="size-4" />
           </IconButton>
