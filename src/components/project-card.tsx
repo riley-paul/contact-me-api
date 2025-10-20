@@ -1,6 +1,7 @@
 import type { ProjectSelect } from "@/lib/types";
-import { Badge, Card, Heading, Text } from "@radix-ui/themes";
+import { Card, Heading, Text } from "@radix-ui/themes";
 import React from "react";
+import ProjectTags from "./project-tags";
 
 type Props = { project: ProjectSelect };
 
@@ -14,12 +15,7 @@ const ProjectCard: React.FC<Props> = ({ project }) => {
         <Text size="2" color="gray" className="line-clamp-2">
           {project.description}
         </Text>
-        <footer className="mt-4 flex flex-wrap gap-3">
-          <Badge>{project.messageCount} messages</Badge>
-          <Badge color="gray" className="font-mono">
-            {project.identifier}
-          </Badge>
-        </footer>
+        <ProjectTags className="pt-4" project={project} />
       </a>
     </Card>
   );

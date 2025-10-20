@@ -1,16 +1,18 @@
 ---
+import MessageTable from "@/components/message-table";
+import ProjectTags from "@/components/project-tags";
 import AppLayout from "@/layouts/app-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
-import { Badge } from "@radix-ui/themes";
 import { actions } from "astro:actions";
 
 const { projectId } = Astro.params;
 if (!projectId) return Astro.redirect("/projects");
 
-const project = await Astro.callAction(actions.projects.getOne.orThrow, {
-  projectId,
-});
+const [project, messages] = await Promise.all([
+  Astro.callAction(actions.projects.getOne.orThrow, { projectId }),
+  Astro.callAction(actions.messages.getAll.orThrow, { projectId }),
+]);
 ---
 
 <RootLayout>
@@ -18,11 +20,9 @@ const project = await Astro.callAction(actions.projects.getOne.orThrow, {
     <MarkdownLayout>
       <h1>{project.name}</h1>
       <p>{project.description}</p>
-      <section class="mt-4 flex flex-wrap gap-3">
-        <Badge>{project.messageCount} messages</Badge>
-        <Badge color="gray" className="font-mono">
-          {project.identifier}
-        </Badge>
+      <ProjectTags project={project} />
+      <section class="not-prose">
+        <MessageTable messages={messages} />
       </section>
     </MarkdownLayout>
   </AppLayout>

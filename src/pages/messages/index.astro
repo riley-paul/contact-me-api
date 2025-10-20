@@ -5,7 +5,13 @@ import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
 import { actions } from "astro:actions";
 
-const messages = await Astro.callAction(actions.messages.getAll.orThrow, {});
+const pageParam = Astro.url.searchParams.get("page");
+const page = pageParam ? parseInt(pageParam, 10) : 1;
+
+const { messages, pagination } = await Astro.callAction(
+  actions.messages.getAll.orThrow,
+  { page },
+);
 ---
 
 <RootLayout>
@@ -13,7 +19,11 @@ const messages = await Astro.callAction(actions.messages.getAll.orThrow, {});
     <MarkdownLayout>
       <h1>Messages</h1>
       <section class="not-prose">
-        <MessageTable messages={messages} />
+        <MessageTable
+          messages={messages}
+          pagination={pagination}
+          url={Astro.url}
+        />
       </section>
     </MarkdownLayout>
   </AppLayout>

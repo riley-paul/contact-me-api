@@ -1,10 +1,15 @@
-import { zMessageInsert, type MessageSelect } from "@/lib/types";
+import {
+  zMessageInsert,
+  type MessageSelect,
+  type PaginationInfo,
+} from "@/lib/types";
 import { Message, Project } from "@/db/schema";
-import { and, eq, like, or } from "drizzle-orm";
+import { and, count, eq, like, or } from "drizzle-orm";
 import { createDb, type Db } from "@/db";
 import { ActionError, defineAction } from "astro:actions";
 import { ensureAuthorized } from "./helpers";
 import { z } from "astro:schema";
+import { PAGE_SIZE } from "@/app/lib/constants";
 
 const getUserInProject = async (db: Db, userId: string, projectId: string) => {
   const [project] = await db
@@ -18,8 +23,12 @@ export const getAll = defineAction({
   input: z.object({
     search: z.string().optional(),
     projectId: z.string().optional(),
+    page: z.number().optional(),
   }),
-  handler: async ({ search, projectId }, c): Promise<MessageSelect[]> => {
+  handler: async (
+    { search, projectId, page = 1 },
+    c,
+  ): Promise<{ messages: MessageSelect[]; pagination: PaginationInfo }> => {
     const db = createDb(c.locals.runtime.env);
     const userId = ensureAuthorized(c).id;
 
@@ -29,7 +38,14 @@ export const getAll = defineAction({
       like(Message.email, searchTerm),
       like(Message.content, searchTerm),
     );
-    return db
+
+    const query = and(
+      eq(Project.userId, userId),
+      projectId ? eq(Message.projectId, projectId) : undefined,
+      search ? searchQuery : undefined,
+    );
+
+    const messages = await db
       .select({
         id: Message.id,
         projectId: Message.projectId,
@@ -41,13 +57,25 @@ export const getAll = defineAction({
       })
       .from(Message)
       .leftJoin(Project, eq(Message.projectId, Project.id))
-      .where(
-        and(
-          eq(Project.userId, userId),
-          projectId ? eq(Message.projectId, projectId) : undefined,
-          search ? searchQuery : undefined,
-        ),
-      );
+      .where(query)
+      .limit(PAGE_SIZE)
+      .offset((page - 1) * PAGE_SIZE);
+
+    const [{ numRows }] = await db
+      .select({ numRows: count() })
+      .from(Message)
+      .leftJoin(Project, eq(Message.projectId, Project.id))
+      .where(query);
+
+    return {
+      messages,
+      pagination: {
+        page,
+        pageSize: PAGE_SIZE,
+        numPages: Math.ceil(numRows / PAGE_SIZE),
+        numRows,
+      },
+    };
   },
 });
 

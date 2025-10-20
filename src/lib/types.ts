@@ -24,3 +24,10 @@ export const zMessageSelect = createSelectSchema(Message);
 export const zMessageInsert = createInsertSchema(Message);
 export type MessageSelect = z.infer<typeof zMessageSelect>;
 export type MessageInsert = z.infer<typeof zMessageInsert>;
+
+export type PaginationInfo = {
+  page: number;
+  pageSize: number;
+  numRows: number;
+  numPages: number;
+};
