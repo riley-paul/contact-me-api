@@ -1,7 +1,7 @@
 import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes";
 import React from "react";
 import RadixProvider from "./radix-provider";
-import { PlusIcon, SaveIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { actions } from "astro:actions";
 
 type Props = { projectId: string };

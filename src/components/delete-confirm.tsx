@@ -1,4 +1,4 @@
-import { AlertDialog, Button, Dialog, Flex } from "@radix-ui/themes";
+import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import { atom, useAtom } from "jotai";
 import React from "react";
 import RadixProvider from "./radix-provider";

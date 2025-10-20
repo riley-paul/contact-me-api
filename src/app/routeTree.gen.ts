@@ -36,9 +36,9 @@ const ProjectsProjectIdRoute = ProjectsProjectIdRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const MessagesMessageIdRoute = MessagesMessageIdRouteImport.update({
-  id: '/$messageId',
-  path: '/$messageId',
-  getParentRoute: () => MessagesRoute,
+  id: '/messages/$messageId',
+  path: '/messages/$messageId',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -89,6 +89,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MessagesMessageIdRoute: typeof MessagesMessageIdRoute
   ProjectsProjectIdRoute: typeof ProjectsProjectIdRoute
   MessagesIndexRoute: typeof MessagesIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
@@ -126,16 +127,17 @@ declare module '@tanstack/react-router' {
     }
     '/messages/$messageId': {
       id: '/messages/$messageId'
-      path: '/$messageId'
+      path: '/messages/$messageId'
       fullPath: '/messages/$messageId'
       preLoaderRoute: typeof MessagesMessageIdRouteImport
-      parentRoute: typeof MessagesRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MessagesMessageIdRoute: MessagesMessageIdRoute,
   ProjectsProjectIdRoute: ProjectsProjectIdRoute,
   MessagesIndexRoute: MessagesIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,

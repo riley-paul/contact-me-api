@@ -5,6 +5,7 @@ import React from "react";
 
 import { intlFormatDistance } from "date-fns";
 import PaginationFooter from "./pagination-footer";
+import { Link } from "@tanstack/react-router";
 
 type Props = {
   messages: MessageSelect[];
@@ -59,9 +60,12 @@ const MessageTable: React.FC<Props> = ({
               </Table.Cell>
               <Table.Cell className="text-end align-middle">
                 <IconButton radius="full" variant="ghost" asChild>
-                  <a href={`/messages/${message.id}`}>
+                  <Link
+                    to="/messages/$messageId"
+                    params={{ messageId: message.id }}
+                  >
                     <ArrowRightIcon className="size-4" />
-                  </a>
+                  </Link>
                 </IconButton>
               </Table.Cell>
             </Table.Row>

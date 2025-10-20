@@ -1,7 +1,6 @@
 import { IconButton, TextField } from "@radix-ui/themes";
 import { SearchIcon, XIcon } from "lucide-react";
 import React, { useState } from "react";
-import { useDebounceCallback } from "usehooks-ts";
 
 type Props = {
   search: string | undefined;
