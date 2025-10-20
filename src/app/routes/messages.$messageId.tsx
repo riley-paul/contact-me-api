@@ -2,14 +2,12 @@ import { DataList, Heading, Text } from "@radix-ui/themes";
 import { createFileRoute } from "@tanstack/react-router";
 import { format } from "date-fns";
 import React from "react";
-import { qMessage } from "../queries";
+import { actions } from "astro:actions";
 
 export const Route = createFileRoute("/messages/$messageId")({
   component: RouteComponent,
-  loader: async ({ params, context }) => {
-    const message = await context.queryClient.ensureQueryData(
-      qMessage(params.messageId),
-    );
+  loader: async ({ params: { messageId } }) => {
+    const message = await actions.messages.getOne.orThrow({ messageId });
     return { message };
   },
 });

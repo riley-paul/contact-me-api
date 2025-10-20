@@ -1,27 +1,24 @@
 import {
   Outlet,
-  createRootRouteWithContext,
+  createRootRoute,
   linkOptions,
   type LinkOptions,
 } from "@tanstack/react-router";
-import type { QueryClient } from "@tanstack/react-query";
-import { qUser } from "../queries";
 import { Heading, Link as UiLink, Separator } from "@radix-ui/themes";
 import { PhoneIcon } from "lucide-react";
 import UserMenu from "@/components/user-menu";
 import DeleteConfirm from "@/components/delete-confirm";
 import { ACCENT_COLOR } from "@/lib/constants";
 import { Link } from "@tanstack/react-router";
+import { actions } from "astro:actions";
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
-  {
-    component: RootComponent,
-    loader: async ({ context }) => {
-      const user = await context.queryClient.ensureQueryData(qUser);
-      return { user };
-    },
+export const Route = createRootRoute({
+  component: RootComponent,
+  loader: async () => {
+    const user = await actions.users.getOne.orThrow();
+    return { user };
   },
-);
+});
 
 const links: { label: string; options: LinkOptions }[] = [
   { label: "Messages", options: linkOptions({ to: "/messages" }) },

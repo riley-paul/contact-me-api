@@ -3,10 +3,9 @@ import SearchForm from "@/components/search-form";
 import { Heading } from "@radix-ui/themes";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "astro:schema";
-import { qMessages } from "../queries";
 import React from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useDebounceCallback } from "usehooks-ts";
+import { actions } from "astro:actions";
 
 export const Route = createFileRoute("/messages/")({
   component: RouteComponent,
@@ -15,20 +14,20 @@ export const Route = createFileRoute("/messages/")({
     page: z.number().optional(),
   }),
   loaderDeps: ({ search: { search, page } }) => ({ search, page }),
-  loader: async ({ deps: { search, page }, context }) => {
-    const messageResponse = await context.queryClient.ensureQueryData(
-      qMessages({ search, page }),
-    );
+  loader: async ({ deps: { search, page } }) => {
+    const messageResponse = await actions.messages.getAll.orThrow({
+      search,
+      page,
+    });
     return { messageResponse };
   },
 });
 
 function RouteComponent() {
-  const { search, page } = Route.useSearch();
+  const { search } = Route.useSearch();
   const {
-    data: { messages, pagination },
-  } = useSuspenseQuery(qMessages({ search, page }));
-
+    messageResponse: { messages, pagination },
+  } = Route.useLoaderData();
   const navigate = Route.useNavigate();
 
   const setSearch = useDebounceCallback((search: string | undefined) => {
