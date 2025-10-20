@@ -4,11 +4,27 @@ import { useAtom } from "jotai";
 import { Trash2Icon } from "lucide-react";
 import React from "react";
 import { deleteConfirmAtom } from "./delete-confirm";
+import { actions } from "astro:actions";
+import { useRouter } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 type Props = { projectEmails: ProjectEmailSelect[] };
 
 const ProjectEmailTable: React.FC<Props> = ({ projectEmails }) => {
   const [, setDeleteConfirm] = useAtom(deleteConfirmAtom);
+  const router = useRouter();
+
+  const handleDelete = (projectEmailId: string) => {
+    setDeleteConfirm({
+      open: true,
+      onConfirm: async () => {
+        await actions.projectEmails.remove({ projectEmailId });
+        await router.invalidate();
+        setDeleteConfirm({ open: false });
+        toast.success("Email removed from project");
+      },
+    });
+  };
 
   return (
     <Table.Root variant="surface">
@@ -28,12 +44,7 @@ const ProjectEmailTable: React.FC<Props> = ({ projectEmails }) => {
               <IconButton
                 variant="ghost"
                 color="red"
-                onClick={() =>
-                  setDeleteConfirm({
-                    open: true,
-                    onConfirm: () => {},
-                  })
-                }
+                onClick={() => handleDelete(email.id)}
               >
                 <Trash2Icon className="size-4" />
               </IconButton>

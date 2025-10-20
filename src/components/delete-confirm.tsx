@@ -33,7 +33,14 @@ const DeleteConfirm: React.FC = () => {
               </Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action>
-              <Button variant="solid" color="red">
+              <Button
+                variant="solid"
+                color="red"
+                onClick={(e) => {
+                  e.preventDefault();
+                  state.open && state.onConfirm();
+                }}
+              >
                 <Trash2Icon className="size-4" />
                 Delete
               </Button>
