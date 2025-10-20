@@ -2,7 +2,9 @@
 import AppLayout from "@/layouts/app-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
+import { DataList, Heading, Text } from "@radix-ui/themes";
 import { actions } from "astro:actions";
+import { format } from "date-fns";
 
 const { messageId } = Astro.params;
 if (!messageId) return Astro.redirect("/messages");
@@ -14,9 +16,23 @@ const message = await Astro.callAction(actions.messages.getOne.orThrow, {
 
 <RootLayout>
   <AppLayout>
-    <MarkdownLayout>
-      <h1>Message</h1>
-      <p>{message.content}</p>
-    </MarkdownLayout>
+    <Heading size="8">Message</Heading>
+    <DataList.Root>
+      <DataList.Item>
+        <DataList.Label> Name </DataList.Label>
+        <DataList.Value> {message.name} </DataList.Value>
+      </DataList.Item>
+      <DataList.Item>
+        <DataList.Label> Email </DataList.Label>
+        <DataList.Value> {message.email} </DataList.Value>
+      </DataList.Item>
+      <DataList.Item>
+        <DataList.Label> Date </DataList.Label>
+        <DataList.Value>
+          {format(message.createdAt, "cccc MMM d, u @ h:mm a")}
+        </DataList.Value>
+      </DataList.Item>
+    </DataList.Root>
+    <Text size="2" color="gray">{message.content}</Text>
   </AppLayout>
 </RootLayout>
