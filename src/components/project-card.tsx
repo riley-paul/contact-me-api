@@ -6,9 +6,9 @@ type Props = { project: ProjectSelect };
 
 const ProjectCard: React.FC<Props> = ({ project }) => {
   return (
-    <Card asChild>
+    <Card asChild size="2">
       <a href={`/projects/${project.id}`}>
-        <Heading as="h2" size="3">
+        <Heading as="h2" size="4">
           {project.name}
         </Heading>
         <Text size="2" color="gray" className="line-clamp-2">

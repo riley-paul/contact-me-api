@@ -1,21 +1,7 @@
 import type { ProjectSelect } from "@/lib/types";
 import React from "react";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSeparator,
-  FieldSet,
-  FieldTitle,
-} from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "./ui/button";
 import { SaveIcon } from "lucide-react";
+import { Button, Separator, Text, TextArea, TextField } from "@radix-ui/themes";
 
 type Props = {
   project?: ProjectSelect;
@@ -24,69 +10,79 @@ type Props = {
 const ProjectForm: React.FC<Props> = ({ project }) => {
   return (
     <form className="grid gap-6">
-      <Field>
-        <FieldLabel>Name</FieldLabel>
-        <Input
+      <div className="grid gap-2">
+        <Text as="label" size="2" weight="medium">
+          Name
+        </Text>
+        <TextField.Root
           placeholder="Cool Project"
           name="name"
           defaultValue={project?.name}
           required
         />
-      </Field>
+      </div>
 
-      <Field>
-        <FieldLabel>Identifier </FieldLabel>
-        <FieldDescription>
+      <div className="grid gap-2">
+        <Text as="label" size="2" weight="medium">
+          Identifier
+        </Text>
+        <Text size="1" color="gray">
           A unique identifier for the project (e.g., "cool-project"). This will
           be used in the form on your site.
-        </FieldDescription>
-        <Input
+        </Text>
+        <TextField.Root
           placeholder="cool-project"
           name="identifier"
           defaultValue={project?.identifier}
           required
         />
-      </Field>
+      </div>
 
-      <Field>
-        <FieldLabel>Description</FieldLabel>
-        <Textarea
+      <div className="grid gap-2">
+        <Text as="label" size="2" weight="medium">
+          Description
+        </Text>
+        <TextArea
           placeholder="A short description"
           name="description"
           defaultValue={project?.description ?? undefined}
         />
-      </Field>
+      </div>
 
-      <FieldSeparator />
+      <Separator size="4" />
 
-      <FieldGroup>
-        <Field>
-          <FieldLabel>Live URL</FieldLabel>
-          <FieldDescription>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="grid gap-2">
+          <Text as="label" size="2" weight="medium">
+            Live URL
+          </Text>
+          <Text size="1" color="gray">
             The URL where the project is hosted (if applicable).
-          </FieldDescription>
-          <Input
+          </Text>
+          <TextField.Root
             placeholder="https://example.com"
             name="liveUrl"
             defaultValue={project?.liveUrl ?? undefined}
           />
-        </Field>
-        <Field>
-          <FieldLabel>Repository URL</FieldLabel>
-          <FieldDescription>
+        </div>
+        <div className="grid gap-2">
+          <Text as="label" size="2" weight="medium">
+            Repository URL
+          </Text>
+          <Text size="1" color="gray">
             The URL of the project's source code repository (if applicable).
-          </FieldDescription>
-          <Input
+          </Text>
+          <TextField.Root
             placeholder="https://github.com/username/repo"
             name="repoUrl"
             defaultValue={project?.repoUrl ?? undefined}
           />
-        </Field>
-      </FieldGroup>
+        </div>
+      </div>
 
       <footer className="flex justify-end">
         <Button type="submit">
-          <SaveIcon />
+          <SaveIcon className="size-4" />
           {project ? "Update" : "Create"} Project
         </Button>
       </footer>
