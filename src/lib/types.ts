@@ -31,7 +31,9 @@ export const zProjectInsert = createInsertSchema(Project);
 export type ProjectSelect = z.infer<typeof zProjectSelect>;
 export type ProjectInsert = z.infer<typeof zProjectInsert>;
 
-export const zMessageSelect = createSelectSchema(Message);
+export const zMessageSelect = createSelectSchema(Message).extend({
+  project: z.object({ id: z.string(), name: z.string() }),
+});
 export const zMessageInsert = createInsertSchema(Message);
 export type MessageSelect = z.infer<typeof zMessageSelect>;
 export type MessageInsert = z.infer<typeof zMessageInsert>;

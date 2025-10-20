@@ -1,5 +1,5 @@
 import type { MessageSelect, PaginationInfo } from "@/lib/types";
-import { IconButton, Table } from "@radix-ui/themes";
+import { Badge, IconButton, Table, Text } from "@radix-ui/themes";
 import { ArrowRightIcon } from "lucide-react";
 import React from "react";
 
@@ -10,9 +10,15 @@ type Props = {
   messages: MessageSelect[];
   pagination: PaginationInfo;
   url: URL;
+  showProject?: boolean;
 };
 
-const MessageTable: React.FC<Props> = ({ messages, pagination, url }) => {
+const MessageTable: React.FC<Props> = ({
+  messages,
+  pagination,
+  url,
+  showProject,
+}) => {
   return (
     <div className="grid gap-4">
       <Table.Root variant="surface">
@@ -21,6 +27,9 @@ const MessageTable: React.FC<Props> = ({ messages, pagination, url }) => {
             <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Content</Table.ColumnHeaderCell>
+            {showProject && (
+              <Table.ColumnHeaderCell>Project</Table.ColumnHeaderCell>
+            )}
             <Table.ColumnHeaderCell>Recieved</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
           </Table.Row>
@@ -34,10 +43,19 @@ const MessageTable: React.FC<Props> = ({ messages, pagination, url }) => {
               <Table.Cell>
                 <span className="line-clamp-2 max-w-sm">{message.content}</span>
               </Table.Cell>
+              {showProject && (
+                <Table.Cell>
+                  <Badge variant="soft" asChild>
+                    <a href={`/projects/${message.projectId}`}>
+                      {message.project.name}
+                    </a>
+                  </Badge>
+                </Table.Cell>
+              )}
               <Table.Cell>
-                <span className="truncate">
+                <Text truncate>
                   {intlFormatDistance(message.createdAt, new Date())}
-                </span>
+                </Text>
               </Table.Cell>
               <Table.Cell className="text-end align-middle">
                 <IconButton radius="full" variant="ghost" asChild>

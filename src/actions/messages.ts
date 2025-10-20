@@ -37,6 +37,7 @@ export const getAll = defineAction({
       like(Message.name, searchTerm),
       like(Message.email, searchTerm),
       like(Message.content, searchTerm),
+      like(Project.name, searchTerm),
     );
 
     const query = and(
@@ -49,6 +50,10 @@ export const getAll = defineAction({
       .select({
         id: Message.id,
         projectId: Message.projectId,
+        project: {
+          id: Project.id,
+          name: Project.name,
+        },
         name: Message.name,
         email: Message.email,
         content: Message.content,
@@ -56,7 +61,7 @@ export const getAll = defineAction({
         updatedAt: Message.updatedAt,
       })
       .from(Message)
-      .leftJoin(Project, eq(Message.projectId, Project.id))
+      .innerJoin(Project, eq(Message.projectId, Project.id))
       .where(query)
       .limit(PAGE_SIZE)
       .offset((page - 1) * PAGE_SIZE);
@@ -81,7 +86,7 @@ export const getAll = defineAction({
 
 export const getOne = defineAction({
   input: z.object({ messageId: z.string() }),
-  handler: async ({ messageId }, c) => {
+  handler: async ({ messageId }, c): Promise<MessageSelect> => {
     const db = createDb(c.locals.runtime.env);
     const userId = ensureAuthorized(c).id;
 
@@ -89,6 +94,10 @@ export const getOne = defineAction({
       .select({
         id: Message.id,
         projectId: Message.projectId,
+        project: {
+          id: Project.id,
+          name: Project.name,
+        },
         name: Message.name,
         email: Message.email,
         content: Message.content,
@@ -96,13 +105,15 @@ export const getOne = defineAction({
         updatedAt: Message.updatedAt,
       })
       .from(Message)
-      .leftJoin(Project, eq(Message.projectId, Project.id))
+      .innerJoin(Project, eq(Message.projectId, Project.id))
       .where(and(eq(Project.userId, userId), eq(Message.id, messageId)));
+
     if (!message)
       throw new ActionError({
         code: "NOT_FOUND",
         message: "Message not found.",
       });
+
     return message;
   },
 });

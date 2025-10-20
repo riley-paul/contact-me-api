@@ -1,5 +1,6 @@
 ---
 import UserMenu from "@/components/user-menu";
+import DeleteConfirm from "@/components/delete-confirm";
 import { ACCENT_COLOR } from "@/lib/constants";
 import { Heading, Link, Separator } from "@radix-ui/themes";
 import { actions } from "astro:actions";
@@ -41,4 +42,5 @@ const links = [
   <article class="py-6 grid gap-8">
     <slot />
   </article>
+  <DeleteConfirm client:load />
 </main>

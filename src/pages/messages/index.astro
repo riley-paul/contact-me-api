@@ -23,6 +23,11 @@ const { messages, pagination } = await Astro.callAction(
       <Heading size="8">Messages</Heading>
       <SearchForm search={search} url={Astro.url} />
     </header>
-    <MessageTable messages={messages} pagination={pagination} url={Astro.url} />
+    <MessageTable
+      messages={messages}
+      pagination={pagination}
+      url={Astro.url}
+      showProject
+    />
   </AppLayout>
 </RootLayout>
