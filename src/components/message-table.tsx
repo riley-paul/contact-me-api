@@ -9,15 +9,15 @@ import PaginationFooter from "./pagination-footer";
 type Props = {
   messages: MessageSelect[];
   pagination: PaginationInfo;
-  url: URL;
   showProject?: boolean;
+  setPage: (page: number) => void;
 };
 
 const MessageTable: React.FC<Props> = ({
   messages,
   pagination,
-  url,
   showProject,
+  setPage,
 }) => {
   return (
     <div className="grid gap-4">
@@ -68,7 +68,7 @@ const MessageTable: React.FC<Props> = ({
           ))}
         </Table.Body>
       </Table.Root>
-      <PaginationFooter pagination={pagination} url={url} />
+      <PaginationFooter pagination={pagination} setPage={setPage} />
     </div>
   );
 };

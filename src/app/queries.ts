@@ -19,10 +19,14 @@ export const qProject = (projectId: string) =>
     queryFn: () => actions.projects.getOne.orThrow({ projectId }),
   });
 
-export const qMessages = (projectId?: string) =>
+export const qMessages = ({
+  projectId,
+  page,
+  search,
+}: Partial<{ projectId: string; page: number; search: string }>) =>
   queryOptions({
-    queryKey: ["messages", projectId],
-    queryFn: () => actions.messages.getAll.orThrow({ projectId }),
+    queryKey: ["messages", projectId, search, page],
+    queryFn: () => actions.messages.getAll.orThrow({ projectId, page, search }),
   });
 
 export const qMessage = (messageId: string) =>

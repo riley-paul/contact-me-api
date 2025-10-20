@@ -10,21 +10,13 @@ import React from "react";
 
 type Props = {
   pagination: PaginationInfo;
-  url: URL;
-  searchParamId?: string;
+  setPage: (page: number) => void;
 };
 
 const PaginationFooter: React.FC<Props> = ({
   pagination: { page, numPages },
-  url,
-  searchParamId,
+  setPage,
 }) => {
-  const getUrlWithPage = (page: number) => {
-    const newUrl = new URL(url.toString());
-    newUrl.searchParams.set(searchParamId ?? "page", page.toString());
-    return newUrl.toString();
-  };
-
   const nextDisabled = page >= numPages;
   const prevDisabled = page <= 1;
 
@@ -36,25 +28,33 @@ const PaginationFooter: React.FC<Props> = ({
         </Text>
       </section>
       <section className="flex items-center gap-2">
-        <IconButton variant="soft" disabled={prevDisabled} asChild>
-          <a href={getUrlWithPage(1)}>
-            <ChevronFirstIcon className="size-4" />
-          </a>
+        <IconButton
+          variant="soft"
+          disabled={prevDisabled}
+          onClick={() => setPage(1)}
+        >
+          <ChevronFirstIcon className="size-4" />
         </IconButton>
-        <IconButton variant="soft" disabled={prevDisabled} asChild>
-          <a href={getUrlWithPage(Math.max(1, page - 1))}>
-            <ChevronLeftIcon className="size-4" />
-          </a>
+        <IconButton
+          variant="soft"
+          disabled={prevDisabled}
+          onClick={() => setPage(Math.max(1, page - 1))}
+        >
+          <ChevronLeftIcon className="size-4" />
         </IconButton>
-        <IconButton variant="soft" disabled={nextDisabled} asChild>
-          <a href={getUrlWithPage(Math.min(numPages, page + 1))}>
-            <ChevronRightIcon className="size-4" />
-          </a>
+        <IconButton
+          variant="soft"
+          disabled={nextDisabled}
+          onClick={() => setPage(Math.min(numPages, page + 1))}
+        >
+          <ChevronRightIcon className="size-4" />
         </IconButton>
-        <IconButton variant="soft" disabled={nextDisabled} asChild>
-          <a href={getUrlWithPage(numPages)}>
-            <ChevronLastIcon className="size-4" />
-          </a>
+        <IconButton
+          variant="soft"
+          disabled={nextDisabled}
+          onClick={() => setPage(numPages)}
+        >
+          <ChevronLastIcon className="size-4" />
         </IconButton>
       </section>
     </footer>
