@@ -47,9 +47,12 @@ const MessageTable: React.FC<Props> = ({
               {showProject && (
                 <Table.Cell>
                   <Badge variant="soft" asChild>
-                    <a href={`/projects/${message.projectId}`}>
+                    <Link
+                      to="/projects/$projectId"
+                      params={{ projectId: message.projectId }}
+                    >
                       {message.project.name}
-                    </a>
+                    </Link>
                   </Badge>
                 </Table.Cell>
               )}
