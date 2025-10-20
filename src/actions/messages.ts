@@ -9,7 +9,7 @@ import { createDb, type Db } from "@/db";
 import { ActionError, defineAction } from "astro:actions";
 import { ensureAuthorized } from "./helpers";
 import { z } from "astro:schema";
-import { PAGE_SIZE } from "@/app/lib/constants";
+import { PAGE_SIZE } from "@/lib/constants";
 
 const getUserInProject = async (db: Db, userId: string, projectId: string) => {
   const [project] = await db

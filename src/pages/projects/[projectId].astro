@@ -9,9 +9,12 @@ import { actions } from "astro:actions";
 const { projectId } = Astro.params;
 if (!projectId) return Astro.redirect("/projects");
 
+const pageParam = Astro.url.searchParams.get("page");
+const page = pageParam ? parseInt(pageParam, 10) : 1;
+
 const [project, messages] = await Promise.all([
   Astro.callAction(actions.projects.getOne.orThrow, { projectId }),
-  Astro.callAction(actions.messages.getAll.orThrow, { projectId }),
+  Astro.callAction(actions.messages.getAll.orThrow, { projectId, page }),
 ]);
 ---
 
@@ -19,10 +22,19 @@ const [project, messages] = await Promise.all([
   <AppLayout>
     <MarkdownLayout>
       <h1>{project.name}</h1>
-      <p>{project.description}</p>
       <ProjectTags project={project} />
+      <p>{project.description}</p>
+      <h2>Emails</h2>
+      <p>
+        This project has received <strong>{project.messageCount}</strong> emails.
+      </p>
+      <h2>Messages</h2>
       <section class="not-prose">
-        <MessageTable messages={messages} />
+        <MessageTable
+          messages={messages.messages}
+          pagination={messages.pagination}
+          url={Astro.url}
+        />
       </section>
     </MarkdownLayout>
   </AppLayout>

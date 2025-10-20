@@ -2,7 +2,7 @@ import { useIsMobile } from "@/app/hooks/use-is-mobile";
 import { Portal, Spinner } from "@radix-ui/themes";
 import React from "react";
 import { Toaster } from "sonner";
-import RadixProvider from "../radix-provider";
+import RadixProvider from "@/components/radix-provider";
 import { CircleCheckIcon, TriangleAlertIcon, InfoIcon } from "lucide-react";
 import { useAppearance } from "@/app/hooks/use-theme";
 

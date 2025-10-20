@@ -25,30 +25,33 @@ const PaginationFooter: React.FC<Props> = ({
     return newUrl.toString();
   };
 
+  const nextDisabled = page >= numPages;
+  const prevDisabled = page <= 1;
+
   return (
-    <footer className="flex items-center justify-between gap-4">
+    <footer className="flex items-start justify-between gap-4">
       <section>
         <Text size="1" color="gray">
           Page {page} of {numPages}
         </Text>
       </section>
       <section className="flex items-center gap-2">
-        <IconButton variant="soft" disabled={page <= 1} asChild>
+        <IconButton variant="soft" disabled={prevDisabled} asChild>
           <a href={getUrlWithPage(1)}>
             <ChevronFirstIcon className="size-4" />
           </a>
         </IconButton>
-        <IconButton variant="soft" disabled={page <= 1} asChild>
+        <IconButton variant="soft" disabled={prevDisabled} asChild>
           <a href={getUrlWithPage(Math.max(1, page - 1))}>
             <ChevronLeftIcon className="size-4" />
           </a>
         </IconButton>
-        <IconButton variant="soft" disabled={page >= numPages} asChild>
+        <IconButton variant="soft" disabled={nextDisabled} asChild>
           <a href={getUrlWithPage(Math.min(numPages, page + 1))}>
             <ChevronRightIcon className="size-4" />
           </a>
         </IconButton>
-        <IconButton variant="soft" disabled={page >= numPages} asChild>
+        <IconButton variant="soft" disabled={nextDisabled} asChild>
           <a href={getUrlWithPage(numPages)}>
             <ChevronLastIcon className="size-4" />
           </a>

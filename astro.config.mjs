@@ -3,7 +3,6 @@ import { defineConfig } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
-import { tanstackRouter } from "@tanstack/router-plugin/vite";
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,15 +11,7 @@ export default defineConfig({
     imageService: "cloudflare",
   }),
   vite: {
-    plugins: [
-      tailwindcss(),
-      tanstackRouter({
-        target: "react",
-        autoCodeSplitting: true,
-        routesDirectory: "./src/app/routes",
-        generatedRouteTree: "./src/app/routeTree.gen.ts",
-      }),
-    ],
+    plugins: [tailwindcss()],
   },
   output: "server",
   integrations: [react()],
