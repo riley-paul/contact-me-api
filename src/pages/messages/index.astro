@@ -1,5 +1,6 @@
 ---
 import MessageTable from "@/components/message-table";
+import SearchForm from "@/components/search-form";
 import AppLayout from "@/layouts/app-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
@@ -8,16 +9,22 @@ import { actions } from "astro:actions";
 const pageParam = Astro.url.searchParams.get("page");
 const page = pageParam ? parseInt(pageParam, 10) : 1;
 
+const searchParam = Astro.url.searchParams.get("search");
+const search = searchParam ? String(searchParam) : undefined;
+
 const { messages, pagination } = await Astro.callAction(
   actions.messages.getAll.orThrow,
-  { page },
+  { page, search },
 );
 ---
 
 <RootLayout>
   <AppLayout>
     <MarkdownLayout>
-      <h1>Messages</h1>
+      <header class="flex items-baseline justify-between">
+        <h1>Messages</h1>
+        <SearchForm search={searchParam} url={Astro.url} />
+      </header>
       <section class="not-prose">
         <MessageTable
           messages={messages}
