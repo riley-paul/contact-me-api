@@ -1,8 +1,20 @@
 ---
+import ProjectCard from "@/components/project-card";
 import AppLayout from "@/layouts/app-layout.astro";
+import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
+import { actions } from "astro:actions";
+
+const projects = await Astro.callAction(actions.projects.getAll.orThrow, {});
 ---
 
 <RootLayout>
-  <AppLayout> Projects Page </AppLayout>
+  <AppLayout>
+    <MarkdownLayout>
+      <h1>Projects</h1>
+      <section class="not-prose">
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </section>
+    </MarkdownLayout>
+  </AppLayout>
 </RootLayout>

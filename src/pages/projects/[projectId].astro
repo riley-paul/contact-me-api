@@ -2,12 +2,20 @@
 import AppLayout from "@/layouts/app-layout.astro";
 import MarkdownLayout from "@/layouts/markdown-layout.astro";
 import RootLayout from "@/layouts/root-layout.astro";
+import { actions } from "astro:actions";
+
+const { projectId } = Astro.params;
+if (!projectId) return Astro.redirect("/projects");
+
+const project = await Astro.callAction(actions.projects.getOne.orThrow, {
+  projectId,
+});
 ---
 
 <RootLayout>
   <AppLayout>
     <MarkdownLayout>
-      <h1>Messages</h1>
+      <h1>{project.name}</h1>
     </MarkdownLayout>
   </AppLayout>
 </RootLayout>

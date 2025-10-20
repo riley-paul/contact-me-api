@@ -21,7 +21,7 @@ const user = await Astro.callAction(actions.users.getOne.orThrow, {});
     </section>
   </header>
   <Separator size="4" color={ACCENT_COLOR} />
-  <article class="py-4">
+  <article class="py-6">
     <slot />
   </article>
 </main>
