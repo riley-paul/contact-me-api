@@ -1,5 +1,5 @@
 import type { ProjectSelect } from "@/lib/types";
-import { Card, Heading, Text } from "@radix-ui/themes";
+import { Badge, Card, Heading, Text } from "@radix-ui/themes";
 import React from "react";
 
 type Props = { project: ProjectSelect };
@@ -14,6 +14,12 @@ const ProjectCard: React.FC<Props> = ({ project }) => {
         <Text size="2" color="gray" className="line-clamp-2">
           {project.description}
         </Text>
+        <footer className="mt-4 flex flex-wrap gap-3">
+          <Badge>{project.messageCount} messages</Badge>
+          <Badge color="gray" className="font-mono">
+            {project.identifier}
+          </Badge>
+        </footer>
       </a>
     </Card>
   );
