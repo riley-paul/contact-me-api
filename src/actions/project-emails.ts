@@ -7,7 +7,6 @@ import { and, eq } from "drizzle-orm";
 import { zProjectEmailInsert } from "@/lib/types";
 
 export const create = defineAction({
-  accept: "form",
   input: zProjectEmailInsert,
   handler: async (data, c) => {
     const db = createDb(c.locals.runtime.env);

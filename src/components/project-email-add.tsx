@@ -1,15 +1,23 @@
 import { Button, Dialog, Flex, Text, TextField } from "@radix-ui/themes";
-import React from "react";
+import React, { useState } from "react";
 import RadixProvider from "./radix-provider";
 import { PlusIcon } from "lucide-react";
 import { actions } from "astro:actions";
+import { useRouter } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 type Props = { projectId: string };
 
 const ProjectEmailAdd: React.FC<Props> = ({ projectId }) => {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
   return (
     <RadixProvider asChild>
-      <Dialog.Root>
+      <Dialog.Root open={open} onOpenChange={setOpen}>
         <Dialog.Trigger>
           <Button variant="soft">
             <PlusIcon className="size-5" />
@@ -17,7 +25,19 @@ const ProjectEmailAdd: React.FC<Props> = ({ projectId }) => {
           </Button>
         </Dialog.Trigger>
         <Dialog.Content>
-          <form action={actions.projectEmails.create}>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              await actions.projectEmails.create.orThrow({
+                name,
+                email,
+                projectId,
+              });
+              await router.invalidate();
+              toast.success("Project email added successfully!");
+              setOpen(false);
+            }}
+          >
             <Dialog.Title>Add Project Email</Dialog.Title>
             <Dialog.Description size="2" mb="4">
               Add a new email address to receive contact form submissions for
@@ -29,15 +49,24 @@ const ProjectEmailAdd: React.FC<Props> = ({ projectId }) => {
                 <Text as="div" size="2" mb="1" weight="bold">
                   Name
                 </Text>
-                <TextField.Root required placeholder="John Smith" />
+                <TextField.Root
+                  required
+                  placeholder="John Smith"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </label>
               <label>
                 <Text as="div" size="2" mb="1" weight="bold">
                   Email
                 </Text>
-                <TextField.Root required placeholder="johnsmith@example.com" />
+                <TextField.Root
+                  required
+                  placeholder="johnsmith@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </label>
-              <input hidden readOnly name="projectId" value={projectId} />
             </Flex>
 
             <Flex gap="3" mt="4" justify="end">
@@ -46,9 +75,7 @@ const ProjectEmailAdd: React.FC<Props> = ({ projectId }) => {
                   Cancel
                 </Button>
               </Dialog.Close>
-              <Dialog.Close>
-                <Button>Save</Button>
-              </Dialog.Close>
+              <Button type="submit">Save</Button>
             </Flex>
           </form>
         </Dialog.Content>
