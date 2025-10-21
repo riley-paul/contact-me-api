@@ -11,12 +11,14 @@ import DeleteConfirm from "@/components/delete-confirm";
 import { ACCENT_COLOR } from "@/lib/constants";
 import { Link } from "@tanstack/react-router";
 import { actions } from "astro:actions";
+import Sidebar from "@/components/sidebar";
 
 export const Route = createRootRoute({
   component: RootComponent,
   loader: async () => {
     const user = await actions.users.getOne.orThrow();
-    return { user };
+    const projects = await actions.projects.getAll.orThrow({});
+    return { user, projects };
   },
 });
 
@@ -26,34 +28,16 @@ const links: { label: string; options: LinkOptions }[] = [
 ];
 
 function RootComponent() {
-  const { user } = Route.useLoaderData();
+  const { user, projects } = Route.useLoaderData();
   return (
-    <main className="container2">
-      <header className="flex h-16 items-center justify-between gap-4">
-        <Link to="/" className="flex items-center gap-3">
-          <PhoneIcon className="text-accent-10 size-6" />
-          <Heading size="4" className="leading-tight">
-            Contactulator
-          </Heading>
-        </Link>
-        <section className="flex items-center gap-6">
-          {links.map(({ label, options }) => (
-            <Link {...options} key={label}>
-              {({ isActive }) => (
-                <UiLink size="2" color={isActive ? ACCENT_COLOR : "gray"}>
-                  {label}
-                </UiLink>
-              )}
-            </Link>
-          ))}
-          <UserMenu user={user} />
-        </section>
-      </header>
-      <Separator size="4" color={ACCENT_COLOR} />
-      <article className="grid gap-8 py-6">
-        <Outlet />
-      </article>
-      <DeleteConfirm />
-    </main>
+    <div className="flex">
+      <Sidebar projects={projects} user={user} />
+      <main className="container2 max-w-none flex-1">
+        <article className="grid gap-8 py-6">
+          <Outlet />
+        </article>
+        <DeleteConfirm />
+      </main>
+    </div>
   );
 }

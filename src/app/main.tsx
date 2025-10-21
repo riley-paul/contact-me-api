@@ -22,7 +22,7 @@ declare module "@tanstack/react-router" {
 
 // Render the app
 export default () => (
-  <RadixProvider>
+  <RadixProvider hasBackground={false}>
     <RouterProvider router={router} />
     <CustomToaster />
   </RadixProvider>
