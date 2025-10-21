@@ -4,9 +4,17 @@ import type { ProjectSelect, UserSelect } from "@/lib/types";
 import { Button, Heading, IconButton, Text } from "@radix-ui/themes";
 import { Link, type LinkOptions } from "@tanstack/react-router";
 import { atom, useAtom } from "jotai";
-import { HomeIcon, MailIcon, PhoneIcon, PlusIcon } from "lucide-react";
+import {
+  HomeIcon,
+  MailIcon,
+  PhoneIcon,
+  PlusIcon,
+  SidebarCloseIcon,
+  SidebarOpenIcon,
+} from "lucide-react";
 import React from "react";
 import UserMenu from "./user-menu";
+import { cn } from "@/lib/utils";
 
 export const sidebarOpenAtom = atom(true);
 
@@ -23,7 +31,7 @@ const SidebarLink: React.FC<React.PropsWithChildren<LinkOptions>> = ({
   return (
     <Button
       asChild
-      variant={isActive ? "soft" : "ghost"}
+      variant={isActive ? "solid" : "ghost"}
       color={isActive ? ACCENT_COLOR : "gray"}
       className="m-0 flex h-auto justify-start gap-2.5 px-3 py-1.5 text-left transition-colors ease-in"
     >
@@ -44,15 +52,27 @@ const Sidebar: React.FC<Props> = ({ projects, user }) => {
   const [open, setOpen] = useAtom(sidebarOpenAtom);
   return (
     <React.Fragment>
-      <div className="w-[300px] shrink-0 transition-all" />
-      <aside className="bg-panel rounded-3 shadow-2 fixed inset-2 right-auto flex w-[300px] flex-col p-3 transition-all">
-        <header className="flex h-8 items-center">
+      <div
+        className="shrink-0 transition-all"
+        style={{ width: open ? 300 : 0 }}
+      />
+      <aside
+        className={cn(
+          "bg-panel rounded-3 shadow-2 fixed inset-2 right-auto flex flex-col p-3 transition-all",
+          !open && "translate-x-[-300px]",
+        )}
+        style={{ width: open ? 300 : 0 }}
+      >
+        <header className="flex h-8 items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5 px-2">
             <PhoneIcon className="text-accent-10 size-5" />
             <Heading size="4" className="leading-tight">
               Contactulator
             </Heading>
           </Link>
+          <IconButton variant="soft" onClick={() => setOpen(false)}>
+            <SidebarCloseIcon className="size-4" />
+          </IconButton>
         </header>
 
         <div className="flex-1">
@@ -96,6 +116,19 @@ const Sidebar: React.FC<Props> = ({ projects, user }) => {
           <UserMenu user={user} />
         </footer>
       </aside>
+      <div className={cn("fixed inset-0 right-auto flex items-center")}>
+        <IconButton
+          variant="soft"
+          className={cn(
+            "w-6 transition-transform ease-in",
+            open && "-translate-x-6",
+          )}
+          style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+          onClick={() => setOpen(true)}
+        >
+          <SidebarOpenIcon className="size-4" />
+        </IconButton>
+      </div>
     </React.Fragment>
   );
 };

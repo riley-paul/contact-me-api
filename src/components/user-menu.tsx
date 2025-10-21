@@ -1,7 +1,6 @@
 import { LogOutIcon, MoreVerticalIcon } from "lucide-react";
 import { Avatar, Button, DropdownMenu, Text } from "@radix-ui/themes";
 import type { UserSelect } from "@/lib/types";
-import RadixProvider from "./radix-provider";
 
 export const UserMenu: React.FC<{ user: UserSelect }> = ({ user }) => {
   const fallback = user.name
