@@ -15,8 +15,14 @@ import {
 import React from "react";
 import UserMenu from "./user-menu";
 import { cn } from "@/lib/utils";
+import { atomWithStorage } from "jotai/utils";
 
-export const sidebarOpenAtom = atom(true);
+export const sidebarOpenAtom = atomWithStorage(
+  "sidebar-open",
+  true,
+  undefined,
+  { getOnInit: true },
+);
 
 type Props = {
   projects: ProjectSelect[];
@@ -54,14 +60,14 @@ const Sidebar: React.FC<Props> = ({ projects, user }) => {
     <React.Fragment>
       <div
         className="shrink-0 transition-all"
-        style={{ width: open ? 300 : 0 }}
+        style={{ width: open ? 280 : 0 }}
       />
       <aside
         className={cn(
           "bg-panel rounded-3 shadow-2 fixed inset-2 right-auto flex flex-col p-3 transition-all",
-          !open && "translate-x-[-300px]",
+          !open && "translate-x-[-280px]",
         )}
-        style={{ width: open ? 300 : 0 }}
+        style={{ width: open ? 280 : 0 }}
       >
         <header className="flex h-8 items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5 px-2">
