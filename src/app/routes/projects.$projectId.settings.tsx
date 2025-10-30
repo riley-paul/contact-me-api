@@ -22,7 +22,7 @@ function RouteComponent() {
         subtitle="Update your project name and notification settings"
         icon={Settings2Icon}
       >
-        <ProjectForm project={project} />
+        <ProjectForm key={project.updatedAt} project={project} />
       </CustomCard>
     </React.Fragment>
   );

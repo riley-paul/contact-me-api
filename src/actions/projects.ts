@@ -1,4 +1,4 @@
-import { and, count, eq, like, or } from "drizzle-orm";
+import { and, count, eq, inArray, like, or } from "drizzle-orm";
 import { Message, Project, ProjectEmail } from "@/db/schema";
 import { createDb, type Db } from "@/db";
 import { ActionError, defineAction } from "astro:actions";
@@ -69,7 +69,7 @@ export const getOne = defineAction({
 
 export const create = defineAction({
   input: z.object({ data: zProjectInsert }),
-  handler: async ({ data }, c) => {
+  handler: async ({ data }, c): Promise<ProjectSelect> => {
     const db = createDb(c.locals.runtime.env);
     const userId = ensureAuthorized(c).id;
 
@@ -78,16 +78,24 @@ export const create = defineAction({
       .values({ ...data, userId })
       .returning();
 
-    // Insert project emails
+    const emails = await db
+      .insert(ProjectEmail)
+      .values(
+        data.emails.map((email) => ({
+          projectId: project.id,
+          email,
+        })),
+      )
+      .returning();
 
     const messageCount = await getMessageCount(db, project.id);
-    return { ...project, messageCount };
+    return { ...project, emails, messageCount };
   },
 });
 
 export const update = defineAction({
   input: z.object({ projectId: z.string(), data: zProjectInsert }),
-  handler: async ({ projectId, data }, c) => {
+  handler: async ({ projectId, data }, c): Promise<ProjectSelect> => {
     const db = createDb(c.locals.runtime.env);
     const userId = ensureAuthorized(c).id;
 
@@ -102,8 +110,44 @@ export const update = defineAction({
         message: "Project not found.",
       });
 
+    const existingEmails = await db
+      .select()
+      .from(ProjectEmail)
+      .where(eq(ProjectEmail.projectId, project.id));
+    const existingEmailSet = new Set(existingEmails.map((e) => e.email));
+    const newEmailSet = new Set(data.emails);
+
+    const emailsToAdd = data.emails.filter(
+      (email) => !existingEmailSet.has(email),
+    );
+    const emailsToRemove = existingEmails
+      .filter((e) => !newEmailSet.has(e.email))
+      .map((e) => e.id);
+
+    if (emailsToAdd.length > 0) {
+      await db.insert(ProjectEmail).values(
+        emailsToAdd.map((email) => ({
+          projectId: project.id,
+          email,
+        })),
+      );
+    }
+
+    if (emailsToRemove.length > 0) {
+      await db
+        .delete(ProjectEmail)
+        .where(
+          and(
+            eq(ProjectEmail.projectId, project.id),
+            inArray(ProjectEmail.id, emailsToRemove),
+          ),
+        );
+    }
+
+    const emails = await getProjectEmails(db, project.id);
+
     const messageCount = await getMessageCount(db, project.id);
-    return { ...project, messageCount };
+    return { ...project, emails, messageCount };
   },
 });
 

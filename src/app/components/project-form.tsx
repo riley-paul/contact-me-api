@@ -3,16 +3,67 @@ import {
   zProjectInsert,
   type ProjectSelect,
 } from "@/lib/types";
-import React from "react";
+import React, { useState } from "react";
 import { PlusIcon, SaveIcon, XIcon } from "lucide-react";
 import { Badge, Button, IconButton, Text, TextField } from "@radix-ui/themes";
 import { useForm } from "@tanstack/react-form";
 import { actions } from "astro:actions";
 import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { z } from "astro/zod";
+import { ACCENT_COLOR } from "@/lib/constants";
 
 type Props = {
   project?: ProjectSelect;
+};
+
+const EmailAdder: React.FC<{ handleAddEmail: (email: string) => void }> = ({
+  handleAddEmail,
+}) => {
+  const [value, setValue] = useState("");
+  const [isError, setIsError] = useState(false);
+
+  const handleSubmit = () => {
+    const { error } = z.string().email().safeParse(value);
+    setIsError(!!error);
+
+    if (!value || error) {
+      toast.error("Not a valid email");
+      return;
+    }
+    handleAddEmail(value);
+    setValue("");
+  };
+
+  return (
+    <TextField.Root
+      size="2"
+      color={isError ? "red" : "gray"}
+      variant="soft"
+      name="email"
+      placeholder="user@example.com"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          e.stopPropagation();
+          handleSubmit();
+        }
+      }}
+    >
+      <TextField.Slot side="right">
+        <IconButton
+          onClick={handleSubmit}
+          size="1"
+          variant="ghost"
+          type="button"
+        >
+          <PlusIcon className="size-3" />
+        </IconButton>
+      </TextField.Slot>
+    </TextField.Root>
+  );
 };
 
 const ProjectForm: React.FC<Props> = ({ project }) => {
@@ -23,9 +74,9 @@ const ProjectForm: React.FC<Props> = ({ project }) => {
     emails: project?.emails.map((e) => e.email) || [],
   };
 
-  const { Field, handleSubmit, state } = useForm({
+  const { Field, handleSubmit } = useForm({
     defaultValues,
-    validators: { onSubmit: zProjectInsert },
+    validators: { onChange: zProjectInsert },
     onSubmit: async ({ value }) => {
       if (project) {
         await actions.projects.update.orThrow({
@@ -57,14 +108,23 @@ const ProjectForm: React.FC<Props> = ({ project }) => {
         </Text>
         <Field name="name">
           {({ state, handleBlur, handleChange }) => (
-            <TextField.Root
-              size="3"
-              placeholder="Cool Project"
-              defaultValue={state.value}
-              onChange={(e) => handleChange(e.target.value)}
-              onBlur={handleBlur}
-              required
-            />
+            <React.Fragment>
+              <TextField.Root
+                size="3"
+                variant={state.meta.isDirty ? "soft" : "surface"}
+                color={state.meta.isValid ? ACCENT_COLOR : "red"}
+                placeholder="Cool Project"
+                defaultValue={state.value}
+                onChange={(e) => handleChange(e.target.value)}
+                onBlur={handleBlur}
+                required
+              />
+              {state.meta.errors.map((err) => (
+                <Text key={err?.message} size="1" color="red">
+                  {err?.message}
+                </Text>
+              ))}
+            </React.Fragment>
           )}
         </Field>
         <Text size="1" color="gray">
@@ -76,35 +136,39 @@ const ProjectForm: React.FC<Props> = ({ project }) => {
         <Text as="label" size="2" weight="bold" htmlFor="email">
           Recipient Email Addresses
         </Text>
-        <div className="flex flex-wrap gap-2">
-          {project?.emails.map((e) => (
-            <Badge
-              color="gray"
-              size="3"
-              key={e.id}
-              className="text-gray-12 h-8"
-            >
-              {e.email}
-              <IconButton color="red" size="1" variant="ghost" type="button">
-                <XIcon className="size-3" />
-              </IconButton>
-            </Badge>
-          ))}
-          <TextField.Root
-            size="2"
-            color="gray"
-            variant="soft"
-            name="email"
-            type="email"
-            placeholder="user@example.com"
-          >
-            <TextField.Slot side="right">
-              <IconButton size="1" variant="ghost" type="button">
-                <PlusIcon className="size-3" />
-              </IconButton>
-            </TextField.Slot>
-          </TextField.Root>
-        </div>
+        <Field name="emails">
+          {({ state, pushValue, removeValue }) => (
+            <React.Fragment>
+              <div className="flex flex-wrap gap-2">
+                {state.value.map((e, idx) => (
+                  <Badge
+                    color="gray"
+                    size="3"
+                    key={e}
+                    className="text-gray-12 h-8"
+                  >
+                    {e}
+                    <IconButton
+                      color="red"
+                      size="1"
+                      variant="ghost"
+                      type="button"
+                      onClick={() => removeValue(idx)}
+                    >
+                      <XIcon className="size-3" />
+                    </IconButton>
+                  </Badge>
+                ))}
+                <EmailAdder handleAddEmail={pushValue} />
+              </div>
+              {state.meta.errors.map((err) => (
+                <Text key={err?.message} size="1" color="red">
+                  {err?.message}
+                </Text>
+              ))}
+            </React.Fragment>
+          )}
+        </Field>
         <Text size="1" color="gray">
           Add emails for form submission notifications. Note that the owner of
           the project (you) will always receive an email notification.
@@ -112,7 +176,7 @@ const ProjectForm: React.FC<Props> = ({ project }) => {
       </div>
 
       <footer className="flex">
-        <Button type="submit">
+        <Button>
           <SaveIcon className="size-4" />
           {project ? "Update" : "Create"} Project
         </Button>
