@@ -13,7 +13,7 @@ export type UserSessionInfo = {
   expiresAt: Date;
 };
 
-export const zProjectEmailSelect = createSelectSchema(ProjectEmail)
+export const zProjectEmailSelect = createSelectSchema(ProjectEmail);
 export const zProjectEmailInsert = createInsertSchema(ProjectEmail);
 export type ProjectEmailSelect = z.infer<typeof zProjectEmailSelect>;
 export type ProjectEmailInsert = z.infer<typeof zProjectEmailInsert>;
