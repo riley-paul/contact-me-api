@@ -2,8 +2,8 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
-import RadixProvider from "@/components/radix-provider";
-import CustomToaster from "@/components/custom-toaster";
+import RadixProvider from "@/app/components/radix-provider";
+import CustomToaster from "@/app/components/custom-toaster";
 import { Spinner } from "@radix-ui/themes";
 
 const router = createRouter({

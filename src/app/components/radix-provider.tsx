@@ -1,6 +1,6 @@
 import { Theme, type ThemeProps } from "@radix-ui/themes";
 import React from "react";
-import { ACCENT_COLOR } from "../lib/constants";
+import { ACCENT_COLOR } from "@/lib/constants";
 
 const RadixProvider: React.FC<ThemeProps> = (props) => {
   return (

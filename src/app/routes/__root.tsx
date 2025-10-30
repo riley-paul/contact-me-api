@@ -1,12 +1,7 @@
-import {
-  Outlet,
-  createRootRoute,
-  linkOptions,
-  type LinkOptions,
-} from "@tanstack/react-router";
-import DeleteConfirm from "@/components/delete-confirm";
+import { Outlet, createRootRoute } from "@tanstack/react-router";
+import DeleteConfirm from "@/app/components/delete-confirm";
 import { actions } from "astro:actions";
-import Sidebar from "@/components/sidebar";
+import Sidebar from "@/app/components/sidebar";
 
 export const Route = createRootRoute({
   component: RootComponent,

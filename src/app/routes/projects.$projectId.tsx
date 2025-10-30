@@ -1,8 +1,8 @@
-import MessageTable from "@/components/message-table";
-import ProjectEmailAdd from "@/components/project-email-add";
-import ProjectEmailTable from "@/components/project-email-table";
-import ProjectTags from "@/components/project-tags";
-import SearchForm from "@/components/search-form";
+import MessageTable from "@/app/components/message-table";
+import ProjectEmailAdd from "@/app/components/project-email-add";
+import ProjectEmailTable from "@/app/components/project-email-table";
+import ProjectTags from "@/app/components/project-tags";
+import SearchForm from "@/app/components/search-form";
 import { Heading, Text } from "@radix-ui/themes";
 import { createFileRoute } from "@tanstack/react-router";
 import { actions } from "astro:actions";

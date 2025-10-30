@@ -1,5 +1,5 @@
-import MessageTable from "@/components/message-table";
-import SearchForm from "@/components/search-form";
+import MessageTable from "@/app/components/message-table";
+import SearchForm from "@/app/components/search-form";
 import { Heading } from "@radix-ui/themes";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "astro:schema";

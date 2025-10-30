@@ -1,9 +1,9 @@
-import useIsLinkActive from "@/hooks/use-is-link-active";
+import useIsLinkActive from "@/app/hooks/use-is-link-active";
 import { ACCENT_COLOR } from "@/lib/constants";
 import type { ProjectSelect, UserSelect } from "@/lib/types";
 import { Button, Heading, IconButton, Text } from "@radix-ui/themes";
 import { Link, type LinkOptions } from "@tanstack/react-router";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import {
   HomeIcon,
   MailIcon,
