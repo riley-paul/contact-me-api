@@ -1,5 +1,10 @@
 ---
+import RadixProvider from "@/app/components/radix-provider";
 import RootLayout from "@/layouts/root-layout.astro";
+
+import Empty from "@/app/components/ui/empty";
+import { CheckCircle2Icon, ListPlusIcon, MoveLeftIcon } from "lucide-react";
+import { Button, Link, Text } from "@radix-ui/themes";
 ---
 
 <script>
@@ -10,8 +15,30 @@ import RootLayout from "@/layouts/root-layout.astro";
 </script>
 
 <RootLayout>
-  <h1>Success!</h1>
-  <p>Your message has been sent. We'll get back to you shortly.</p>
-
-  <button id="back-button"> Return </button>
+  <RadixProvider>
+    <Empty.Root className="h-screen relative">
+      <Empty.Header>
+        <Empty.Media variant="icon">
+          <CheckCircle2Icon className="size-8" />
+        </Empty.Media>
+        <Empty.Title>Message sent!</Empty.Title>
+        <Empty.Description>
+          Thank you! Your message has been successfully sent. We'll get back to
+          you shortly.
+        </Empty.Description>
+      </Empty.Header>
+      <Empty.Content>
+        <Button id="back-button">
+          <MoveLeftIcon className="size-4" />
+          Back
+        </Button>
+      </Empty.Content>
+      <Text size="1" color="gray" className="absolute bottom-8">
+        Create your own contact form at <Link
+          href="https://contactulator.rileys-projects.com"
+          >contactulator.rileys-projects.com</Link
+        >
+      </Text>
+    </Empty.Root>
+  </RadixProvider>
 </RootLayout>
