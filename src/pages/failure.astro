@@ -3,7 +3,7 @@ import RadixProvider from "@/app/components/radix-provider";
 import RootLayout from "@/layouts/root-layout.astro";
 
 import Empty from "@/app/components/ui/empty";
-import { InfoIcon, MoveLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, InfoIcon } from "lucide-react";
 import { Button, Link, Text } from "@radix-ui/themes";
 
 const message = Astro.url.searchParams.get("message") || "Error Encountered";
@@ -31,7 +31,7 @@ const message = Astro.url.searchParams.get("message") || "Error Encountered";
       </Empty.Header>
       <Empty.Content>
         <Button id="back-button">
-          <MoveLeftIcon className="size-4" />
+          <ArrowLeftIcon className="size-4" />
           Back
         </Button>
       </Empty.Content>
