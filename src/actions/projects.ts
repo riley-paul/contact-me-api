@@ -78,19 +78,16 @@ export const create = defineAction({
       .values({ ...data, userId })
       .returning();
 
-    const emails =
-      data.emails.length > 0
-        ? await db
-            .insert(ProjectEmail)
-            .values(
-              data.emails.map((email) => ({
-                projectId: project.id,
-                email,
-              })),
-            )
-            .returning()
-        : [];
+    if (data.emails.length > 0) {
+      await db.insert(ProjectEmail).values(
+        data.emails.map((email) => ({
+          projectId: project.id,
+          email,
+        })),
+      );
+    }
 
+    const emails = await getProjectEmails(db, project.id);
     const messageCount = await getMessageCount(db, project.id);
     return { ...project, emails, messageCount };
   },
@@ -148,7 +145,6 @@ export const update = defineAction({
     }
 
     const emails = await getProjectEmails(db, project.id);
-
     const messageCount = await getMessageCount(db, project.id);
     return { ...project, emails, messageCount };
   },

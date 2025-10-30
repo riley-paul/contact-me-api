@@ -82,7 +82,7 @@ const Sidebar: React.FC<Props> = ({ projects, user }) => {
           </IconButton>
         </header>
 
-        <div className="flex-1">
+        <div className="-mx-3 flex-1 overflow-auto px-3">
           <SidebarSection>
             <SidebarItems>
               <SidebarLink to="/">

@@ -136,7 +136,7 @@ const ProjectForm: React.FC<Props> = ({ project, onSubmit }) => {
 
       <div className="grid gap-2">
         <Text as="label" size="2" weight="bold" htmlFor="email">
-          Recipient Email Addresses
+          Additional Recipient Email Addresses
         </Text>
         <Field name="emails">
           {({ state, pushValue, removeValue }) => (
@@ -172,8 +172,9 @@ const ProjectForm: React.FC<Props> = ({ project, onSubmit }) => {
           )}
         </Field>
         <Text size="1" color="gray">
-          Add emails for form submission notifications. Note that the owner of
-          the project (you) will always receive an email notification.
+          Add additional emails for recieving form submission notifications.
+          Note that the owner of the project (you) will always receive an email
+          notification.
         </Text>
       </div>
 
