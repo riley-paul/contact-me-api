@@ -18,7 +18,7 @@ function RootComponent() {
     <div className="flex">
       <Sidebar projects={projects} user={user} />
       <main className="container2 max-w-none flex-1">
-        <article className="grid gap-8 py-6">
+        <article className="grid gap-6 py-6">
           <Outlet />
         </article>
         <DeleteConfirm />
