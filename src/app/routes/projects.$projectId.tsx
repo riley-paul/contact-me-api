@@ -57,7 +57,7 @@ function RouteComponent() {
 
   return (
     <React.Fragment>
-      <Heading size="8">{project.name}</Heading>
+      <Heading size="6">{project.name}</Heading>
       <TabNav.Root>
         {links.map((link) => (
           <TabLink key={link.label} label={link.label} link={link.link} />
