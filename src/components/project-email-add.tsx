@@ -26,6 +26,7 @@ const ProjectEmailAdd: React.FC<Props> = ({ projectId }) => {
         </Dialog.Trigger>
         <Dialog.Content>
           <form
+            className="grid gap-6"
             onSubmit={async (e) => {
               e.preventDefault();
               await actions.projectEmails.create.orThrow({
@@ -38,11 +39,13 @@ const ProjectEmailAdd: React.FC<Props> = ({ projectId }) => {
               setOpen(false);
             }}
           >
-            <Dialog.Title>Add Project Email</Dialog.Title>
-            <Dialog.Description size="2" mb="4">
-              Add a new email address to receive contact form submissions for
-              this project.
-            </Dialog.Description>
+            <header>
+              <Dialog.Title>Add Project Email</Dialog.Title>
+              <Dialog.Description size="2" color="gray">
+                Add a new email address to receive contact form submissions for
+                this project.
+              </Dialog.Description>
+            </header>
 
             <Flex direction="column" gap="3">
               <label>
@@ -69,7 +72,7 @@ const ProjectEmailAdd: React.FC<Props> = ({ projectId }) => {
               </label>
             </Flex>
 
-            <Flex gap="3" mt="4" justify="end">
+            <Flex gap="3" justify="end">
               <Dialog.Close>
                 <Button variant="soft" color="gray">
                   Cancel
