@@ -11,6 +11,7 @@ export default defineConfig({
     platformProxy: { enabled: true },
     imageService: "cloudflare",
   }),
+  security: { checkOrigin: false },
   vite: {
     plugins: [
       tailwindcss(),
