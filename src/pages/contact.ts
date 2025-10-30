@@ -21,7 +21,9 @@ export const POST: APIRoute = async ({ request, locals, redirect }) => {
   const parsedData = formSchema.safeParse(Object.fromEntries(formData));
 
   if (!parsedData.success) {
-    return new Response("Invalid form data", { status: 400 });
+    const params = new URLSearchParams();
+    params.set("message", "Form validation error");
+    return redirect(`/failure?${params.toString()}`);
   }
 
   const { name, email, message, access_key, redirect_url } = parsedData.data;
@@ -32,7 +34,9 @@ export const POST: APIRoute = async ({ request, locals, redirect }) => {
     .where(eq(Project.id, access_key));
 
   if (!project) {
-    return new Response("Project not found", { status: 404 });
+    const params = new URLSearchParams();
+    params.set("message", "Project not found");
+    return redirect(`/failure?${params.toString()}`);
   }
 
   await db.insert(Message).values({
@@ -62,10 +66,9 @@ export const POST: APIRoute = async ({ request, locals, redirect }) => {
   });
 
   if (emailResponse.error) {
-    return new Response(
-      `Failed to send email: ${emailResponse.error.message}`,
-      { status: 500 },
-    );
+    const params = new URLSearchParams();
+    params.set("message", "Failed to send emails");
+    return redirect(`/failure?${params.toString()}`);
   }
 
   if (redirect_url) {

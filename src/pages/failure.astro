@@ -3,8 +3,10 @@ import RadixProvider from "@/app/components/radix-provider";
 import RootLayout from "@/layouts/root-layout.astro";
 
 import Empty from "@/app/components/ui/empty";
-import { ArrowLeftIcon, CheckCircle2Icon } from "lucide-react";
+import { InfoIcon, MoveLeftIcon } from "lucide-react";
 import { Button, Link, Text } from "@radix-ui/themes";
+
+const message = Astro.url.searchParams.get("message") || "Error Encountered";
 ---
 
 <script>
@@ -19,17 +21,17 @@ import { Button, Link, Text } from "@radix-ui/themes";
     <Empty.Root className="h-screen relative">
       <Empty.Header>
         <Empty.Media>
-          <CheckCircle2Icon className="size-8 text-green-10" />
+          <InfoIcon className="size-8 text-red-10" />
         </Empty.Media>
-        <Empty.Title>Message sent!</Empty.Title>
+        <Empty.Title>{message}</Empty.Title>
         <Empty.Description>
-          Thank you! Your message has been successfully sent. We'll get back to
-          you shortly.
+          Oh no! There was an error sending your message. Please try again
+          later.
         </Empty.Description>
       </Empty.Header>
       <Empty.Content>
         <Button id="back-button">
-          <ArrowLeftIcon className="size-4" />
+          <MoveLeftIcon className="size-4" />
           Back
         </Button>
       </Empty.Content>

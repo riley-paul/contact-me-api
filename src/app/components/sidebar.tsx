@@ -8,7 +8,6 @@ import {
   HomeIcon,
   MailIcon,
   PhoneIcon,
-  PlusIcon,
   SidebarCloseIcon,
   SidebarOpenIcon,
 } from "lucide-react";
