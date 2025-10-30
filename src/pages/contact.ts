@@ -3,7 +3,7 @@ import { Project, ProjectEmail } from "@/db/schema";
 import { createResend } from "@/lib/server/resend";
 import type { APIRoute } from "astro";
 import { z } from "astro/zod";
-import { eq, or } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 const formSchema = z.object({
   name: z.string().min(1).max(100),
@@ -29,7 +29,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const [project] = await db
     .select()
     .from(Project)
-    .where(or(eq(Project.identifier, projectId), eq(Project.id, projectId)));
+    .where(eq(Project.id, projectId));
 
   if (!project) {
     return new Response("Project not found", { status: 404 });

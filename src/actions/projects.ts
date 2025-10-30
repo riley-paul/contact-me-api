@@ -28,13 +28,7 @@ export const getAll = defineAction({
     const userId = ensureAuthorized(c).id;
 
     const searchTerm = `%${search}%`;
-    const searchQuery = or(
-      like(Project.name, searchTerm),
-      like(Project.identifier, searchTerm),
-      like(Project.description, searchTerm),
-      like(Project.liveUrl, searchTerm),
-      like(Project.repoUrl, searchTerm),
-    );
+    const searchQuery = or(like(Project.name, searchTerm));
     return db
       .select()
       .from(Project)

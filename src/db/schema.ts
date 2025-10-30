@@ -45,10 +45,6 @@ export const Project = sqliteTable("project", {
   id,
   userId,
   name: text().notNull(),
-  description: text(),
-  identifier: text().notNull(),
-  repoUrl: text(),
-  liveUrl: text(),
   ...timeStamps,
 });
 
@@ -65,6 +61,5 @@ export const ProjectEmail = sqliteTable("projectEmail", {
   id,
   projectId,
   email: text().notNull(),
-  name: text().notNull(),
   ...timeStamps,
 });

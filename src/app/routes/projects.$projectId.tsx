@@ -1,9 +1,6 @@
 import MessageTable from "@/app/components/message-table";
-import ProjectEmailAdd from "@/app/components/project-email-add";
-import ProjectEmailTable from "@/app/components/project-email-table";
-import ProjectTags from "@/app/components/project-tags";
 import SearchForm from "@/app/components/search-form";
-import { Heading, Text } from "@radix-ui/themes";
+import { Heading } from "@radix-ui/themes";
 import { createFileRoute } from "@tanstack/react-router";
 import { actions } from "astro:actions";
 import { z } from "astro:schema";
@@ -42,21 +39,7 @@ function RouteComponent() {
   return (
     <React.Fragment>
       <Heading size="8">{project.name}</Heading>
-      <ProjectTags project={project} />
-      <Text size="2" color="gray">
-        {project.description}
-      </Text>
-      <section className="grid gap-4">
-        <header className="flex items-center justify-between">
-          <Heading as="h2">Emails</Heading>
-          <ProjectEmailAdd projectId={project.id} />
-        </header>
-        <ProjectEmailTable projectEmails={project.emails} />
-        <Text color="gray" size="2">
-          Messages sent to this project will be forwarded to all of the emails
-          above.
-        </Text>
-      </section>
+
       <section className="grid gap-4">
         <header className="flex items-center justify-between">
           <Heading>Messages</Heading>
