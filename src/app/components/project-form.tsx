@@ -1,27 +1,72 @@
-import type { ProjectSelect } from "@/lib/types";
+import {
+  type ProjectInsert,
+  zProjectInsert,
+  type ProjectSelect,
+} from "@/lib/types";
 import React from "react";
 import { PlusIcon, SaveIcon, XIcon } from "lucide-react";
 import { Badge, Button, IconButton, Text, TextField } from "@radix-ui/themes";
+import { useForm } from "@tanstack/react-form";
+import { actions } from "astro:actions";
+import { useRouter } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 type Props = {
   project?: ProjectSelect;
 };
 
 const ProjectForm: React.FC<Props> = ({ project }) => {
+  const router = useRouter();
+
+  const defaultValues: ProjectInsert = {
+    name: project?.name || "",
+    emails: project?.emails.map((e) => e.email) || [],
+  };
+
+  const { Field, handleSubmit, state } = useForm({
+    defaultValues,
+    validators: { onSubmit: zProjectInsert },
+    onSubmit: async ({ value }) => {
+      if (project) {
+        await actions.projects.update.orThrow({
+          projectId: project.id,
+          data: value,
+        });
+        toast.success("Project updated successfully");
+        router.invalidate();
+      } else {
+        await actions.projects.create.orThrow({ data: value });
+        toast.success("Project created successfully");
+        router.invalidate();
+      }
+    },
+  });
+
   return (
-    <form className="flex flex-col gap-8">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleSubmit();
+      }}
+      className="flex flex-col gap-8"
+    >
       <div className="grid gap-2">
         <Text as="label" size="2" weight="bold" htmlFor="name">
           Name
         </Text>
-        <TextField.Root
-          size="3"
-          placeholder="Cool Project"
-          name="name"
-          type="text"
-          defaultValue={project?.name}
-          required
-        />
+        <Field name="name">
+          {({ state, handleBlur, handleChange }) => (
+            <TextField.Root
+              size="3"
+              placeholder="Cool Project"
+              defaultValue={state.value}
+              onChange={(e) => handleChange(e.target.value)}
+              onBlur={handleBlur}
+              required
+            />
+          )}
+        </Field>
         <Text size="1" color="gray">
           Give your project a descriptive name to easily identify it.
         </Text>
