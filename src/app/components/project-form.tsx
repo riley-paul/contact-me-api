@@ -74,7 +74,7 @@ const ProjectForm: React.FC<Props> = ({ project }) => {
     emails: project?.emails.map((e) => e.email) || [],
   };
 
-  const { Field, handleSubmit } = useForm({
+  const { Field, Subscribe, handleSubmit } = useForm({
     defaultValues,
     validators: { onChange: zProjectInsert },
     onSubmit: async ({ value }) => {
@@ -176,10 +176,16 @@ const ProjectForm: React.FC<Props> = ({ project }) => {
       </div>
 
       <footer className="flex">
-        <Button>
-          <SaveIcon className="size-4" />
-          {project ? "Update" : "Create"} Project
-        </Button>
+        <Subscribe
+          selector={({ canSubmit, isDirty }) => ({ canSubmit, isDirty })}
+        >
+          {({ canSubmit, isDirty }) => (
+            <Button disabled={!canSubmit || !isDirty}>
+              <SaveIcon className="size-4" />
+              {project ? "Update" : "Create"} Project
+            </Button>
+          )}
+        </Subscribe>
       </footer>
     </form>
   );
