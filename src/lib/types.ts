@@ -22,7 +22,10 @@ export const zProjectSelect = createSelectSchema(Project).extend({
   messageCount: z.number(),
   emails: z.array(zProjectEmailSelect),
 });
-export const zProjectInsert = createInsertSchema(Project);
+export const zProjectInsert = z.object({
+  name: z.string().min(1).max(255),
+  emails: z.array(z.string().email()),
+});
 export type ProjectSelect = z.infer<typeof zProjectSelect>;
 export type ProjectInsert = z.infer<typeof zProjectInsert>;
 

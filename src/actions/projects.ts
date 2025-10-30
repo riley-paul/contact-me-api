@@ -78,6 +78,8 @@ export const create = defineAction({
       .values({ ...data, userId })
       .returning();
 
+    // Insert project emails
+
     const messageCount = await getMessageCount(db, project.id);
     return { ...project, messageCount };
   },
