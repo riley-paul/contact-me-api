@@ -27,12 +27,8 @@ const userValidation = defineMiddleware(async (context, next) => {
   return next();
 });
 
-const WHITE_LIST = ["/welcome", "/login"];
 const routeGuarding = defineMiddleware(async (context, next) => {
-  const isWhiteListed = WHITE_LIST.some((path) =>
-    context.url.pathname.startsWith(path)
-  );
-  if (!isWhiteListed && !context.locals.user) {
+  if (context.url.pathname.startsWith("/admin") && !context.locals.user) {
     return context.redirect("/welcome");
   }
   return next();

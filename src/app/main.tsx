@@ -7,10 +7,12 @@ import CustomToaster from "@/app/components/custom-toaster";
 import { Spinner } from "@radix-ui/themes";
 
 const router = createRouter({
+  basepath: "/admin",
   routeTree,
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
   defaultPendingComponent: Spinner,
+
   // defaultErrorComponent: ({ error }) => <ErrorPage error={error} goHome />,
 });
 
