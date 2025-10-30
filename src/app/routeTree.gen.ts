@@ -13,6 +13,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as MessagesIndexRouteImport } from './routes/messages.index'
 import { Route as ProjectsProjectIdRouteImport } from './routes/projects.$projectId'
 import { Route as MessagesMessageIdRouteImport } from './routes/messages.$messageId'
+import { Route as ProjectsProjectIdIndexRouteImport } from './routes/projects.$projectId.index'
+import { Route as ProjectsProjectIdSetupRouteImport } from './routes/projects.$projectId.setup'
+import { Route as ProjectsProjectIdSettingsRouteImport } from './routes/projects.$projectId.settings'
+import { Route as ProjectsProjectIdMessagesRouteImport } from './routes/projects.$projectId.messages'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,43 +38,95 @@ const MessagesMessageIdRoute = MessagesMessageIdRouteImport.update({
   path: '/messages/$messageId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProjectsProjectIdIndexRoute = ProjectsProjectIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProjectsProjectIdRoute,
+} as any)
+const ProjectsProjectIdSetupRoute = ProjectsProjectIdSetupRouteImport.update({
+  id: '/setup',
+  path: '/setup',
+  getParentRoute: () => ProjectsProjectIdRoute,
+} as any)
+const ProjectsProjectIdSettingsRoute =
+  ProjectsProjectIdSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => ProjectsProjectIdRoute,
+  } as any)
+const ProjectsProjectIdMessagesRoute =
+  ProjectsProjectIdMessagesRouteImport.update({
+    id: '/messages',
+    path: '/messages',
+    getParentRoute: () => ProjectsProjectIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/messages/$messageId': typeof MessagesMessageIdRoute
-  '/projects/$projectId': typeof ProjectsProjectIdRoute
+  '/projects/$projectId': typeof ProjectsProjectIdRouteWithChildren
   '/messages': typeof MessagesIndexRoute
+  '/projects/$projectId/messages': typeof ProjectsProjectIdMessagesRoute
+  '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
+  '/projects/$projectId/setup': typeof ProjectsProjectIdSetupRoute
+  '/projects/$projectId/': typeof ProjectsProjectIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/messages/$messageId': typeof MessagesMessageIdRoute
-  '/projects/$projectId': typeof ProjectsProjectIdRoute
   '/messages': typeof MessagesIndexRoute
+  '/projects/$projectId/messages': typeof ProjectsProjectIdMessagesRoute
+  '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
+  '/projects/$projectId/setup': typeof ProjectsProjectIdSetupRoute
+  '/projects/$projectId': typeof ProjectsProjectIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/messages/$messageId': typeof MessagesMessageIdRoute
-  '/projects/$projectId': typeof ProjectsProjectIdRoute
+  '/projects/$projectId': typeof ProjectsProjectIdRouteWithChildren
   '/messages/': typeof MessagesIndexRoute
+  '/projects/$projectId/messages': typeof ProjectsProjectIdMessagesRoute
+  '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
+  '/projects/$projectId/setup': typeof ProjectsProjectIdSetupRoute
+  '/projects/$projectId/': typeof ProjectsProjectIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/messages/$messageId' | '/projects/$projectId' | '/messages'
+  fullPaths:
+    | '/'
+    | '/messages/$messageId'
+    | '/projects/$projectId'
+    | '/messages'
+    | '/projects/$projectId/messages'
+    | '/projects/$projectId/settings'
+    | '/projects/$projectId/setup'
+    | '/projects/$projectId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/messages/$messageId' | '/projects/$projectId' | '/messages'
+  to:
+    | '/'
+    | '/messages/$messageId'
+    | '/messages'
+    | '/projects/$projectId/messages'
+    | '/projects/$projectId/settings'
+    | '/projects/$projectId/setup'
+    | '/projects/$projectId'
   id:
     | '__root__'
     | '/'
     | '/messages/$messageId'
     | '/projects/$projectId'
     | '/messages/'
+    | '/projects/$projectId/messages'
+    | '/projects/$projectId/settings'
+    | '/projects/$projectId/setup'
+    | '/projects/$projectId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   MessagesMessageIdRoute: typeof MessagesMessageIdRoute
-  ProjectsProjectIdRoute: typeof ProjectsProjectIdRoute
+  ProjectsProjectIdRoute: typeof ProjectsProjectIdRouteWithChildren
   MessagesIndexRoute: typeof MessagesIndexRoute
 }
 
@@ -104,13 +160,58 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MessagesMessageIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/projects/$projectId/': {
+      id: '/projects/$projectId/'
+      path: '/'
+      fullPath: '/projects/$projectId/'
+      preLoaderRoute: typeof ProjectsProjectIdIndexRouteImport
+      parentRoute: typeof ProjectsProjectIdRoute
+    }
+    '/projects/$projectId/setup': {
+      id: '/projects/$projectId/setup'
+      path: '/setup'
+      fullPath: '/projects/$projectId/setup'
+      preLoaderRoute: typeof ProjectsProjectIdSetupRouteImport
+      parentRoute: typeof ProjectsProjectIdRoute
+    }
+    '/projects/$projectId/settings': {
+      id: '/projects/$projectId/settings'
+      path: '/settings'
+      fullPath: '/projects/$projectId/settings'
+      preLoaderRoute: typeof ProjectsProjectIdSettingsRouteImport
+      parentRoute: typeof ProjectsProjectIdRoute
+    }
+    '/projects/$projectId/messages': {
+      id: '/projects/$projectId/messages'
+      path: '/messages'
+      fullPath: '/projects/$projectId/messages'
+      preLoaderRoute: typeof ProjectsProjectIdMessagesRouteImport
+      parentRoute: typeof ProjectsProjectIdRoute
+    }
   }
 }
+
+interface ProjectsProjectIdRouteChildren {
+  ProjectsProjectIdMessagesRoute: typeof ProjectsProjectIdMessagesRoute
+  ProjectsProjectIdSettingsRoute: typeof ProjectsProjectIdSettingsRoute
+  ProjectsProjectIdSetupRoute: typeof ProjectsProjectIdSetupRoute
+  ProjectsProjectIdIndexRoute: typeof ProjectsProjectIdIndexRoute
+}
+
+const ProjectsProjectIdRouteChildren: ProjectsProjectIdRouteChildren = {
+  ProjectsProjectIdMessagesRoute: ProjectsProjectIdMessagesRoute,
+  ProjectsProjectIdSettingsRoute: ProjectsProjectIdSettingsRoute,
+  ProjectsProjectIdSetupRoute: ProjectsProjectIdSetupRoute,
+  ProjectsProjectIdIndexRoute: ProjectsProjectIdIndexRoute,
+}
+
+const ProjectsProjectIdRouteWithChildren =
+  ProjectsProjectIdRoute._addFileChildren(ProjectsProjectIdRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   MessagesMessageIdRoute: MessagesMessageIdRoute,
-  ProjectsProjectIdRoute: ProjectsProjectIdRoute,
+  ProjectsProjectIdRoute: ProjectsProjectIdRouteWithChildren,
   MessagesIndexRoute: MessagesIndexRoute,
 }
 export const routeTree = rootRouteImport

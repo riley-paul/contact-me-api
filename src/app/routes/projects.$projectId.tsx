@@ -1,9 +1,9 @@
 import MessageTable from "@/app/components/message-table";
 import SearchForm from "@/app/components/search-form";
 import { Heading } from "@radix-ui/themes";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { actions } from "astro:actions";
-import { z } from "astro:schema";
+import { z } from "astro/zod";
 import React from "react";
 import { useDebounceCallback } from "usehooks-ts";
 
@@ -40,17 +40,7 @@ function RouteComponent() {
     <React.Fragment>
       <Heading size="8">{project.name}</Heading>
 
-      <section className="grid gap-4">
-        <header className="flex items-center justify-between">
-          <Heading>Messages</Heading>
-          <SearchForm search={search} setSearch={setSearch} />
-        </header>
-        <MessageTable
-          messages={messages.messages}
-          pagination={messages.pagination}
-          setPage={setPage}
-        />
-      </section>
+      <Outlet />
     </React.Fragment>
   );
 }

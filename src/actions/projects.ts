@@ -3,7 +3,7 @@ import { Message, Project, ProjectEmail } from "@/db/schema";
 import { createDb, type Db } from "@/db";
 import { ActionError, defineAction } from "astro:actions";
 import { ensureAuthorized } from "./helpers";
-import { z } from "astro:schema";
+import { z } from "astro/zod";
 import { zProjectInsert, type ProjectSelect } from "@/lib/types";
 
 const getMessageCount = async (db: Db, projectId: string) => {

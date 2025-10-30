@@ -8,7 +8,7 @@ import { and, count, eq, like, or } from "drizzle-orm";
 import { createDb, type Db } from "@/db";
 import { ActionError, defineAction } from "astro:actions";
 import { ensureAuthorized } from "./helpers";
-import { z } from "astro:schema";
+import { z } from "astro/zod";
 import { PAGE_SIZE } from "@/lib/constants";
 
 const getUserInProject = async (db: Db, userId: string, projectId: string) => {

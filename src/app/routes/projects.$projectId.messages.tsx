@@ -1,33 +1,31 @@
-import MessageTable from "@/app/components/message-table";
-import SearchForm from "@/app/components/search-form";
 import { Heading } from "@radix-ui/themes";
 import { createFileRoute } from "@tanstack/react-router";
-import { z } from "astro/zod";
-import React from "react";
-import { useDebounceCallback } from "usehooks-ts";
+import SearchForm from "../components/search-form";
+import MessageTable from "../components/message-table";
 import { actions } from "astro:actions";
+import { z } from "astro/zod";
+import { useDebounceCallback } from "usehooks-ts";
 
-export const Route = createFileRoute("/messages/")({
+export const Route = createFileRoute("/projects/$projectId/messages")({
   component: RouteComponent,
+  loaderDeps: ({ search: { search, page } }) => ({ search, page }),
+  loader: async ({ params: { projectId }, deps: { search, page } }) => {
+    const messages = await actions.messages.getAll.orThrow({
+      projectId,
+      search,
+      page,
+    });
+    return { messages };
+  },
   validateSearch: z.object({
     search: z.string().optional(),
     page: z.number().optional(),
   }),
-  loaderDeps: ({ search: { search, page } }) => ({ search, page }),
-  loader: async ({ deps: { search, page } }) => {
-    const messageResponse = await actions.messages.getAll.orThrow({
-      search,
-      page,
-    });
-    return { messageResponse };
-  },
 });
 
 function RouteComponent() {
+  const { messages } = Route.useLoaderData();
   const { search } = Route.useSearch();
-  const {
-    messageResponse: { messages, pagination },
-  } = Route.useLoaderData();
   const navigate = Route.useNavigate();
 
   const setSearch = useDebounceCallback((search: string | undefined) => {
@@ -39,17 +37,16 @@ function RouteComponent() {
   };
 
   return (
-    <React.Fragment>
+    <section className="grid gap-4">
       <header className="flex items-center justify-between">
-        <Heading size="8">Messages</Heading>
+        <Heading>Messages</Heading>
         <SearchForm search={search} setSearch={setSearch} />
       </header>
       <MessageTable
-        messages={messages}
-        pagination={pagination}
+        messages={messages.messages}
+        pagination={messages.pagination}
         setPage={setPage}
-        showProject
       />
-    </React.Fragment>
+    </section>
   );
 }
