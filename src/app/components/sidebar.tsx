@@ -16,6 +16,7 @@ import React from "react";
 import UserMenu from "./user-menu";
 import { cn } from "@/lib/utils";
 import { atomWithStorage } from "jotai/utils";
+import ProjectAdder from "./project-adder";
 
 export const sidebarOpenAtom = atomWithStorage(
   "sidebar-open",
@@ -100,9 +101,7 @@ const Sidebar: React.FC<Props> = ({ projects, user }) => {
               <Text size="1" className="uppercase" color="gray" weight="bold">
                 Projects
               </Text>
-              <IconButton size="2" variant="ghost" radius="full">
-                <PlusIcon className="size-4" />
-              </IconButton>
+              <ProjectAdder />
             </header>
             <SidebarItems>
               {projects.map((project) => (

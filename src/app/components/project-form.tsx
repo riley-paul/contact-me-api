@@ -15,6 +15,7 @@ import { ACCENT_COLOR } from "@/lib/constants";
 
 type Props = {
   project?: ProjectSelect;
+  onSubmit?: () => void;
 };
 
 const EmailAdder: React.FC<{ handleAddEmail: (email: string) => void }> = ({
@@ -66,7 +67,7 @@ const EmailAdder: React.FC<{ handleAddEmail: (email: string) => void }> = ({
   );
 };
 
-const ProjectForm: React.FC<Props> = ({ project }) => {
+const ProjectForm: React.FC<Props> = ({ project, onSubmit }) => {
   const router = useRouter();
 
   const defaultValues: ProjectInsert = {
@@ -95,10 +96,11 @@ const ProjectForm: React.FC<Props> = ({ project }) => {
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
         e.stopPropagation();
-        handleSubmit();
+        await handleSubmit();
+        onSubmit?.();
       }}
       className="flex flex-col gap-8"
     >

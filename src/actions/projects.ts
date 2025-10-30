@@ -78,15 +78,18 @@ export const create = defineAction({
       .values({ ...data, userId })
       .returning();
 
-    const emails = await db
-      .insert(ProjectEmail)
-      .values(
-        data.emails.map((email) => ({
-          projectId: project.id,
-          email,
-        })),
-      )
-      .returning();
+    const emails =
+      data.emails.length > 0
+        ? await db
+            .insert(ProjectEmail)
+            .values(
+              data.emails.map((email) => ({
+                projectId: project.id,
+                email,
+              })),
+            )
+            .returning()
+        : [];
 
     const messageCount = await getMessageCount(db, project.id);
     return { ...project, emails, messageCount };
