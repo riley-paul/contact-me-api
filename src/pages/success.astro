@@ -1,0 +1,17 @@
+---
+import RootLayout from "@/layouts/root-layout.astro";
+---
+
+<script>
+  const btn = document.getElementById("back-button");
+  btn?.addEventListener("click", () => {
+    window.history.back();
+  });
+</script>
+
+<RootLayout>
+  <h1>Success!</h1>
+  <p>Your message has been sent. We'll get back to you shortly.</p>
+
+  <button id="back-button"> Return </button>
+</RootLayout>
