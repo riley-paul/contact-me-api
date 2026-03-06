@@ -1,6 +1,20 @@
 import { LogOutIcon, MoreVerticalIcon } from "lucide-react";
-import { Avatar, Button, DropdownMenu, Text } from "@radix-ui/themes";
 import type { UserSelect } from "@/lib/types";
+
+import { Button } from "@/app/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/app/components/ui/dropdown-menu";
+
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/app/components/ui/avatar";
 
 export const UserMenu: React.FC<{ user: UserSelect }> = ({ user }) => {
   const fallback = user.name
@@ -10,60 +24,52 @@ export const UserMenu: React.FC<{ user: UserSelect }> = ({ user }) => {
     .toUpperCase();
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
+    <DropdownMenu>
+      <DropdownMenuTrigger>
         <Button
           variant="ghost"
           color="gray"
           className="m-0 h-auto justify-start gap-2.5 px-3 py-2 text-left"
         >
-          <Avatar
-            src={user.avatarUrl ?? ""}
-            radius="full"
-            size="2"
-            fallback={fallback}
-          />
+          <Avatar>
+            <AvatarFallback>{fallback}</AvatarFallback>
+            <AvatarImage src={user.avatarUrl ?? ""} alt={user.name} />
+          </Avatar>
+
           <div className="grid flex-1">
-            <Text size="2" weight="bold">
-              {user.name}
-            </Text>
-            <Text size="1" color="gray">
-              {user.email}
-            </Text>
+            <span className="text-sm font-medium">{user.name}</span>
+            <span className="text-muted-foreground text-xs">{user.email}</span>
           </div>
           <MoreVerticalIcon className="size-4 opacity-70" />
         </Button>
-      </DropdownMenu.Trigger>
+      </DropdownMenuTrigger>
 
-      <DropdownMenu.Content
+      <DropdownMenuContent
         side="right"
         align="end"
         sideOffset={8}
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
         <header className="flex items-center gap-2 p-2">
-          <Avatar
-            src={user.avatarUrl ?? ""}
-            radius="full"
-            size="4"
-            fallback={fallback}
-          />
+          <Avatar size="lg">
+            <AvatarFallback>{fallback}</AvatarFallback>
+            <AvatarImage src={user.avatarUrl ?? ""} alt={user.name} />
+          </Avatar>
+
           <div className="grid">
-            <Text weight="bold">{user.name}</Text>
-            <Text size="2" color="gray">
-              {user.email}
-            </Text>
+            <span className="font-medium">{user.name}</span>
+            <span className="text-muted-foreground text-sm">{user.email}</span>
           </div>
         </header>
-        <DropdownMenu.Separator />
-        <DropdownMenu.Item asChild color="amber">
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild color="amber">
           <a href="/logout">
             <LogOutIcon className="size-4" />
             <span>Log out</span>
           </a>
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
