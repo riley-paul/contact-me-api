@@ -28,8 +28,7 @@ export const UserMenu: React.FC<{ user: UserSelect }> = ({ user }) => {
       <DropdownMenuTrigger>
         <Button
           variant="ghost"
-          color="gray"
-          className="m-0 h-auto justify-start gap-2.5 px-3 py-2 text-left"
+          className="h-auto justify-start gap-2.5 px-3 py-2 text-left"
         >
           <Avatar>
             <AvatarFallback>{fallback}</AvatarFallback>
@@ -62,9 +61,9 @@ export const UserMenu: React.FC<{ user: UserSelect }> = ({ user }) => {
           </div>
         </header>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild color="amber">
+        <DropdownMenuItem asChild>
           <a href="/logout">
-            <LogOutIcon className="size-4" />
+            <LogOutIcon className="size-4 opacity-70" />
             <span>Log out</span>
           </a>
         </DropdownMenuItem>
