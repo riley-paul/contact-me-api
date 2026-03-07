@@ -20,6 +20,6 @@
     "hooks": "@/app/hooks"
   },
   "menuColor": "default",
-  "menuAccent": "subtle",
+  "menuAccent": "bold",
   "registries": {}
 }
