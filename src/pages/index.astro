@@ -1,4 +1,5 @@
 ---
+import { buttonVariants } from "@/app/components/ui/button";
 import RootLayout from "@/layouts/root-layout.astro";
 const { user } = Astro.locals;
 
@@ -9,5 +10,5 @@ if (user) return Astro.redirect("/admin");
   <h1>Welcome to the Contact Me API</h1>
   <p>This is the home page of the Contact Me API project.</p>
 
-  <a href="/admin">Login</a>
+  <a class={buttonVariants({ size: "lg" })} href="/admin">Login</a>
 </RootLayout>
