@@ -1,5 +1,5 @@
 import MessageTable from "@/app/components/message-table";
-import SearchForm from "@/app/components/search-form";
+import SearchInput from "@/app/components/search-input";
 import { Heading } from "@radix-ui/themes";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "astro/zod";
@@ -42,7 +42,7 @@ function RouteComponent() {
     <React.Fragment>
       <header className="flex items-center justify-between">
         <Heading size="8">Messages</Heading>
-        <SearchForm search={search} setSearch={setSearch} />
+        <SearchInput search={search} setSearch={setSearch} />
       </header>
       <MessageTable
         messages={messages}

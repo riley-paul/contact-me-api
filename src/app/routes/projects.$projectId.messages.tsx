@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import SearchForm from "../components/search-form";
+import SearchInput from "../components/search-input";
 import MessageTable from "../components/message-table";
 import { actions } from "astro:actions";
 import { z } from "astro/zod";
@@ -63,8 +63,9 @@ function RouteComponent() {
 
   return (
     <React.Fragment>
-      <SearchForm search={search} setSearch={setSearch} />
       <MessageTable
+        search={search}
+        setSearch={setSearch}
         messages={messages.messages}
         pagination={messages.pagination}
         setPage={setPage}

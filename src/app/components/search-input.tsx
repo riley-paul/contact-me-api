@@ -13,7 +13,7 @@ type Props = {
   setSearch: (value: string | undefined) => void;
 };
 
-const SearchForm: React.FC<Props> = ({ search, setSearch }) => {
+const SearchInput: React.FC<Props> = ({ search, setSearch }) => {
   const [value, setValue] = useState(search ?? "");
 
   return (
@@ -47,4 +47,4 @@ const SearchForm: React.FC<Props> = ({ search, setSearch }) => {
   );
 };
 
-export default SearchForm;
+export default SearchInput;

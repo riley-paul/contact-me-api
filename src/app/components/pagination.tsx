@@ -13,7 +13,7 @@ type Props = {
   setPage: (page: number) => void;
 };
 
-const PaginationFooter: React.FC<Props> = ({
+const Pagination: React.FC<Props> = ({
   pagination: { page, numPages },
   setPage,
 }) => {
@@ -21,7 +21,7 @@ const PaginationFooter: React.FC<Props> = ({
   const prevDisabled = page <= 1;
 
   return (
-    <footer className="flex items-start justify-between gap-4 px-2">
+    <footer className="flex shrink-0 items-start justify-between gap-4">
       <section>
         <span className="text-muted-foreground text-xs">
           Page {page} of {numPages}
@@ -65,4 +65,4 @@ const PaginationFooter: React.FC<Props> = ({
   );
 };
 
-export default PaginationFooter;
+export default Pagination;

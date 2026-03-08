@@ -3,7 +3,7 @@ import { ArrowRightIcon } from "lucide-react";
 import React from "react";
 
 import { intlFormatDistance } from "date-fns";
-import PaginationFooter from "./pagination-footer";
+import Pagination from "./pagination";
 import { Link } from "@tanstack/react-router";
 
 import {
@@ -17,22 +17,34 @@ import {
 } from "@/app/components/ui/table";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import SearchInput from "./search-input";
 
 type Props = {
   messages: MessageSelect[];
-  pagination: PaginationInfo;
   showProject?: boolean;
+
+  search: string | undefined;
+  setSearch: (value: string | undefined) => void;
+
+  pagination: PaginationInfo;
   setPage: (page: number) => void;
 };
 
 const MessageTable: React.FC<Props> = ({
   messages,
-  pagination,
   showProject,
+  search,
+  setSearch,
+  pagination,
   setPage,
 }) => {
   return (
     <div className="grid gap-4">
+      <header className="flex items-center justify-end gap-8">
+        <SearchInput search={search} setSearch={setSearch} />
+        <Pagination pagination={pagination} setPage={setPage} />
+      </header>
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -82,7 +94,6 @@ const MessageTable: React.FC<Props> = ({
           ))}
         </TableBody>
       </Table>
-      <PaginationFooter pagination={pagination} setPage={setPage} />
     </div>
   );
 };
