@@ -14,7 +14,7 @@ export const Route = createFileRoute("/projects/$projectId/messages")({
       search,
       page,
     });
-    return { messages };
+    return { messages, crumb: "Messages" };
   },
   validateSearch: z.object({
     search: z.string().optional(),

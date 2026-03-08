@@ -11,11 +11,20 @@ import useIsLinkActive from "../hooks/use-is-link-active";
 import { GlobeIcon, MailIcon, Settings, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/client/utils";
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/app/components/ui/breadcrumb";
+
 export const Route = createFileRoute("/projects/$projectId")({
   component: RouteComponent,
   loader: async ({ params: { projectId } }) => {
     const project = await actions.projects.getOne.orThrow({ projectId });
-    return { project };
+    return { project, crumb: project.name };
   },
 });
 
@@ -68,13 +77,19 @@ function RouteComponent() {
 
   return (
     <React.Fragment>
-      <h2 className="text-2xl font-bold tracking-tight">{project.name}</h2>
+      <aside>
+        {links.map((link) => (
+          <TabLink key={link.label} {...link} />
+        ))}
+      </aside>
       <div className="flex w-full border-b">
         {links.map((link) => (
           <TabLink key={link.label} {...link} />
         ))}
       </div>
-      <Outlet />
+      <article className="grid gap-6 px-6 py-4">
+        <Outlet />
+      </article>
     </React.Fragment>
   );
 }

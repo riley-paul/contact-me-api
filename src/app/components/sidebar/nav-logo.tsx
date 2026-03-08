@@ -7,9 +7,9 @@ const NavLogo: React.FC = () => {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton size="lg" asChild>
+        <SidebarMenuButton asChild>
           <Link to="/">
-            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+            <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-6 items-center justify-center rounded-lg">
               <PhoneIcon className="size-4" />
             </div>
             <span className="text-base font-bold">Contactulator</span>

@@ -19,7 +19,7 @@ export const Route = createFileRoute("/messages/")({
       search,
       page,
     });
-    return { messageResponse };
+    return { messageResponse, crumb: "Messages" };
   },
 });
 

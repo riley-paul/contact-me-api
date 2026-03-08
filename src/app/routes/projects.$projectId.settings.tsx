@@ -9,7 +9,7 @@ export const Route = createFileRoute("/projects/$projectId/settings")({
   component: RouteComponent,
   loader: async ({ params: { projectId } }) => {
     const project = await actions.projects.getOne.orThrow({ projectId });
-    return { project };
+    return { project, crumb: "Settings" };
   },
 });
 

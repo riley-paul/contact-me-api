@@ -11,7 +11,6 @@ import { actions } from "astro:actions";
 import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { z } from "astro/zod";
-import { ACCENT_COLOR } from "@/lib/constants";
 import { Button } from "./ui/button";
 import { Field, FieldDescription, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";

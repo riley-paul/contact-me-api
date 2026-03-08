@@ -1,17 +1,23 @@
-import { Button, Text, TextField, IconButton } from "@radix-ui/themes";
 import { createFileRoute } from "@tanstack/react-router";
 import { actions } from "astro:actions";
 import { Code2Icon, CopyIcon, KeyIcon } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
-import CustomCard from "../components/ui/custom-card";
+import CustomCard from "@/app/components/ui/custom-card";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupTextarea,
+} from "../components/ui/input-group";
 
 export const Route = createFileRoute("/projects/$projectId/setup")({
   component: RouteComponent,
   loader: async ({ params: { projectId } }) => {
     const project = await actions.projects.getOne.orThrow({ projectId });
-    return { project };
+    return { project, crumb: "Setup" };
   },
 });
 
@@ -44,31 +50,19 @@ function RouteComponent() {
     <React.Fragment>
       <CustomCard
         title="Access Key"
-        subtitle="Your unique access key to send form submissions"
+        subtitle="Use this unique access key in your frontend application to send form
+        submissions to this project"
         icon={KeyIcon}
       >
-        <TextField.Root
-          size="3"
-          className="font-mono"
-          readOnly
-          value={project.id}
-        >
-          <TextField.Slot side="right">
-            <Button
-              onClick={handleCopyId}
-              size="2"
-              variant="ghost"
-              className="font-sans"
-            >
+        <InputGroup>
+          <InputGroupInput className="font-mono" readOnly value={project.id} />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton onClick={handleCopyId}>
               <CopyIcon className="size-4" />
               Copy
-            </Button>
-          </TextField.Slot>
-        </TextField.Root>
-        <Text size="2" color="gray">
-          Use this access key in your frontend application to send form
-          submissions to this project.
-        </Text>
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
       </CustomCard>
 
       <CustomCard
@@ -76,17 +70,19 @@ function RouteComponent() {
         subtitle="Copy the code snippet to get started"
         icon={Code2Icon}
       >
-        <pre className="bg-gray-3 text-2 rounded-3 relative overflow-x-auto p-4 font-mono">
-          {formExample}
-          <IconButton
-            onClick={handleCopyFormExample}
-            size="2"
-            variant="surface"
-            className="absolute top-2 right-2"
-          >
-            <CopyIcon className="size-4" />
-          </IconButton>
-        </pre>
+        <InputGroup>
+          <InputGroupTextarea
+            className="font-mono"
+            readOnly
+            value={formExample}
+          />
+          <InputGroupAddon align="block-end" className="justify-end">
+            <InputGroupButton onClick={handleCopyFormExample}>
+              <CopyIcon className="size-4" />
+              Copy
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
       </CustomCard>
     </React.Fragment>
   );

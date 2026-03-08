@@ -8,7 +8,7 @@ export const Route = createFileRoute("/messages/$messageId")({
   component: RouteComponent,
   loader: async ({ params: { messageId } }) => {
     const message = await actions.messages.getOne.orThrow({ messageId });
-    return { message };
+    return { message, crumb: message.name };
   },
 });
 
