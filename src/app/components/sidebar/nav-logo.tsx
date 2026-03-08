@@ -12,7 +12,7 @@ const NavLogo: React.FC = () => {
             <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
               <PhoneIcon className="size-4" />
             </div>
-            <span className="text-lg font-bold">Contactulator</span>
+            <span className="text-base font-bold">Contactulator</span>
           </Link>
         </SidebarMenuButton>
       </SidebarMenuItem>

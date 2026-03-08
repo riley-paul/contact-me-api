@@ -1,4 +1,3 @@
-import { Heading, TabNav } from "@radix-ui/themes";
 import { linkOptions } from "@tanstack/react-router";
 import {
   createFileRoute,
@@ -24,14 +23,16 @@ type TabLinkProps = { label: string; link: LinkOptions; icon: LucideIcon };
 const TabLink: React.FC<TabLinkProps> = ({ label, link, icon: Icon }) => {
   const isActive = useIsLinkActive(link);
   return (
-    <TabNav.Link asChild active={isActive}>
-      <Link {...link}>
-        <div className="flex items-center gap-2">
-          <Icon className={cn("size-4", isActive && "text-accent-11")} />
-          {label}
-        </div>
-      </Link>
-    </TabNav.Link>
+    <Link
+      {...link}
+      className={cn(
+        "text-muted-foreground flex items-center gap-2 border-b border-transparent px-3 py-2 text-sm",
+        isActive && "text-primary-foreground border-primary",
+      )}
+    >
+      <Icon className={cn("size-4 opacity-70")} />
+      {label}
+    </Link>
   );
 };
 
@@ -67,12 +68,12 @@ function RouteComponent() {
 
   return (
     <React.Fragment>
-      <Heading size="6">{project.name}</Heading>
-      <TabNav.Root>
+      <h2 className="text-2xl font-bold tracking-tight">{project.name}</h2>
+      <div className="flex w-full border-b">
         {links.map((link) => (
           <TabLink key={link.label} {...link} />
         ))}
-      </TabNav.Root>
+      </div>
       <Outlet />
     </React.Fragment>
   );
