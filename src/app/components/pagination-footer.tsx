@@ -1,5 +1,4 @@
 import type { PaginationInfo } from "@/lib/types";
-import { IconButton, Text } from "@radix-ui/themes";
 import {
   ChevronFirstIcon,
   ChevronLastIcon,
@@ -7,6 +6,7 @@ import {
   ChevronRightIcon,
 } from "lucide-react";
 import React from "react";
+import { Button } from "./ui/button";
 
 type Props = {
   pagination: PaginationInfo;
@@ -21,41 +21,45 @@ const PaginationFooter: React.FC<Props> = ({
   const prevDisabled = page <= 1;
 
   return (
-    <footer className="flex items-start justify-between gap-4">
+    <footer className="flex items-start justify-between gap-4 px-2">
       <section>
-        <Text size="1" color="gray">
+        <span className="text-muted-foreground text-xs">
           Page {page} of {numPages}
-        </Text>
+        </span>
       </section>
-      <section className="flex items-center gap-2">
-        <IconButton
-          variant="soft"
+      <section className="flex items-center">
+        <Button
+          variant="ghost"
+          size="icon-sm"
           disabled={prevDisabled}
           onClick={() => setPage(1)}
         >
           <ChevronFirstIcon className="size-4" />
-        </IconButton>
-        <IconButton
-          variant="soft"
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-sm"
           disabled={prevDisabled}
           onClick={() => setPage(Math.max(1, page - 1))}
         >
           <ChevronLeftIcon className="size-4" />
-        </IconButton>
-        <IconButton
-          variant="soft"
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-sm"
           disabled={nextDisabled}
           onClick={() => setPage(Math.min(numPages, page + 1))}
         >
           <ChevronRightIcon className="size-4" />
-        </IconButton>
-        <IconButton
-          variant="soft"
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon-sm"
           disabled={nextDisabled}
           onClick={() => setPage(numPages)}
         >
           <ChevronLastIcon className="size-4" />
-        </IconButton>
+        </Button>
       </section>
     </footer>
   );
