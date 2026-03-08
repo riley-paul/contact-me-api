@@ -1,11 +1,22 @@
 import type { MessageSelect, PaginationInfo } from "@/lib/types";
-import { Badge, IconButton, Table, Text } from "@radix-ui/themes";
 import { ArrowRightIcon } from "lucide-react";
 import React from "react";
 
 import { intlFormatDistance } from "date-fns";
 import PaginationFooter from "./pagination-footer";
 import { Link } from "@tanstack/react-router";
+
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/app/components/ui/table";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
 
 type Props = {
   messages: MessageSelect[];
@@ -22,31 +33,29 @@ const MessageTable: React.FC<Props> = ({
 }) => {
   return (
     <div className="grid gap-4">
-      <Table.Root variant="surface">
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Content</Table.ColumnHeaderCell>
-            {showProject && (
-              <Table.ColumnHeaderCell>Project</Table.ColumnHeaderCell>
-            )}
-            <Table.ColumnHeaderCell>Recieved</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
-          </Table.Row>
-        </Table.Header>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Content</TableHead>
+            {showProject && <TableHead>Project</TableHead>}
+            <TableHead>Recieved</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
 
-        <Table.Body>
+        <TableBody>
           {messages.map((message) => (
-            <Table.Row key={message.id}>
-              <Table.RowHeaderCell>{message.name}</Table.RowHeaderCell>
-              <Table.Cell>{message.email}</Table.Cell>
-              <Table.Cell>
+            <TableRow key={message.id}>
+              <TableCell>{message.name}</TableCell>
+              <TableCell>{message.email}</TableCell>
+              <TableCell>
                 <span className="line-clamp-2 max-w-sm">{message.content}</span>
-              </Table.Cell>
+              </TableCell>
               {showProject && (
-                <Table.Cell>
-                  <Badge variant="soft" asChild>
+                <TableCell>
+                  <Badge asChild>
                     <Link
                       to="/projects/$projectId"
                       params={{ projectId: message.projectId }}
@@ -54,27 +63,25 @@ const MessageTable: React.FC<Props> = ({
                       {message.project.name}
                     </Link>
                   </Badge>
-                </Table.Cell>
+                </TableCell>
               )}
-              <Table.Cell>
-                <Text truncate>
-                  {intlFormatDistance(message.createdAt, new Date())}
-                </Text>
-              </Table.Cell>
-              <Table.Cell className="text-end align-middle">
-                <IconButton radius="full" variant="ghost" asChild>
+              <TableCell>
+                {intlFormatDistance(message.createdAt, new Date())}
+              </TableCell>
+              <TableCell className="text-end align-middle">
+                <Button size="icon" variant="ghost" asChild>
                   <Link
                     to="/messages/$messageId"
                     params={{ messageId: message.id }}
                   >
                     <ArrowRightIcon className="size-4" />
                   </Link>
-                </IconButton>
-              </Table.Cell>
-            </Table.Row>
+                </Button>
+              </TableCell>
+            </TableRow>
           ))}
-        </Table.Body>
-      </Table.Root>
+        </TableBody>
+      </Table>
       <PaginationFooter pagination={pagination} setPage={setPage} />
     </div>
   );

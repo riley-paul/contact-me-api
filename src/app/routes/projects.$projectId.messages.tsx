@@ -38,7 +38,6 @@ function RouteComponent() {
   return (
     <section className="grid gap-4">
       <header className="flex items-center justify-between gap-4">
-        <h3 className="flex-1 font-bold">Messages</h3>
         <SearchForm search={search} setSearch={setSearch} />
       </header>
       <MessageTable
