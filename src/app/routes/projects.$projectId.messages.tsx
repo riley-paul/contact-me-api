@@ -1,4 +1,3 @@
-import { Heading } from "@radix-ui/themes";
 import { createFileRoute } from "@tanstack/react-router";
 import SearchForm from "../components/search-form";
 import MessageTable from "../components/message-table";
@@ -38,8 +37,8 @@ function RouteComponent() {
 
   return (
     <section className="grid gap-4">
-      <header className="flex items-center justify-between">
-        <Heading>Messages</Heading>
+      <header className="flex items-center justify-between gap-4">
+        <h3 className="flex-1 font-bold">Messages</h3>
         <SearchForm search={search} setSearch={setSearch} />
       </header>
       <MessageTable

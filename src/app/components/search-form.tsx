@@ -1,6 +1,12 @@
-import { IconButton, TextField } from "@radix-ui/themes";
 import { SearchIcon, XIcon } from "lucide-react";
 import React, { useState } from "react";
+
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/app/components/ui/input-group";
 
 type Props = {
   search: string | undefined;
@@ -11,37 +17,33 @@ const SearchForm: React.FC<Props> = ({ search, setSearch }) => {
   const [value, setValue] = useState(search ?? "");
 
   return (
-    <TextField.Root
-      variant="surface"
-      name="search"
-      value={value}
-      onChange={(e) => {
-        const { value } = e.target;
-        setValue(value);
-        setSearch(value.length > 0 ? value : undefined);
-      }}
-      placeholder="Search..."
-    >
-      <TextField.Slot side="left">
+    <InputGroup>
+      <InputGroupInput
+        name="search"
+        value={value}
+        onChange={(e) => {
+          const { value } = e.target;
+          setValue(value);
+          setSearch(value.length > 0 ? value : undefined);
+        }}
+        placeholder="Search..."
+      />
+      <InputGroupAddon>
         <SearchIcon className="text-accent-10 size-4" />
-      </TextField.Slot>
+      </InputGroupAddon>
       {search && (
-        <TextField.Slot side="right">
-          <IconButton
-            color="red"
-            variant="ghost"
-            radius="full"
-            size="1"
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton
             onClick={() => {
               setValue("");
               setSearch(undefined);
             }}
           >
             <XIcon className="size-4" />
-          </IconButton>
-        </TextField.Slot>
+          </InputGroupButton>
+        </InputGroupAddon>
       )}
-    </TextField.Root>
+    </InputGroup>
   );
 };
 

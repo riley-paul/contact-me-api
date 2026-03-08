@@ -5,13 +5,16 @@ import {
 } from "@/lib/types";
 import React, { useState } from "react";
 import { PlusIcon, SaveIcon, XIcon } from "lucide-react";
-import { Badge, Button, IconButton, Text, TextField } from "@radix-ui/themes";
+import { Badge, IconButton, Text, TextField } from "@radix-ui/themes";
 import { useForm } from "@tanstack/react-form";
 import { actions } from "astro:actions";
 import { useRouter } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { z } from "astro/zod";
 import { ACCENT_COLOR } from "@/lib/constants";
+import { Button } from "./ui/button";
+import { Field, FieldDescription, FieldLabel } from "./ui/field";
+import { Input } from "./ui/input";
 
 type Props = {
   project?: ProjectSelect;
@@ -75,7 +78,11 @@ const ProjectForm: React.FC<Props> = ({ project, onSubmit }) => {
     emails: project?.emails.map((e) => e.email) || [],
   };
 
-  const { Field, Subscribe, handleSubmit } = useForm({
+  const {
+    Field: FormField,
+    Subscribe,
+    handleSubmit,
+  } = useForm({
     defaultValues,
     validators: { onChange: zProjectInsert },
     onSubmit: async ({ value }) => {
@@ -104,17 +111,12 @@ const ProjectForm: React.FC<Props> = ({ project, onSubmit }) => {
       }}
       className="flex flex-col gap-8"
     >
-      <div className="grid gap-2">
-        <Text as="label" size="2" weight="bold" htmlFor="name">
-          Name
-        </Text>
-        <Field name="name">
+      <Field>
+        <FieldLabel htmlFor="name">Project name</FieldLabel>
+        <FormField name="name">
           {({ state, handleBlur, handleChange }) => (
             <React.Fragment>
-              <TextField.Root
-                size="3"
-                variant={state.meta.isDirty ? "soft" : "surface"}
-                color={state.meta.isValid ? ACCENT_COLOR : "red"}
+              <Input
                 placeholder="Cool Project"
                 defaultValue={state.value}
                 onChange={(e) => handleChange(e.target.value)}
@@ -128,17 +130,15 @@ const ProjectForm: React.FC<Props> = ({ project, onSubmit }) => {
               ))}
             </React.Fragment>
           )}
-        </Field>
-        <Text size="1" color="gray">
+        </FormField>
+        <FieldDescription>
           Give your project a descriptive name to easily identify it.
-        </Text>
-      </div>
+        </FieldDescription>
+      </Field>
 
-      <div className="grid gap-2">
-        <Text as="label" size="2" weight="bold" htmlFor="email">
-          Additional Recipient Email Addresses
-        </Text>
-        <Field name="emails">
+      <Field>
+        <FieldLabel>Additional Recipient Email Addresses</FieldLabel>
+        <FormField name="emails">
           {({ state, pushValue, removeValue }) => (
             <React.Fragment>
               <div className="flex flex-wrap gap-2">
@@ -170,20 +170,20 @@ const ProjectForm: React.FC<Props> = ({ project, onSubmit }) => {
               ))}
             </React.Fragment>
           )}
-        </Field>
-        <Text size="1" color="gray">
+        </FormField>
+        <FieldDescription>
           Add additional emails for recieving form submission notifications.
           Note that the owner of the project (you) will always receive an email
           notification.
-        </Text>
-      </div>
+        </FieldDescription>
+      </Field>
 
       <footer className="flex">
         <Subscribe
           selector={({ canSubmit, isDirty }) => ({ canSubmit, isDirty })}
         >
           {({ canSubmit, isDirty }) => (
-            <Button disabled={!canSubmit || !isDirty}>
+            <Button disabled={!canSubmit || !isDirty} variant="secondary">
               <SaveIcon className="size-4" />
               {project ? "Update" : "Create"} Project
             </Button>
