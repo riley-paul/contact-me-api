@@ -2,7 +2,7 @@ import { Outlet, createRootRoute } from "@tanstack/react-router";
 import DeleteConfirm from "@/app/components/delete-confirm";
 import { actions } from "astro:actions";
 import AppSidebar from "@/app/components/sidebar/app-sidebar";
-import { SidebarProvider } from "../components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
 import ContextBreadcrumbs from "../components/context-breadcrumbs";
 
 export const Route = createRootRoute({
@@ -19,8 +19,9 @@ function RootComponent() {
   return (
     <SidebarProvider>
       <AppSidebar projects={projects} user={user} />
-      <main className="flex-1">
-        <header className="flex h-12 items-center border-b px-6">
+      <main className="flex h-screen flex-1 flex-col overflow-hidden">
+        <header className="flex h-12 items-center gap-4 border-b px-2">
+          <SidebarTrigger />
           <ContextBreadcrumbs />
         </header>
         <Outlet />

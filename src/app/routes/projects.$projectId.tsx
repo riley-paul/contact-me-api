@@ -12,13 +12,10 @@ import { GlobeIcon, MailIcon, Settings, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/client/utils";
 
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/app/components/ui/breadcrumb";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/app/components/ui/tooltip";
 
 export const Route = createFileRoute("/projects/$projectId")({
   component: RouteComponent,
@@ -32,16 +29,20 @@ type TabLinkProps = { label: string; link: LinkOptions; icon: LucideIcon };
 const TabLink: React.FC<TabLinkProps> = ({ label, link, icon: Icon }) => {
   const isActive = useIsLinkActive(link);
   return (
-    <Link
-      {...link}
-      className={cn(
-        "text-muted-foreground flex items-center gap-2 border-b border-transparent px-3 py-2 text-sm",
-        isActive && "text-primary-foreground border-primary",
-      )}
-    >
-      <Icon className={cn("size-4 opacity-70")} />
-      {label}
-    </Link>
+    <Tooltip delayDuration={1000}>
+      <TooltipTrigger>
+        <Link
+          {...link}
+          className={cn(
+            "text-muted-foreground flex h-8 items-center justify-center border-r-2 border-transparent",
+            isActive && "text-primary-foreground border-primary",
+          )}
+        >
+          <Icon className={cn("size-4")} />
+        </Link>
+      </TooltipTrigger>
+      <TooltipContent side="right">{label}</TooltipContent>
+    </Tooltip>
   );
 };
 
@@ -76,20 +77,15 @@ function RouteComponent() {
   ];
 
   return (
-    <React.Fragment>
-      <aside>
+    <div className="flex flex-1 overflow-hidden">
+      <aside className="flex w-11 flex-col gap-2 border-r py-2">
         {links.map((link) => (
           <TabLink key={link.label} {...link} />
         ))}
       </aside>
-      <div className="flex w-full border-b">
-        {links.map((link) => (
-          <TabLink key={link.label} {...link} />
-        ))}
-      </div>
-      <article className="grid gap-6 px-6 py-4">
+      <article className="flex flex-1 flex-col gap-6 overflow-auto px-6 py-4">
         <Outlet />
       </article>
-    </React.Fragment>
+    </div>
   );
 }

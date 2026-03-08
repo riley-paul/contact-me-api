@@ -6,7 +6,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
 } from "@/app/components/ui/sidebar";
 import NavUser from "./nav-user";
 import NavProjects from "./nav-projects";
@@ -27,7 +26,7 @@ type Props = {
 
 const AppSidebar: React.FC<Props> = ({ projects, user }) => {
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar>
       <SidebarHeader>
         <NavLogo />
         <NavMain />
@@ -38,7 +37,6 @@ const AppSidebar: React.FC<Props> = ({ projects, user }) => {
       <SidebarFooter>
         <NavUser user={user} />
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   );
 };
