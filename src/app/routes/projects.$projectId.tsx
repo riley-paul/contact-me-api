@@ -9,7 +9,7 @@ import { actions } from "astro:actions";
 import React from "react";
 import useIsLinkActive from "../hooks/use-is-link-active";
 import { GlobeIcon, MailIcon, Settings, type LucideIcon } from "lucide-react";
-import { cn } from "@/lib/client/utils";
+import { cn } from "@/lib/utils";
 
 import {
   Tooltip,

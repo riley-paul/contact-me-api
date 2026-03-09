@@ -5,8 +5,8 @@ import AppSidebar from "@/app/components/sidebar/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
 import ContextBreadcrumbs from "../components/context-breadcrumbs";
 import ProjectAdder from "../components/project-adder";
-import React from "react";
 import { Toaster } from "../components/ui/sonner";
+import { TooltipProvider } from "../components/ui/tooltip";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -20,7 +20,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   const { user, projects } = Route.useLoaderData();
   return (
-    <React.Fragment>
+    <TooltipProvider>
       <SidebarProvider>
         <AppSidebar projects={projects} user={user} />
         <main className="flex h-screen flex-1 flex-col overflow-hidden">
@@ -34,6 +34,6 @@ function RootComponent() {
       <DeleteConfirm />
       <ProjectAdder />
       <Toaster />
-    </React.Fragment>
+    </TooltipProvider>
   );
 }
