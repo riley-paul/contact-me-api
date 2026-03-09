@@ -25,9 +25,11 @@ const CustomCard: React.FC<Props> = ({
 }) => {
   return (
     <Card className="shrink-0">
-      <CardHeader>
+      <CardHeader className="gap-3">
         <CardTitle className="flex items-center gap-2">
-          <Icon className="text-primary size-5" />
+          <div className="bg-primary text-primary-foreground rounded-md p-1">
+            <Icon className="size-4" />
+          </div>
           <h4>{title}</h4>
         </CardTitle>
         <CardDescription>{subtitle}</CardDescription>

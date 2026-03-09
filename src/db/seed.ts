@@ -1,4 +1,4 @@
-import { Message, Project, ProjectEmail, User } from "./schema";
+import { Message, Project, User } from "./schema";
 import { faker } from "@faker-js/faker";
 
 import env from "@/envs-runtime";
@@ -45,16 +45,6 @@ export default async function seed() {
     const numMessages = faker.number.int({ min: 0, max: 70 });
     const numEmails = faker.number.int({ min: 1, max: 5 });
     if (numMessages > 0) {
-      await db.insert(ProjectEmail).values(
-        Array.from({
-          length: numEmails,
-        }).map(() => ({
-          projectId: project.id,
-          name: faker.person.fullName(),
-          email: faker.internet.email(),
-        })),
-      );
-
       await db.insert(Message).values(
         Array.from({ length: numMessages }).map(() => ({
           projectId: project.id,
