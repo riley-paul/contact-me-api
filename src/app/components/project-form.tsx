@@ -23,7 +23,7 @@ import {
 
 type Props = {
   project?: ProjectSelect;
-  onSubmit?: () => void;
+  onSuccess?: (project: ProjectSelect) => void;
 };
 
 const EmailAdder: React.FC<{ handleAddEmail: (email: string) => void }> = ({
@@ -79,7 +79,7 @@ const EmailAdder: React.FC<{ handleAddEmail: (email: string) => void }> = ({
   );
 };
 
-const ProjectForm: React.FC<Props> = ({ project, onSubmit }) => {
+const ProjectForm: React.FC<Props> = ({ project, onSuccess }) => {
   const router = useRouter();
 
   const defaultValues: ProjectInsert = {
@@ -96,14 +96,18 @@ const ProjectForm: React.FC<Props> = ({ project, onSubmit }) => {
     validators: { onChange: zProjectInsert },
     onSubmit: async ({ value }) => {
       if (project) {
-        await actions.projects.update.orThrow({
+        const newProject = await actions.projects.update.orThrow({
           projectId: project.id,
           data: value,
         });
+        onSuccess?.(newProject);
         toast.success("Project updated successfully");
         router.invalidate();
       } else {
-        await actions.projects.create.orThrow({ data: value });
+        const updatedProject = await actions.projects.create.orThrow({
+          data: value,
+        });
+        onSuccess?.(updatedProject);
         toast.success("Project created successfully");
         router.invalidate();
       }
@@ -116,7 +120,6 @@ const ProjectForm: React.FC<Props> = ({ project, onSubmit }) => {
         e.preventDefault();
         e.stopPropagation();
         await handleSubmit();
-        onSubmit?.();
       }}
       className="flex flex-col gap-8"
     >
@@ -190,12 +193,12 @@ const ProjectForm: React.FC<Props> = ({ project, onSubmit }) => {
         </FieldDescription>
       </Field>
 
-      <footer className="flex">
+      <footer className="flex justify-end">
         <Subscribe
           selector={({ canSubmit, isDirty }) => ({ canSubmit, isDirty })}
         >
           {({ canSubmit, isDirty }) => (
-            <Button disabled={!canSubmit || !isDirty} variant="secondary">
+            <Button disabled={!canSubmit || !isDirty}>
               <SaveIcon className="size-4" />
               {project ? "Update" : "Create"} Project
             </Button>

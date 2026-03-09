@@ -1,27 +1,40 @@
-import { Dialog, IconButton } from "@radix-ui/themes";
-import { PlusIcon } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 import ProjectForm from "./project-form";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
+import { atom, useAtom } from "jotai";
+import { useNavigate } from "@tanstack/react-router";
+
+export const projectAdderOpenAtom = atom(false);
 
 const ProjectAdder: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useAtom(projectAdderOpenAtom);
+  const navigate = useNavigate();
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger>
-        <IconButton size="2" variant="ghost" radius="full">
-          <PlusIcon className="size-4" />
-        </IconButton>
-      </Dialog.Trigger>
-      <Dialog.Content className="grid gap-6">
-        <header>
-          <Dialog.Title size="4">Add New Project</Dialog.Title>
-          <Dialog.Description size="2" color="gray">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="sm:max-w-[600px]">
+        <DialogHeader>
+          <DialogTitle>Add New Project</DialogTitle>
+          <DialogDescription>
             Fill out the form below to create a new project.
-          </Dialog.Description>
-        </header>
-        <ProjectForm onSubmit={() => setOpen(false)} />
-      </Dialog.Content>
-    </Dialog.Root>
+          </DialogDescription>
+        </DialogHeader>
+        <ProjectForm
+          onSuccess={(project) => {
+            navigate({
+              to: "/projects/$projectId",
+              params: { projectId: project.id },
+            });
+            setOpen(false);
+          }}
+        />
+      </DialogContent>
+    </Dialog>
   );
 };
 

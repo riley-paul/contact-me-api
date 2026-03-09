@@ -4,6 +4,7 @@ import { actions } from "astro:actions";
 import AppSidebar from "@/app/components/sidebar/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar";
 import ContextBreadcrumbs from "../components/context-breadcrumbs";
+import ProjectAdder from "../components/project-adder";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -27,6 +28,7 @@ function RootComponent() {
         <Outlet />
       </main>
       <DeleteConfirm />
+      <ProjectAdder />
     </SidebarProvider>
   );
 }
