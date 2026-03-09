@@ -2,7 +2,7 @@ import type { MessageSelect, PaginationInfo } from "@/lib/types";
 import { ArrowRightIcon } from "lucide-react";
 import React from "react";
 
-import { intlFormatDistance } from "date-fns";
+import { format, formatDistanceToNow, isAfter, subDays } from "date-fns";
 import Pagination from "./pagination";
 import { Link } from "@tanstack/react-router";
 
@@ -84,7 +84,9 @@ const MessageTable: React.FC<Props> = ({
                 </TableCell>
               )}
               <TableCell className="text-muted-foreground text-sm">
-                {intlFormatDistance(message.createdAt, new Date())}
+                {isAfter(message.createdAt, subDays(new Date(), 7))
+                  ? formatDistanceToNow(message.createdAt, { addSuffix: true })
+                  : format(message.createdAt, "MMM d, yyyy")}
               </TableCell>
               <TableCell className="text-end align-middle">
                 <Button
