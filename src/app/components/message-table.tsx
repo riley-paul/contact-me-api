@@ -64,10 +64,10 @@ const MessageTable: React.FC<Props> = ({
             >
               <TableCell className="font-medium">{message.name}</TableCell>
               <TableCell className="text-muted-foreground">
-                {message.email}
+                <div className="truncate min-w-0">{message.email}</div>
               </TableCell>
               <TableCell className="whitespace-normal">
-                <div className="line-clamp-2 max-w-sm text-sm leading-relaxed">
+                <div className="line-clamp-2 text-sm leading-relaxed">
                   {message.content}
                 </div>
               </TableCell>
