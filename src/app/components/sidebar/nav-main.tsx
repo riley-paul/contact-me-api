@@ -19,7 +19,7 @@ const NavMain: React.FC = () => {
         <SidebarMenuButton asChild isActive={isAllMessages}>
           <Link to="/messages">
             <MailIcon />
-            All messages
+            Messages
           </Link>
         </SidebarMenuButton>
       </SidebarMenuItem>
