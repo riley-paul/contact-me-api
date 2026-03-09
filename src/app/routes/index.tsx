@@ -2,12 +2,23 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { actions } from "astro:actions";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/app/components/ui/card";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemGroup,
+  ItemMedia,
+  ItemSeparator,
+  ItemTitle,
+} from "@/app/components/ui/item";
+
 import {
   BarChart3Icon,
   InboxIcon,
@@ -21,6 +32,8 @@ import {
 import { formatDistanceToNow, format, isAfter, subDays } from "date-fns";
 import { Badge } from "@/app/components/ui/badge";
 import { Button } from "@/app/components/ui/button";
+import { formatMessageDate } from "@/lib/utils";
+import React from "react";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -103,33 +116,27 @@ function RouteComponent() {
                 No projects yet. Create your first project to get started!
               </div>
             ) : (
-              <div className="space-y-4">
+              <ItemGroup className="gap-1">
                 {stats.projectStats.map((project, index) => (
-                  <div
-                    key={project.id}
-                    className="flex items-center justify-between"
-                  >
-                    <div className="flex min-w-0 flex-1 items-center gap-3">
-                      <div className="bg-primary/10 text-primary flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold">
-                        {index + 1}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <Link
-                          to="/projects/$projectId"
-                          params={{ projectId: project.id }}
-                          className="block truncate font-medium hover:underline"
-                        >
-                          {project.name}
-                        </Link>
-                      </div>
-                    </div>
-                    <Badge variant="secondary" className="ml-2 shrink-0">
-                      {project.messageCount}{" "}
-                      {project.messageCount === 1 ? "message" : "messages"}
-                    </Badge>
-                  </div>
+                  <Item key={project.id} asChild className="group">
+                    <Link
+                      to="/projects/$projectId"
+                      params={{ projectId: project.id }}
+                    >
+                      <ItemMedia variant="icon">
+                        <Badge className="size-6">{index + 1}</Badge>
+                      </ItemMedia>
+                      <ItemContent>
+                        <ItemTitle>{project.name}</ItemTitle>
+                      </ItemContent>
+                      <Badge variant="secondary">
+                        {project.messageCount}{" "}
+                        {project.messageCount === 1 ? "message" : "messages"}
+                      </Badge>
+                    </Link>
+                  </Item>
                 ))}
-              </div>
+              </ItemGroup>
             )}
           </CardContent>
         </Card>
@@ -152,58 +159,34 @@ function RouteComponent() {
                 messages!
               </div>
             ) : (
-              <div className="space-y-4">
-                {stats.recentMessages.map((message) => (
-                  <div
-                    key={message.id}
-                    className="group hover:bg-muted/50 rounded-lg border p-3 transition-colors"
-                  >
-                    <div className="mb-2 flex items-start justify-between gap-2">
-                      <div className="min-w-0 flex-1">
-                        <div className="mb-1 flex items-center gap-2">
-                          <p className="truncate text-sm font-medium">
-                            {message.name}
-                          </p>
-                          <Badge variant="invert" className="shrink-0">
-                            <Link
-                              to="/projects/$projectId"
-                              params={{ projectId: message.project.id }}
-                            >
-                              {message.project.name}
-                            </Link>
-                          </Badge>
-                        </div>
-                        <p className="text-muted-foreground truncate text-xs">
-                          {message.email}
-                        </p>
-                      </div>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="h-7 w-7 shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
-                        asChild
+              <ItemGroup className="gap-1">
+                {stats.recentMessages.map((message, idx) => (
+                  <React.Fragment>
+                    {idx > 0 && <ItemSeparator />}
+                    <Item key={message.id} asChild>
+                      <Link
+                        to="/messages/$messageId"
+                        params={{ messageId: message.id }}
                       >
-                        <Link
-                          to="/messages/$messageId"
-                          params={{ messageId: message.id }}
-                        >
-                          <ArrowRightIcon className="h-3.5 w-3.5" />
-                        </Link>
-                      </Button>
-                    </div>
-                    <p className="mb-2 line-clamp-2 text-sm">
-                      {message.content}
-                    </p>
-                    <p className="text-muted-foreground text-xs">
-                      {isAfter(message.createdAt, subDays(new Date(), 7))
-                        ? formatDistanceToNow(message.createdAt, {
-                            addSuffix: true,
-                          })
-                        : format(message.createdAt, "MMM d, yyyy 'at' h:mm a")}
-                    </p>
-                  </div>
+                        <ItemContent>
+                          <ItemTitle>{message.name}</ItemTitle>
+                          <ItemDescription>{message.content}</ItemDescription>
+                        </ItemContent>
+                        <ItemActions>
+                          <ArrowRightIcon className="size-4" />
+                        </ItemActions>
+
+                        <ItemFooter>
+                          <span className="text-muted-foreground text-xs">
+                            {formatMessageDate(message.createdAt)}
+                          </span>
+                          <Badge variant="invert">{message.project.name}</Badge>
+                        </ItemFooter>
+                      </Link>
+                    </Item>
+                  </React.Fragment>
                 ))}
-              </div>
+              </ItemGroup>
             )}
           </CardContent>
         </Card>
@@ -240,13 +223,6 @@ function RouteComponent() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Quick Actions */}
-      <div className="flex justify-center">
-        <Button asChild>
-          <Link to="/messages">View All Messages</Link>
-        </Button>
-      </div>
     </div>
   );
 }

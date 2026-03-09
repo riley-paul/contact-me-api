@@ -17,6 +17,7 @@ import {
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import SearchInput from "./search-input";
+import { formatMessageDate } from "@/lib/utils";
 
 type Props = {
   messages: MessageSelect[];
@@ -64,7 +65,7 @@ const MessageTable: React.FC<Props> = ({
             >
               <TableCell className="font-medium">{message.name}</TableCell>
               <TableCell className="text-muted-foreground">
-                <div className="truncate min-w-0">{message.email}</div>
+                <div className="min-w-0 truncate">{message.email}</div>
               </TableCell>
               <TableCell className="whitespace-normal">
                 <div className="line-clamp-2 text-sm leading-relaxed">
@@ -84,9 +85,7 @@ const MessageTable: React.FC<Props> = ({
                 </TableCell>
               )}
               <TableCell className="text-muted-foreground text-sm">
-                {isAfter(message.createdAt, subDays(new Date(), 7))
-                  ? formatDistanceToNow(message.createdAt, { addSuffix: true })
-                  : format(message.createdAt, "MMM d, yyyy")}
+                {formatMessageDate(message.createdAt)}
               </TableCell>
               <TableCell className="text-end align-middle">
                 <Button
