@@ -20,14 +20,8 @@ export type ProjectEmailInsert = z.infer<typeof zProjectEmailInsert>;
 
 export const zProjectSelect = createSelectSchema(Project).extend({
   messageCount: z.number(),
-  emails: z.array(zProjectEmailSelect),
 });
-export const zProjectInsert = z.object({
-  name: z.string().min(1).max(255),
-  emails: z.array(z.string().email()),
-  allowedOrigins: z.string().optional(),
-  allowedRedirects: z.string().optional(),
-});
+export const zProjectInsert = createInsertSchema(Project);
 export type ProjectSelect = z.infer<typeof zProjectSelect>;
 export type ProjectInsert = z.infer<typeof zProjectInsert>;
 
@@ -44,3 +38,16 @@ export type PaginationInfo = {
   numRows: number;
   numPages: number;
 };
+
+export const contactFormSchema = z.object({
+  name: z.string().min(1, "Name is required").max(100, "Name too long"),
+  email: z.string().email("Invalid email").max(100, "Email too long"),
+  message: z
+    .string()
+    .min(1, "Message is required")
+    .max(1000, "Message too long"),
+  access_key: z.string().uuid("Invalid access key"),
+  redirect_url: z.string().url("Invalid redirect URL").optional(),
+  honeypot: z.string().optional(),
+});
+export type ContactFormData = z.infer<typeof contactFormSchema>;

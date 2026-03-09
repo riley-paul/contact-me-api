@@ -45,8 +45,9 @@ export const Project = sqliteTable("project", {
   id,
   userId,
   name: text().notNull(),
-  allowedOrigins: text(), // Comma-separated list of allowed origins for CORS
-  allowedRedirects: text(), // Comma-separated list of allowed redirect domains
+  emails: text().notNull().default(""), // Comma-separated list of email addresses to receive messages
+  allowedOrigins: text().notNull().default(""), // Comma-separated list of allowed origins for CORS
+  allowedRedirects: text().notNull().default(""), // Comma-separated list of allowed redirect domains
   ...timeStamps,
 });
 

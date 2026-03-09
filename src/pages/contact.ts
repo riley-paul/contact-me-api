@@ -1,8 +1,7 @@
 import { createDb } from "@/db";
-import { Message, Project, ProjectEmail } from "@/db/schema";
+import { Message, Project } from "@/db/schema";
 import { createResend } from "@/lib/server/resend";
 import type { APIRoute } from "astro";
-import { z } from "astro/zod";
 import { eq } from "drizzle-orm";
 import {
   checkRateLimit,
@@ -13,19 +12,8 @@ import {
   checkHoneypot,
 } from "@/lib/server/contact/security";
 import { createContactLogger } from "@/lib/server/contact/logger";
-import escapeHtml from "escape-html";
-
-const formSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100, "Name too long"),
-  email: z.string().email("Invalid email").max(100, "Email too long"),
-  message: z
-    .string()
-    .min(1, "Message is required")
-    .max(1000, "Message too long"),
-  access_key: z.string().uuid("Invalid access key"),
-  redirect_url: z.string().url("Invalid redirect URL").optional(),
-  honeypot: z.string().optional(),
-});
+import { contactFormSchema } from "@/lib/types";
+import { getEmail, getProjectEmails } from "@/lib/server/contact/email";
 
 /**
  * Handle OPTIONS requests for CORS preflight
@@ -75,7 +63,9 @@ export const POST: APIRoute = async (ctx) => {
     }
 
     // Validate form data
-    const parsedData = formSchema.safeParse(Object.fromEntries(formData));
+    const parsedData = contactFormSchema.safeParse(
+      Object.fromEntries(formData),
+    );
 
     if (!parsedData.success) {
       logger.validationFailed(accessKey, parsedData.error.errors);
@@ -156,11 +146,7 @@ export const POST: APIRoute = async (ctx) => {
     logger.messageSaved(project.id, savedMessage.id);
 
     // Fetch project emails
-    const projectEmails = await db
-      .select()
-      .from(ProjectEmail)
-      .where(eq(ProjectEmail.projectId, project.id))
-      .then((rows) => rows.map((r) => r.email));
+    const projectEmails = getProjectEmails(project.emails);
 
     if (projectEmails.length === 0) {
       logger.warn("no_project_emails", {
@@ -169,60 +155,16 @@ export const POST: APIRoute = async (ctx) => {
       });
     }
 
-    // Escape HTML to prevent XSS in email clients
-    const escapedName = escapeHtml(name);
-    const escapedEmail = escapeHtml(email);
-    const escapedMessage = escapeHtml(message);
-    const escapedProjectName = escapeHtml(project.name);
-
     // Send email notification to project owners only
     // Security: Do NOT send to user-submitted email address
     if (projectEmails.length > 0) {
-      const emailResponse = await resend.emails.send({
-        from: "Contactulator <contactulator@notifications.rileys-projects.com>",
-        to: projectEmails,
-        replyTo: email, // Allow project owners to reply directly
-        subject: `New message from ${name} via Contactulator`,
-        html: `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>New Contact Message</title>
-</head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-  <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
-    <h1 style="color: white; margin: 0; font-size: 24px;">📬 New Contact Message</h1>
-  </div>
-
-  <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e0e0e0; border-top: none;">
-    <div style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #667eea;">
-      <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;"><strong>From:</strong></p>
-      <p style="margin: 0 0 20px 0; font-size: 16px;">${escapedName}</p>
-
-      <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;"><strong>Email:</strong></p>
-      <p style="margin: 0 0 20px 0;"><a href="mailto:${escapedEmail}" style="color: #667eea; text-decoration: none;">${escapedEmail}</a></p>
-
-      <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;"><strong>Message:</strong></p>
-      <div style="background: #f5f5f5; padding: 15px; border-radius: 6px; white-space: pre-wrap; word-wrap: break-word;">${escapedMessage}</div>
-    </div>
-
-    <div style="background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-      <p style="margin: 0; color: #666; font-size: 14px;"><strong>Project:</strong> ${escapedProjectName}</p>
-      <p style="margin: 10px 0 0 0; color: #999; font-size: 12px;">Message ID: ${savedMessage.id}</p>
-    </div>
-
-    <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;">
-
-    <p style="text-align: center; color: #999; font-size: 12px; margin: 0;">
-      This email was sent via <a href="https://contactulator.rileys-projects.com" style="color: #667eea; text-decoration: none;">Contactulator</a>
-    </p>
-  </div>
-</body>
-</html>
-        `,
-      });
+      const emailResponse = await resend.emails.send(
+        getEmail({
+          contactData: parsedData.data,
+          projectEmails,
+          projectName: project.name,
+        }),
+      );
 
       if (emailResponse.error) {
         logger.emailFailed(project.id, emailResponse.error.message);
