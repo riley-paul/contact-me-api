@@ -1,17 +1,15 @@
 ---
-import RadixProvider from "@/app/components/radix-provider";
 import RootLayout from "@/layouts/root-layout.astro";
 
 import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/app/components/ui/empty";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/app/components/ui/card";
+import { Button } from "@/app/components/ui/button";
 import { ArrowLeftIcon, CheckCircle2Icon } from "lucide-react";
-import { Button, Link, Text } from "@radix-ui/themes";
 ---
 
 <script>
@@ -21,31 +19,81 @@ import { Button, Link, Text } from "@radix-ui/themes";
   });
 </script>
 
+<style>
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+</style>
+
 <RootLayout>
-  <RadixProvider>
-    <Empty className="h-screen relative">
-      <EmptyHeader>
-        <EmptyMedia>
-          <CheckCircle2Icon className="size-8 text-green-10" />
-        </EmptyMedia>
-        <EmptyTitle>Message sent!</EmptyTitle>
-        <EmptyDescription>
-          Thank you! Your message has been successfully sent. We'll get back to
-          you shortly.
-        </EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
-        <Button id="back-button">
-          <ArrowLeftIcon className="size-4" />
-          Back
-        </Button>
-      </EmptyContent>
-      <Text size="1" color="gray" className="absolute bottom-8">
-        Create your own contact form at <Link
-          href="https://contactulator.rileys-projects.com"
-          >contactulator.rileys-projects.com</Link
+  <div
+    class="flex min-h-screen flex-col items-center justify-center p-4 bg-gradient-to-br from-background via-background to-muted/20"
+  >
+    <Card className="w-full max-w-md shadow-lg animate-fade-in-up">
+      <CardHeader className="text-center space-y-4">
+        <div
+          class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 animate-scale-in"
         >
-      </Text>
-    </Empty>
-  </RadixProvider>
+          <CheckCircle2Icon
+            className="h-8 w-8 text-green-600 dark:text-green-500"
+          />
+        </div>
+        <CardTitle className="text-2xl">Message Sent Successfully!</CardTitle>
+        <CardDescription>
+          Thank you for reaching out! Your message has been successfully
+          delivered. We'll get back to you as soon as possible.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex justify-center pt-2">
+        <Button
+          id="back-button"
+          variant="outline"
+          size="default"
+          className="gap-2"
+        >
+          <ArrowLeftIcon className="h-4 w-4" />
+          Go Back
+        </Button>
+      </CardContent>
+    </Card>
+
+    <span
+      class="mt-8 text-center text-xs text-muted-foreground animate-fade-in-up"
+      style={{ animationDelay: "0.2s", opacity: 0 }}
+    >
+      Create your own contact form at{" "}
+      <a
+        href="https://contactulator.rileys-projects.com"
+        class="underline underline-offset-2 hover:text-foreground transition-colors"
+      >
+        contactulator.rileys-projects.com
+      </a>
+    </span>
+  </div>
 </RootLayout>

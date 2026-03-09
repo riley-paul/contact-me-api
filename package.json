@@ -24,7 +24,6 @@
     "@fontsource-variable/geist": "^5.2.8",
     "@fontsource-variable/radio-canada": "^5.2.10",
     "@libsql/client": "^0.15.14",
-    "@radix-ui/themes": "^3.2.1",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.12",
     "@tanstack/react-form": "^1.23.8",

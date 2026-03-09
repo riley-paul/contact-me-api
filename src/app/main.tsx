@@ -2,8 +2,6 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
-import RadixProvider from "@/app/components/radix-provider";
-import CustomToaster from "@/app/components/custom-toaster";
 import { Spinner } from "./components/ui/spinner";
 
 const router = createRouter({
@@ -23,9 +21,4 @@ declare module "@tanstack/react-router" {
 }
 
 // Render the app
-export default () => (
-  <RadixProvider hasBackground={false}>
-    <RouterProvider router={router} />
-    <CustomToaster />
-  </RadixProvider>
-);
+export default () => <RouterProvider router={router} />;

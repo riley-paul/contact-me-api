@@ -2,7 +2,6 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { MailIcon, Trash2Icon } from "lucide-react";
 import { useSetAtom } from "jotai";
-import React from "react";
 import { actions } from "astro:actions";
 import { Button } from "@/app/components/ui/button";
 import {

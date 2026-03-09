@@ -1,17 +1,15 @@
 ---
-import RadixProvider from "@/app/components/radix-provider";
 import RootLayout from "@/layouts/root-layout.astro";
 
 import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/app/components/ui/empty";
-import { ArrowLeftIcon, InfoIcon } from "lucide-react";
-import { Button, Link, Text } from "@radix-ui/themes";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/app/components/ui/card";
+import { Button } from "@/app/components/ui/button";
+import { ArrowLeftIcon, XCircleIcon } from "lucide-react";
 
 const message = Astro.url.searchParams.get("message") || "Error Encountered";
 ---
@@ -23,31 +21,103 @@ const message = Astro.url.searchParams.get("message") || "Error Encountered";
   });
 </script>
 
+<style>
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+      transform: translateX(-4px);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+      transform: translateX(4px);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .animate-shake {
+    animation: shake 0.5s ease-in-out;
+  }
+</style>
+
 <RootLayout>
-  <RadixProvider>
-    <Empty className="h-screen relative">
-      <EmptyHeader>
-        <EmptyMedia>
-          <InfoIcon className="size-8 text-red-10" />
-        </EmptyMedia>
-        <EmptyTitle>{message}</EmptyTitle>
-        <EmptyDescription>
-          Oh no! There was an error sending your message. Please try again
-          later.
-        </EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
-        <Button id="back-button">
-          <ArrowLeftIcon className="size-4" />
-          Back
-        </Button>
-      </EmptyContent>
-      <Text size="1" color="gray" className="absolute bottom-8">
-        Create your own contact form at <Link
-          href="https://contactulator.rileys-projects.com"
-          >contactulator.rileys-projects.com</Link
+  <div
+    class="flex min-h-screen flex-col items-center justify-center p-4 bg-gradient-to-br from-background via-background to-muted/20"
+  >
+    <Card className="w-full max-w-md shadow-lg animate-fade-in-up">
+      <CardHeader className="text-center space-y-4">
+        <div
+          class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10 animate-scale-in animate-shake"
         >
-      </Text>
-    </Empty>
-  </RadixProvider>
+          <XCircleIcon className="h-8 w-8 text-red-600 dark:text-red-500" />
+        </div>
+        <CardTitle className="text-2xl">{message}</CardTitle>
+        <CardDescription>
+          We're sorry, but there was an error sending your message. Please try
+          again later or contact us through an alternative method.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex justify-center pt-2">
+        <Button
+          id="back-button"
+          variant="outline"
+          size="default"
+          className="gap-2"
+        >
+          <ArrowLeftIcon className="h-4 w-4" />
+          Go Back
+        </Button>
+      </CardContent>
+    </Card>
+
+    <span
+      class="mt-8 text-center text-xs text-muted-foreground animate-fade-in-up"
+      style={{ animationDelay: "0.2s", opacity: 0 }}
+    >
+      Create your own contact form at{" "}
+      <a
+        href="https://contactulator.rileys-projects.com"
+        class="underline underline-offset-2 hover:text-foreground transition-colors"
+      >
+        contactulator.rileys-projects.com
+      </a>
+    </span>
+  </div>
 </RootLayout>

@@ -2,7 +2,7 @@ import { Message, Project } from "@/db/schema";
 import { createDb } from "@/db";
 import { defineAction } from "astro:actions";
 import { ensureAuthorized } from "./helpers";
-import { count, eq, gte, sql } from "drizzle-orm";
+import { count, eq, sql } from "drizzle-orm";
 import { subDays, subHours } from "date-fns";
 
 export const getStats = defineAction({
