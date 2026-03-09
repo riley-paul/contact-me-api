@@ -73,7 +73,7 @@ const MessageTable: React.FC<Props> = ({
               </TableCell>
               {showProject && (
                 <TableCell>
-                  <Badge asChild>
+                  <Badge variant="invert" asChild>
                     <Link
                       to="/projects/$projectId"
                       params={{ projectId: message.projectId }}
