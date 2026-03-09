@@ -34,7 +34,7 @@ const TabLink: React.FC<TabLinkProps> = ({ label, link, icon: Icon }) => {
         <Link
           {...link}
           className={cn(
-            "text-muted-foreground flex h-8 items-center justify-center border-r-2 border-transparent",
+            "text-muted-foreground flex h-9 items-center justify-center border-r-2 border-transparent",
             isActive && "text-primary-foreground border-primary",
           )}
         >
@@ -78,7 +78,7 @@ function RouteComponent() {
 
   return (
     <div className="flex flex-1 overflow-hidden">
-      <aside className="flex w-11 flex-col gap-2 border-r py-2">
+      <aside className="flex w-12 flex-col gap-2 border-r py-2">
         {links.map((link) => (
           <TabLink key={link.label} {...link} />
         ))}

@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  LogOutIcon,
-  Sparkles,
-} from "lucide-react";
+import { ChevronsUpDown, LogOutIcon } from "lucide-react";
 
 import {
   Avatar,
@@ -18,7 +10,6 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,

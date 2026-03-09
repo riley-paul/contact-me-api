@@ -9,7 +9,6 @@ import { Link } from "@tanstack/react-router";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -59,11 +58,18 @@ const MessageTable: React.FC<Props> = ({
 
         <TableBody>
           {messages.map((message) => (
-            <TableRow key={message.id}>
-              <TableCell>{message.name}</TableCell>
-              <TableCell>{message.email}</TableCell>
-              <TableCell>
-                <span className="line-clamp-2 max-w-sm">{message.content}</span>
+            <TableRow
+              key={message.id}
+              className="group hover:bg-muted/50 transition-colors"
+            >
+              <TableCell className="font-medium">{message.name}</TableCell>
+              <TableCell className="text-muted-foreground">
+                {message.email}
+              </TableCell>
+              <TableCell className="whitespace-normal">
+                <div className="line-clamp-2 max-w-sm text-sm leading-relaxed">
+                  {message.content}
+                </div>
               </TableCell>
               {showProject && (
                 <TableCell>
@@ -77,11 +83,16 @@ const MessageTable: React.FC<Props> = ({
                   </Badge>
                 </TableCell>
               )}
-              <TableCell>
+              <TableCell className="text-muted-foreground text-sm">
                 {intlFormatDistance(message.createdAt, new Date())}
               </TableCell>
               <TableCell className="text-end align-middle">
-                <Button size="icon" variant="ghost" asChild>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="opacity-0 transition-opacity group-hover:opacity-100"
+                  asChild
+                >
                   <Link
                     to="/messages/$messageId"
                     params={{ messageId: message.id }}

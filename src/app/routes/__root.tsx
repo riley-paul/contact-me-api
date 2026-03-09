@@ -20,7 +20,7 @@ function RootComponent() {
     <SidebarProvider>
       <AppSidebar projects={projects} user={user} />
       <main className="flex h-screen flex-1 flex-col overflow-hidden">
-        <header className="flex h-12 items-center gap-4 border-b px-2">
+        <header className="flex h-12 items-center gap-5 border-b px-2">
           <SidebarTrigger />
           <ContextBreadcrumbs />
         </header>

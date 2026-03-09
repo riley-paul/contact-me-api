@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import SearchInput from "../components/search-input";
 import MessageTable from "../components/message-table";
 import { actions } from "astro:actions";
 import { z } from "astro/zod";
@@ -7,7 +6,6 @@ import { useDebounceCallback } from "usehooks-ts";
 import React from "react";
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
