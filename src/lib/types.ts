@@ -25,6 +25,8 @@ export const zProjectSelect = createSelectSchema(Project).extend({
 export const zProjectInsert = z.object({
   name: z.string().min(1).max(255),
   emails: z.array(z.string().email()),
+  allowedOrigins: z.string().optional(),
+  allowedRedirects: z.string().optional(),
 });
 export type ProjectSelect = z.infer<typeof zProjectSelect>;
 export type ProjectInsert = z.infer<typeof zProjectInsert>;
