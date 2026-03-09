@@ -21,7 +21,12 @@ export type ProjectEmailInsert = z.infer<typeof zProjectEmailInsert>;
 export const zProjectSelect = createSelectSchema(Project).extend({
   messageCount: z.number(),
 });
-export const zProjectInsert = createInsertSchema(Project);
+export const zProjectInsert = createInsertSchema(Project).pick({
+  name: true,
+  emails: true,
+  allowedOrigins: true,
+  allowedRedirects: true,
+});
 export type ProjectSelect = z.infer<typeof zProjectSelect>;
 export type ProjectInsert = z.infer<typeof zProjectInsert>;
 

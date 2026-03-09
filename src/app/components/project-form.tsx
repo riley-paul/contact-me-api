@@ -84,7 +84,7 @@ const ProjectForm: React.FC<Props> = ({ project, onSuccess }) => {
 
   const defaultValues: ProjectInsert = {
     name: project?.name || "",
-    emails: project?.emails.map((e) => e.email) || [],
+    emails: project?.emails || "",
   };
 
   const {
