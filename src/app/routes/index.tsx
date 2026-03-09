@@ -65,7 +65,7 @@ function RouteComponent() {
   return (
     <div className="flex flex-1 flex-col gap-6 overflow-auto p-6">
       {/* Stats Grid */}
-      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {/* Total Messages */}
         <StatCard
           title="Total Messages"
@@ -100,9 +100,9 @@ function RouteComponent() {
       </section>
 
       {/* Two Column Layout */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         {/* Top Projects by Messages */}
-        <Card>
+        <Card className="rounded-3xl px-2 py-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BarChart3Icon className="text-primary h-5 w-5" />
@@ -142,7 +142,7 @@ function RouteComponent() {
         </Card>
 
         {/* Recent Messages */}
-        <Card>
+        <Card className="rounded-3xl px-2 py-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <MailIcon className="text-primary h-5 w-5" />
@@ -172,15 +172,12 @@ function RouteComponent() {
                           <ItemTitle>{message.name}</ItemTitle>
                           <ItemDescription>{message.content}</ItemDescription>
                         </ItemContent>
-                        <ItemActions>
-                          <ArrowRightIcon className="size-4" />
-                        </ItemActions>
 
                         <ItemFooter>
+                          <Badge variant="invert">{message.project.name}</Badge>
                           <span className="text-muted-foreground text-xs">
                             {formatMessageDate(message.createdAt)}
                           </span>
-                          <Badge variant="invert">{message.project.name}</Badge>
                         </ItemFooter>
                       </Link>
                     </Item>
@@ -193,7 +190,7 @@ function RouteComponent() {
       </div>
 
       {/* Additional Stats */}
-      <Card className="shrink-0">
+      <Card className="shrink-0 rounded-3xl px-2 py-6">
         <CardHeader>
           <CardTitle>Message Activity</CardTitle>
           <CardDescription>
