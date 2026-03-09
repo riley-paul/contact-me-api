@@ -1,10 +1,17 @@
-import { Heading } from "@radix-ui/themes";
 import { createFileRoute } from "@tanstack/react-router";
-import SearchForm from "../components/search-form";
 import MessageTable from "../components/message-table";
 import { actions } from "astro:actions";
 import { z } from "astro/zod";
 import { useDebounceCallback } from "usehooks-ts";
+import React from "react";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/app/components/ui/empty";
+import { MailXIcon } from "lucide-react";
 
 export const Route = createFileRoute("/projects/$projectId/messages")({
   component: RouteComponent,
@@ -15,7 +22,7 @@ export const Route = createFileRoute("/projects/$projectId/messages")({
       search,
       page,
     });
-    return { messages };
+    return { messages, crumb: "Messages" };
   },
   validateSearch: z.object({
     search: z.string().optional(),
@@ -36,17 +43,31 @@ function RouteComponent() {
     navigate({ search: (old) => ({ ...old, page }) });
   };
 
+  if (messages.messages.length === 0) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <MailXIcon />
+          </EmptyMedia>
+          <EmptyTitle>No messages</EmptyTitle>
+          <EmptyDescription>
+            This project has yet to recieve any messages
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+    );
+  }
+
   return (
-    <section className="grid gap-4">
-      <header className="flex items-center justify-between">
-        <Heading>Messages</Heading>
-        <SearchForm search={search} setSearch={setSearch} />
-      </header>
+    <React.Fragment>
       <MessageTable
+        search={search}
+        setSearch={setSearch}
         messages={messages.messages}
         pagination={messages.pagination}
         setPage={setPage}
       />
-    </section>
+    </React.Fragment>
   );
 }

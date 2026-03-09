@@ -1,9 +1,6 @@
 import MessageTable from "@/app/components/message-table";
-import SearchForm from "@/app/components/search-form";
-import { Heading } from "@radix-ui/themes";
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "astro/zod";
-import React from "react";
 import { useDebounceCallback } from "usehooks-ts";
 import { actions } from "astro:actions";
 
@@ -19,7 +16,7 @@ export const Route = createFileRoute("/messages/")({
       search,
       page,
     });
-    return { messageResponse };
+    return { messageResponse, crumb: "All" };
   },
 });
 
@@ -39,17 +36,13 @@ function RouteComponent() {
   };
 
   return (
-    <React.Fragment>
-      <header className="flex items-center justify-between">
-        <Heading size="8">Messages</Heading>
-        <SearchForm search={search} setSearch={setSearch} />
-      </header>
-      <MessageTable
-        messages={messages}
-        pagination={pagination}
-        setPage={setPage}
-        showProject
-      />
-    </React.Fragment>
+    <MessageTable
+      search={search}
+      setSearch={setSearch}
+      messages={messages}
+      pagination={pagination}
+      setPage={setPage}
+      showProject
+    />
   );
 }

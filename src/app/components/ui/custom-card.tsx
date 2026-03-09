@@ -1,11 +1,19 @@
-import { Card, Heading, Text } from "@radix-ui/themes";
 import type { LucideIcon } from "lucide-react";
 import React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./card";
 
 type Props = React.PropsWithChildren<{
   title: string;
   subtitle: string;
   icon: LucideIcon;
+  footer?: React.ReactNode;
 }>;
 
 const CustomCard: React.FC<Props> = ({
@@ -13,21 +21,20 @@ const CustomCard: React.FC<Props> = ({
   subtitle,
   icon: Icon,
   children,
+  footer,
 }) => {
   return (
-    <Card size="3" className="grid gap-6">
-      <header>
-        <span className="flex items-center gap-2">
-          <Icon className="text-accent-11 size-5" />
-          <Heading as="h3" size="4">
-            {title}
-          </Heading>
-        </span>
-        <Text size="2" color="gray">
-          {subtitle}
-        </Text>
-      </header>
-      {children}
+    <Card className="shrink-0">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Icon className="text-primary size-5" />
+          <h4>{title}</h4>
+        </CardTitle>
+        <CardDescription>{subtitle}</CardDescription>
+      </CardHeader>
+
+      <CardContent>{children}</CardContent>
+      {footer && <CardFooter>{footer}</CardFooter>}
     </Card>
   );
 };

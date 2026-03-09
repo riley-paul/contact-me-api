@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MessagesIndexRouteImport } from './routes/messages.index'
 import { Route as ProjectsProjectIdRouteImport } from './routes/projects.$projectId'
@@ -18,15 +19,20 @@ import { Route as ProjectsProjectIdSetupRouteImport } from './routes/projects.$p
 import { Route as ProjectsProjectIdSettingsRouteImport } from './routes/projects.$projectId.settings'
 import { Route as ProjectsProjectIdMessagesRouteImport } from './routes/projects.$projectId.messages'
 
+const MessagesRoute = MessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MessagesIndexRoute = MessagesIndexRouteImport.update({
-  id: '/messages/',
-  path: '/messages/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => MessagesRoute,
 } as any)
 const ProjectsProjectIdRoute = ProjectsProjectIdRouteImport.update({
   id: '/projects/$projectId',
@@ -34,9 +40,9 @@ const ProjectsProjectIdRoute = ProjectsProjectIdRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const MessagesMessageIdRoute = MessagesMessageIdRouteImport.update({
-  id: '/messages/$messageId',
-  path: '/messages/$messageId',
-  getParentRoute: () => rootRouteImport,
+  id: '/$messageId',
+  path: '/$messageId',
+  getParentRoute: () => MessagesRoute,
 } as any)
 const ProjectsProjectIdIndexRoute = ProjectsProjectIdIndexRouteImport.update({
   id: '/',
@@ -63,9 +69,10 @@ const ProjectsProjectIdMessagesRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/messages': typeof MessagesRouteWithChildren
   '/messages/$messageId': typeof MessagesMessageIdRoute
   '/projects/$projectId': typeof ProjectsProjectIdRouteWithChildren
-  '/messages': typeof MessagesIndexRoute
+  '/messages/': typeof MessagesIndexRoute
   '/projects/$projectId/messages': typeof ProjectsProjectIdMessagesRoute
   '/projects/$projectId/settings': typeof ProjectsProjectIdSettingsRoute
   '/projects/$projectId/setup': typeof ProjectsProjectIdSetupRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/messages': typeof MessagesRouteWithChildren
   '/messages/$messageId': typeof MessagesMessageIdRoute
   '/projects/$projectId': typeof ProjectsProjectIdRouteWithChildren
   '/messages/': typeof MessagesIndexRoute
@@ -95,9 +103,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/messages'
     | '/messages/$messageId'
     | '/projects/$projectId'
-    | '/messages'
+    | '/messages/'
     | '/projects/$projectId/messages'
     | '/projects/$projectId/settings'
     | '/projects/$projectId/setup'
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/messages'
     | '/messages/$messageId'
     | '/projects/$projectId'
     | '/messages/'
@@ -125,13 +135,19 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  MessagesMessageIdRoute: typeof MessagesMessageIdRoute
+  MessagesRoute: typeof MessagesRouteWithChildren
   ProjectsProjectIdRoute: typeof ProjectsProjectIdRouteWithChildren
-  MessagesIndexRoute: typeof MessagesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/messages': {
+      id: '/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof MessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -141,10 +157,10 @@ declare module '@tanstack/react-router' {
     }
     '/messages/': {
       id: '/messages/'
-      path: '/messages'
-      fullPath: '/messages'
+      path: '/'
+      fullPath: '/messages/'
       preLoaderRoute: typeof MessagesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MessagesRoute
     }
     '/projects/$projectId': {
       id: '/projects/$projectId'
@@ -155,10 +171,10 @@ declare module '@tanstack/react-router' {
     }
     '/messages/$messageId': {
       id: '/messages/$messageId'
-      path: '/messages/$messageId'
+      path: '/$messageId'
       fullPath: '/messages/$messageId'
       preLoaderRoute: typeof MessagesMessageIdRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof MessagesRoute
     }
     '/projects/$projectId/': {
       id: '/projects/$projectId/'
@@ -191,6 +207,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface MessagesRouteChildren {
+  MessagesMessageIdRoute: typeof MessagesMessageIdRoute
+  MessagesIndexRoute: typeof MessagesIndexRoute
+}
+
+const MessagesRouteChildren: MessagesRouteChildren = {
+  MessagesMessageIdRoute: MessagesMessageIdRoute,
+  MessagesIndexRoute: MessagesIndexRoute,
+}
+
+const MessagesRouteWithChildren = MessagesRoute._addFileChildren(
+  MessagesRouteChildren,
+)
+
 interface ProjectsProjectIdRouteChildren {
   ProjectsProjectIdMessagesRoute: typeof ProjectsProjectIdMessagesRoute
   ProjectsProjectIdSettingsRoute: typeof ProjectsProjectIdSettingsRoute
@@ -210,9 +240,8 @@ const ProjectsProjectIdRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  MessagesMessageIdRoute: MessagesMessageIdRoute,
+  MessagesRoute: MessagesRouteWithChildren,
   ProjectsProjectIdRoute: ProjectsProjectIdRouteWithChildren,
-  MessagesIndexRoute: MessagesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

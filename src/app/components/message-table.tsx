@@ -1,52 +1,79 @@
 import type { MessageSelect, PaginationInfo } from "@/lib/types";
-import { Badge, IconButton, Table, Text } from "@radix-ui/themes";
 import { ArrowRightIcon } from "lucide-react";
 import React from "react";
 
-import { intlFormatDistance } from "date-fns";
-import PaginationFooter from "./pagination-footer";
+import { format, formatDistanceToNow, isAfter, subDays } from "date-fns";
+import Pagination from "./pagination";
 import { Link } from "@tanstack/react-router";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/app/components/ui/table";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import SearchInput from "./search-input";
 
 type Props = {
   messages: MessageSelect[];
-  pagination: PaginationInfo;
   showProject?: boolean;
+
+  search: string | undefined;
+  setSearch: (value: string | undefined) => void;
+
+  pagination: PaginationInfo;
   setPage: (page: number) => void;
 };
 
 const MessageTable: React.FC<Props> = ({
   messages,
-  pagination,
   showProject,
+  search,
+  setSearch,
+  pagination,
   setPage,
 }) => {
   return (
     <div className="grid gap-4">
-      <Table.Root variant="surface">
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeaderCell>Name</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Email</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Content</Table.ColumnHeaderCell>
-            {showProject && (
-              <Table.ColumnHeaderCell>Project</Table.ColumnHeaderCell>
-            )}
-            <Table.ColumnHeaderCell>Recieved</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
-          </Table.Row>
-        </Table.Header>
+      <header className="flex items-center justify-end gap-8">
+        <SearchInput search={search} setSearch={setSearch} />
+        <Pagination pagination={pagination} setPage={setPage} />
+      </header>
 
-        <Table.Body>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Content</TableHead>
+            {showProject && <TableHead>Project</TableHead>}
+            <TableHead>Recieved</TableHead>
+            <TableHead></TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
           {messages.map((message) => (
-            <Table.Row key={message.id}>
-              <Table.RowHeaderCell>{message.name}</Table.RowHeaderCell>
-              <Table.Cell>{message.email}</Table.Cell>
-              <Table.Cell>
-                <span className="line-clamp-2 max-w-sm">{message.content}</span>
-              </Table.Cell>
+            <TableRow
+              key={message.id}
+              className="group hover:bg-muted/50 transition-colors"
+            >
+              <TableCell className="font-medium">{message.name}</TableCell>
+              <TableCell className="text-muted-foreground">
+                {message.email}
+              </TableCell>
+              <TableCell className="whitespace-normal">
+                <div className="line-clamp-2 max-w-sm text-sm leading-relaxed">
+                  {message.content}
+                </div>
+              </TableCell>
               {showProject && (
-                <Table.Cell>
-                  <Badge variant="soft" asChild>
+                <TableCell>
+                  <Badge variant="invert" asChild>
                     <Link
                       to="/projects/$projectId"
                       params={{ projectId: message.projectId }}
@@ -54,28 +81,32 @@ const MessageTable: React.FC<Props> = ({
                       {message.project.name}
                     </Link>
                   </Badge>
-                </Table.Cell>
+                </TableCell>
               )}
-              <Table.Cell>
-                <Text truncate>
-                  {intlFormatDistance(message.createdAt, new Date())}
-                </Text>
-              </Table.Cell>
-              <Table.Cell className="text-end align-middle">
-                <IconButton radius="full" variant="ghost" asChild>
+              <TableCell className="text-muted-foreground text-sm">
+                {isAfter(message.createdAt, subDays(new Date(), 7))
+                  ? formatDistanceToNow(message.createdAt, { addSuffix: true })
+                  : format(message.createdAt, "MMM d, yyyy")}
+              </TableCell>
+              <TableCell className="text-end align-middle">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="opacity-0 transition-opacity group-hover:opacity-100"
+                  asChild
+                >
                   <Link
                     to="/messages/$messageId"
                     params={{ messageId: message.id }}
                   >
                     <ArrowRightIcon className="size-4" />
                   </Link>
-                </IconButton>
-              </Table.Cell>
-            </Table.Row>
+                </Button>
+              </TableCell>
+            </TableRow>
           ))}
-        </Table.Body>
-      </Table.Root>
-      <PaginationFooter pagination={pagination} setPage={setPage} />
+        </TableBody>
+      </Table>
     </div>
   );
 };
