@@ -5,7 +5,6 @@ import type { APIRoute } from "astro";
 import { z } from "astro/zod";
 import { eq } from "drizzle-orm";
 import {
-  escapeHtml,
   checkRateLimit,
   isDuplicateSubmission,
   validateRequestOrigin,
@@ -14,6 +13,7 @@ import {
   checkHoneypot,
 } from "@/lib/server/contact/security";
 import { createContactLogger } from "@/lib/server/contact/logger";
+import escapeHtml from "escape-html";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name too long"),
@@ -119,7 +119,12 @@ export const POST: APIRoute = async (ctx) => {
     }
 
     // Check for duplicate submissions
-    if (isDuplicateSubmission(project.id, email, message)) {
+    const duplicateSubmissionSuccess = await isDuplicateSubmission(ctx, {
+      projectId: project.id,
+      email,
+      message,
+    });
+    if (!duplicateSubmissionSuccess) {
       logger.duplicateSubmission(access_key, email);
       const params = new URLSearchParams();
       params.set("message", "Duplicate submission detected");

@@ -7,21 +7,6 @@ type Submission = {
 };
 
 /**
- * Escapes HTML characters to prevent XSS in email content
- */
-export function escapeHtml(text: string): string {
-  const htmlEscapeMap: Record<string, string> = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-    "/": "&#x2F;",
-  };
-  return text.replace(/[&<>"'/]/g, (char) => htmlEscapeMap[char] || char);
-}
-
-/**
  * Validates if an origin is allowed based on project configuration
  */
 export function isOriginAllowed(

@@ -1,43 +1,10 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import {
-  escapeHtml,
   isOriginAllowed,
   isRedirectAllowed,
   generateSubmissionHash,
-  isDuplicateSubmission,
   checkHoneypot,
 } from "./security";
-
-describe("escapeHtml", () => {
-  it("should escape HTML special characters", () => {
-    expect(escapeHtml("<script>alert('xss')</script>")).toBe(
-      "&lt;script&gt;alert(&#39;xss&#39;)&lt;&#x2F;script&gt;",
-    );
-  });
-
-  it("should escape ampersands", () => {
-    expect(escapeHtml("Tom & Jerry")).toBe("Tom &amp; Jerry");
-  });
-
-  it("should escape quotes", () => {
-    expect(escapeHtml('Say "hello"')).toBe("Say &quot;hello&quot;");
-    expect(escapeHtml("It's working")).toBe("It&#39;s working");
-  });
-
-  it("should handle empty strings", () => {
-    expect(escapeHtml("")).toBe("");
-  });
-
-  it("should handle strings without special characters", () => {
-    expect(escapeHtml("Hello World")).toBe("Hello World");
-  });
-
-  it("should escape all special characters in one string", () => {
-    const dangerous = `<div>&"'/</div>`;
-    const safe = escapeHtml(dangerous);
-    expect(safe).toBe("&lt;div&gt;&amp;&quot;&#39;&#x2F;&lt;&#x2F;div&gt;");
-  });
-});
 
 describe("isOriginAllowed", () => {
   it("should return false for null origin", () => {
