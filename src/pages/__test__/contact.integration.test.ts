@@ -2,6 +2,7 @@ import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
 import { createDb } from "@/db";
 import { Project, Message, User } from "@/db/schema";
 import type { Environment } from "@/envs";
+import { createTables } from "@/db/test-setup";
 
 /**
  * Integration Tests for Contact Endpoint
@@ -15,18 +16,7 @@ import type { Environment } from "@/envs";
 
 const BASE_URL = "http://localhost:4321";
 
-// Test environment config
-const testEnv = {
-  NODE_ENV: "test" as const,
-  DATABASE_URL: "file:test.db",
-  DATABASE_AUTH_TOKEN: "",
-  RESEND_API_KEY: "test_key",
-  GITHUB_CLIENT_ID: "test",
-  GITHUB_CLIENT_SECRET: "test",
-  GOOGLE_CLIENT_ID: "test",
-  GOOGLE_CLIENT_SECRET: "test",
-  SITE: "http://localhost:4321",
-};
+const testEnv = { NODE_ENV: "test" } as Environment;
 
 let testProjectId: string;
 let testUserId: string;
@@ -34,11 +24,7 @@ let testUserId: string;
 describe("Contact Endpoint Integration Tests", () => {
   beforeAll(async () => {
     const db = createDb(testEnv);
-
-    // Clean up existing data
-    await db.delete(Message);
-    await db.delete(Project);
-    await db.delete(User);
+    await createTables(db);
 
     // Create test user
     const [user] = await db

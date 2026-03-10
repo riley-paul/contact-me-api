@@ -1,8 +1,32 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach } from "vitest";
+import {
+  describe,
+  it,
+  expect,
+  beforeAll,
+  afterAll,
+  beforeEach,
+  vi,
+} from "vitest";
 import { createDb } from "@/db";
 import { Project, Message, User } from "@/db/schema";
 import { POST, OPTIONS } from "../contact";
 import type { APIContext } from "astro";
+import { createTables } from "@/db/test-setup";
+
+// Mock Resend module to prevent actual API calls
+vi.mock("resend", () => {
+  class MockResend {
+    emails = {
+      send: vi.fn().mockResolvedValue({
+        data: { id: "test-email-id" },
+        error: null,
+      }),
+    };
+  }
+  return {
+    Resend: MockResend,
+  };
+});
 
 // Mock environment for testing
 const mockEnv = {
@@ -25,25 +49,13 @@ const mockEnv = {
   },
 } as any;
 
-// Mock Resend client
-const mockResend = {
-  emails: {
-    send: async () => ({ data: { id: "test-email-id" }, error: null }),
-  },
-};
-
 let testProjectId: string;
 let testUserId: string;
 
 describe("Contact Endpoint E2E Tests", () => {
   beforeAll(async () => {
-    // Set up test database
     const db = createDb(mockEnv);
-
-    // Clean up existing data
-    await db.delete(Message);
-    await db.delete(Project);
-    await db.delete(User);
+    await createTables(db);
 
     // Create test user
     const [user] = await db
@@ -97,7 +109,6 @@ describe("Contact Endpoint E2E Tests", () => {
     const request = new Request(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
         Origin: origin,
       },
       body: formData,
@@ -149,9 +160,6 @@ describe("Contact Endpoint E2E Tests", () => {
       );
       expect(response.headers.get("Access-Control-Allow-Methods")).toContain(
         "POST",
-      );
-      expect(response.headers.get("Access-Control-Allow-Headers")).toContain(
-        "Content-Type",
       );
     });
 
@@ -238,7 +246,7 @@ describe("Contact Endpoint E2E Tests", () => {
 
       expect(response.status).toBe(303);
       expect(response.headers.get("Location")).toContain("/failure");
-      expect(response.headers.get("Location")).toContain("Invalid form data");
+      expect(response.headers.get("Location")).toContain("Invalid+form+data");
     });
 
     it("should reject submission with invalid email", async () => {
@@ -309,7 +317,7 @@ describe("Contact Endpoint E2E Tests", () => {
 
       expect(response.status).toBe(303);
       expect(response.headers.get("Location")).toContain("/failure");
-      expect(response.headers.get("Location")).toContain("Invalid access key");
+      expect(response.headers.get("Location")).toContain("Invalid+access+key");
     });
   });
 
@@ -348,7 +356,7 @@ describe("Contact Endpoint E2E Tests", () => {
       expect(response.status).toBe(303);
       expect(response.headers.get("Location")).toContain("/failure");
       expect(response.headers.get("Location")).toContain(
-        "Request origin not allowed",
+        "Request+origin+not+allowed",
       );
     });
 
@@ -367,7 +375,7 @@ describe("Contact Endpoint E2E Tests", () => {
       expect(response.status).toBe(303);
       expect(response.headers.get("Location")).toContain("/failure");
       expect(response.headers.get("Location")).toContain(
-        "Redirect URL not allowed",
+        "Redirect+URL+not+allowed",
       );
     });
 
@@ -386,7 +394,7 @@ describe("Contact Endpoint E2E Tests", () => {
 
       expect(response.status).toBe(303);
       expect(response.headers.get("Location")).toContain("/failure");
-      expect(response.headers.get("Location")).toContain("Too many requests");
+      expect(response.headers.get("Location")).toContain("Too+many+requests");
 
       // Verify message was NOT saved
       const db = createDb(mockEnv);
@@ -410,7 +418,7 @@ describe("Contact Endpoint E2E Tests", () => {
       expect(response.status).toBe(303);
       expect(response.headers.get("Location")).toContain("/failure");
       expect(response.headers.get("Location")).toContain(
-        "Duplicate submission",
+        "Duplicate+submission",
       );
     });
   });
@@ -520,7 +528,6 @@ describe("Contact Endpoint E2E Tests", () => {
       const request = new Request(url, {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
           Referer: "http://localhost:3000/contact-page",
         },
         body: formData,

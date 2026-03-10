@@ -31,6 +31,17 @@ export const OPTIONS: APIRoute = async ({ request }) => {
   });
 };
 
+const failureResponse = (message: string) => {
+  const params = new URLSearchParams();
+  params.set("message", message);
+  return new Response(null, {
+    status: 303,
+    headers: {
+      Location: `/failure?${params.toString()}`,
+    },
+  });
+};
+
 /**
  * Handle contact form submissions with comprehensive security measures
  */
@@ -57,9 +68,7 @@ export const POST: APIRoute = async (ctx) => {
     // Check honeypot (spam prevention)
     if (!checkHoneypot(formData)) {
       logger.honeypotTriggered(accessKey || "unknown");
-      const params = new URLSearchParams();
-      params.set("message", "Invalid submission");
-      return redirect(`/failure?${params.toString()}`);
+      return failureResponse("Invalid submission");
     }
 
     // Validate form data
@@ -69,9 +78,7 @@ export const POST: APIRoute = async (ctx) => {
 
     if (!parsedData.success) {
       logger.validationFailed(accessKey, parsedData.error.errors);
-      const params = new URLSearchParams();
-      params.set("message", "Invalid form data");
-      return redirect(`/failure?${params.toString()}`);
+      return failureResponse("Invalid form data");
     }
 
     const { name, email, message, access_key, redirect_url } = parsedData.data;
@@ -80,9 +87,7 @@ export const POST: APIRoute = async (ctx) => {
     const rateLimitSuccess = await checkRateLimit(ctx, access_key);
     if (!rateLimitSuccess) {
       logger.rateLimited(access_key);
-      const params = new URLSearchParams();
-      params.set("message", "Too many requests. Please try again later");
-      return redirect(`/failure?${params.toString()}`);
+      return failureResponse("Too many requests. Please try again later");
     }
 
     // Fetch project
@@ -93,9 +98,7 @@ export const POST: APIRoute = async (ctx) => {
 
     if (!projectResult) {
       logger.projectNotFound(access_key);
-      const params = new URLSearchParams();
-      params.set("message", "Invalid access key");
-      return redirect(`/failure?${params.toString()}`);
+      return failureResponse("Invalid access key");
     }
 
     project = projectResult;
@@ -103,9 +106,7 @@ export const POST: APIRoute = async (ctx) => {
     // Validate origin/referer
     if (!validateRequestOrigin(ctx, project)) {
       logger.originBlocked(access_key, origin);
-      const params = new URLSearchParams();
-      params.set("message", "Request origin not allowed");
-      return redirect(`/failure?${params.toString()}`);
+      return failureResponse("Request origin not allowed");
     }
 
     // Check for duplicate submissions
@@ -116,9 +117,7 @@ export const POST: APIRoute = async (ctx) => {
     });
     if (!duplicateSubmissionSuccess) {
       logger.duplicateSubmission(access_key, email);
-      const params = new URLSearchParams();
-      params.set("message", "Duplicate submission detected");
-      return redirect(`/failure?${params.toString()}`);
+      return failureResponse("Duplicate submission detected");
     }
 
     // Validate redirect URL if provided
@@ -127,9 +126,7 @@ export const POST: APIRoute = async (ctx) => {
       !isRedirectAllowed(redirect_url, project.allowedRedirects)
     ) {
       logger.redirectBlocked(access_key, redirect_url);
-      const params = new URLSearchParams();
-      params.set("message", "Redirect URL not allowed");
-      return redirect(`/failure?${params.toString()}`);
+      return failureResponse("Redirect URL not allowed");
     }
 
     // Start database transaction (save message)
@@ -168,9 +165,7 @@ export const POST: APIRoute = async (ctx) => {
 
       if (emailResponse.error) {
         logger.emailFailed(project.id, emailResponse.error.message);
-        const params = new URLSearchParams();
-        params.set("message", "Failed to send notification email");
-        return redirect(`/failure?${params.toString()}`);
+        return failureResponse("Failed to send notification email");
       }
 
       logger.emailSent(project.id, projectEmails.length);
@@ -212,9 +207,6 @@ export const POST: APIRoute = async (ctx) => {
       },
     );
 
-    // Don't expose internal errors to users
-    const params = new URLSearchParams();
-    params.set("message", "An unexpected error occurred");
-    return redirect(`/failure?${params.toString()}`);
+    return failureResponse("An unexpected error occurred");
   }
 };
