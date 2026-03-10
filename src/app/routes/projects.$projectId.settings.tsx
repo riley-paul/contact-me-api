@@ -48,18 +48,10 @@ function RouteComponent() {
         subtitle="Permanently delete this project and all its messages"
         icon={Trash2Icon}
       >
-        <div className="flex flex-col gap-4">
-          <p className="text-muted-foreground text-sm">
-            Once you delete a project, there is no going back. Please be
-            certain.
-          </p>
-          <div>
-            <Button variant="destructive" onClick={handleDelete}>
-              <Trash2Icon className="size-4" />
-              Delete Project
-            </Button>
-          </div>
-        </div>
+        <Button size="lg" variant="destructive" onClick={handleDelete}>
+          <Trash2Icon className="size-4" />
+          Delete Project
+        </Button>
       </CustomCard>
     </React.Fragment>
   );

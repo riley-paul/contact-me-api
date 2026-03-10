@@ -3,8 +3,8 @@ import {
   zProjectInsert,
   type ProjectSelect,
 } from "@/lib/types";
-import React, { useState } from "react";
-import { PlusIcon, SaveIcon, XIcon } from "lucide-react";
+import React from "react";
+import { SaveIcon } from "lucide-react";
 import { useForm } from "@tanstack/react-form";
 import { actions } from "astro:actions";
 import { useRouter } from "@tanstack/react-router";
@@ -13,70 +13,11 @@ import { z } from "astro/zod";
 import { Button } from "./ui/button";
 import { Field, FieldDescription, FieldLabel } from "./ui/field";
 import { Input } from "./ui/input";
-import { Badge } from "./ui/badge";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "./ui/input-group";
+import TagInput from "./tag-input";
 
 type Props = {
   project?: ProjectSelect;
   onSuccess?: (project: ProjectSelect) => void;
-};
-
-const EmailAdder: React.FC<{ handleAddEmail: (email: string) => void }> = ({
-  handleAddEmail,
-}) => {
-  const [value, setValue] = useState("");
-  const [isError, setIsError] = useState(false);
-
-  const handleSubmit = () => {
-    const { error } = z.string().email().safeParse(value);
-    setIsError(!!error);
-
-    if (!value || error) {
-      toast.error("Not a valid email");
-      return;
-    }
-    handleAddEmail(value);
-    setValue("");
-    setIsError(false);
-  };
-
-  return (
-    <InputGroup className="max-w-sm">
-      <InputGroupInput
-        name="email"
-        type="email"
-        placeholder="user@example.com"
-        value={value}
-        aria-invalid={isError}
-        onChange={(e) => {
-          setValue(e.target.value);
-          if (isError) setIsError(false);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            e.stopPropagation();
-            handleSubmit();
-          }
-        }}
-      />
-      <InputGroupAddon align="inline-end">
-        <InputGroupButton
-          onClick={handleSubmit}
-          size="icon-xs"
-          type="button"
-          className="hover:bg-primary hover:text-primary-foreground"
-        >
-          <PlusIcon className="size-3.5" />
-        </InputGroupButton>
-      </InputGroupAddon>
-    </InputGroup>
-  );
 };
 
 const ProjectForm: React.FC<Props> = ({ project, onSuccess }) => {
@@ -85,6 +26,8 @@ const ProjectForm: React.FC<Props> = ({ project, onSuccess }) => {
   const defaultValues: ProjectInsert = {
     name: project?.name || "",
     emails: project?.emails || "",
+    allowedOrigins: project?.allowedOrigins || "",
+    allowedRedirects: project?.allowedRedirects || "",
   };
 
   const {
@@ -125,6 +68,9 @@ const ProjectForm: React.FC<Props> = ({ project, onSuccess }) => {
     >
       <Field>
         <FieldLabel htmlFor="name">Project name</FieldLabel>
+        <FieldDescription>
+          Give your project a descriptive name to easily identify it.
+        </FieldDescription>
         <FormField name="name">
           {({ state, handleBlur, handleChange }) => (
             <React.Fragment>
@@ -143,54 +89,110 @@ const ProjectForm: React.FC<Props> = ({ project, onSuccess }) => {
             </React.Fragment>
           )}
         </FormField>
-        <FieldDescription>
-          Give your project a descriptive name to easily identify it.
-        </FieldDescription>
       </Field>
 
       <Field>
         <FieldLabel>Additional Recipient Email Addresses</FieldLabel>
+        <FieldDescription>
+          Add additional emails for receiving form submission notifications.
+          Note that the owner of the project (you) will always receive an email
+          notification.
+        </FieldDescription>
         <FormField name="emails">
-          {({ state, pushValue, removeValue }) => (
+          {({ state, handleChange }) => (
             <React.Fragment>
-              <div className="space-y-3">
-                {state.value.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {state.value.map((e, idx) => (
-                      <Badge
-                        key={e}
-                        variant="secondary"
-                        className="h-7 gap-1.5 pr-1.5 pl-2.5 text-xs"
-                      >
-                        {e}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          type="button"
-                          onClick={() => removeValue(idx)}
-                          className="hover:bg-destructive/20 hover:text-destructive size-5 rounded-full p-0"
-                        >
-                          <XIcon className="size-3" />
-                        </Button>
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-                <EmailAdder handleAddEmail={pushValue} />
-              </div>
+              <TagInput
+                value={(state.value || "").split(",").filter((e) => e.trim())}
+                onChange={(values) => handleChange(values.join(","))}
+                placeholder="user@example.com"
+                inputType="email"
+                validate={(email) => {
+                  const result = z.string().email().safeParse(email);
+                  return {
+                    isValid: result.success,
+                    errorMessage: result.success
+                      ? undefined
+                      : "Invalid email address",
+                  };
+                }}
+              />
               {state.meta.errors.length > 0 && (
-                <p className="text-destructive mt-2 text-sm">
+                <p className="text-destructive text-sm">
                   {state.meta.errors[0]?.message}
                 </p>
               )}
             </React.Fragment>
           )}
         </FormField>
+      </Field>
+
+      <Field>
+        <FieldLabel>Allowed Origins</FieldLabel>
         <FieldDescription>
-          Add additional emails for recieving form submission notifications.
-          Note that the owner of the project (you) will always receive an email
-          notification.
+          Specify which domains are allowed to submit forms to this project.
+          Leave empty to allow all origins.
         </FieldDescription>
+        <FormField name="allowedOrigins">
+          {({ state, handleChange }) => (
+            <React.Fragment>
+              <TagInput
+                value={(state.value || "").split(",").filter((e) => e.trim())}
+                onChange={(values) => handleChange(values.join(","))}
+                placeholder="https://example.com"
+                inputType="url"
+                validate={(origin) => {
+                  try {
+                    new URL(origin);
+                    return { isValid: true };
+                  } catch {
+                    return {
+                      isValid: false,
+                      errorMessage: "Invalid URL format",
+                    };
+                  }
+                }}
+              />
+              {state.meta.errors.length > 0 && (
+                <p className="text-destructive text-sm">
+                  {state.meta.errors[0]?.message}
+                </p>
+              )}
+            </React.Fragment>
+          )}
+        </FormField>
+      </Field>
+
+      <Field>
+        <FieldLabel>Allowed Redirect Domains</FieldLabel>
+        <FieldDescription>
+          Specify which domains are allowed for redirect URLs after form
+          submission. Leave empty to allow all domains.
+        </FieldDescription>
+        <FormField name="allowedRedirects">
+          {({ state, handleChange }) => (
+            <React.Fragment>
+              <TagInput
+                value={(state.value || "").split(",").filter((e) => e.trim())}
+                onChange={(values) => handleChange(values.join(","))}
+                placeholder="example.com"
+                validate={(domain) => {
+                  // Basic domain validation
+                  const domainRegex = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i;
+                  const isValid = domainRegex.test(domain);
+                  return {
+                    isValid,
+                    errorMessage: isValid ? undefined : "Invalid domain format",
+                  };
+                }}
+              />
+              {state.meta.errors.length > 0 && (
+                <p className="text-destructive text-sm">
+                  {state.meta.errors[0]?.message}
+                </p>
+              )}
+            </React.Fragment>
+          )}
+        </FormField>
       </Field>
 
       <footer className="flex justify-end">
@@ -198,7 +200,7 @@ const ProjectForm: React.FC<Props> = ({ project, onSuccess }) => {
           selector={({ canSubmit, isDirty }) => ({ canSubmit, isDirty })}
         >
           {({ canSubmit, isDirty }) => (
-            <Button disabled={!canSubmit || !isDirty}>
+            <Button size="lg" disabled={!canSubmit || !isDirty}>
               <SaveIcon className="size-4" />
               {project ? "Update" : "Create"} Project
             </Button>
