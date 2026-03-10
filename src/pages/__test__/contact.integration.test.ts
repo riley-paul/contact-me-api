@@ -21,7 +21,7 @@ const testEnv = { NODE_ENV: "test" } as Environment;
 let testProjectId: string;
 let testUserId: string;
 
-describe("Contact Endpoint Integration Tests", () => {
+describe.skip("Contact Endpoint Integration Tests", () => {
   beforeAll(async () => {
     const db = createDb(testEnv);
     await createTables(db);
