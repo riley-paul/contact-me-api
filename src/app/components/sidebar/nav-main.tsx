@@ -14,7 +14,7 @@ const NavMain: React.FC = () => {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <SidebarMenuButton variant="outline" onClick={() => setOpen(true)}>
+        <SidebarMenuButton variant="default" onClick={() => setOpen(true)}>
           <PlusIcon />
           New Project
         </SidebarMenuButton>
