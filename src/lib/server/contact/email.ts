@@ -10,7 +10,7 @@ type GetEmailArgs = {
 };
 
 export const getProjectEmails = (emails: string): string[] => {
-  const { data = [] } = z.array(z.string().email()).safeParse(
+  const { data = [] } = z.array(z.email()).safeParse(
     emails
       .split(",")
       .map((o) => o.trim())

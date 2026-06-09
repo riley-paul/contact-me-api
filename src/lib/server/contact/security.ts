@@ -107,7 +107,7 @@ export async function checkRateLimit(
     context.clientAddress ||
     "unknown";
 
-  const rateLimiter = context.locals.runtime.env.RATE_LIMITER;
+  const rateLimiter = context.locals.env.RATE_LIMITER;
   const key = `contact:${accessKey}:${clientIp}`;
   const { success } = await rateLimiter.limit({ key });
   return success;
@@ -141,7 +141,7 @@ export async function isDuplicateSubmission(
 ): Promise<boolean> {
   const hash = generateSubmissionHash(submission);
 
-  const rateLimiter = context.locals.runtime.env.DUPLICATE_LIMITER;
+  const rateLimiter = context.locals.env.DUPLICATE_LIMITER;
   const { success } = await rateLimiter.limit({ key: `duplicate:${hash}` });
   return success;
 }
@@ -154,7 +154,7 @@ export function validateRequestOrigin(
   project: { allowedOrigins: string | null },
 ): boolean {
   // For development, allow requests without origin
-  if (context.locals.runtime.env.NODE_ENV === "development") {
+  if (context.locals.env.NODE_ENV === "development") {
     return true;
   }
 

@@ -7,6 +7,6 @@ declare namespace App {
   interface Locals extends Runtime {
     session: import("./lib/types").UserSessionInfo | null;
     user: import("./lib/types").UserSelect | null;
-    env: Env;
+    env: import("./envs").Environment;
   }
 }

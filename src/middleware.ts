@@ -5,7 +5,7 @@ import {
   setSessionTokenCookie,
   validateSessionToken,
 } from "./lib/server/lucia";
-import { parseEnv } from "./envs";
+import { parseEnv, type Environment } from "./envs";
 
 const injectEnv = defineMiddleware(async (context, next) => {
   const isTesting = import.meta.env.NODE_ENV === "test";
@@ -16,7 +16,7 @@ const injectEnv = defineMiddleware(async (context, next) => {
   }
 
   const { env } = await import("cloudflare:workers");
-  context.locals.env = env;
+  context.locals.env = env as Environment;
   return next();
 });
 

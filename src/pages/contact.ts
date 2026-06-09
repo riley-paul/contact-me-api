@@ -46,10 +46,10 @@ const failureResponse = (message: string) => {
  * Handle contact form submissions with comprehensive security measures
  */
 export const POST: APIRoute = async (ctx) => {
-  const { request, locals, redirect } = ctx;
+  const { request, locals } = ctx;
   const logger = createContactLogger(ctx);
-  const db = createDb(locals.runtime.env);
-  const resend = createResend(locals.runtime.env);
+  const db = createDb(locals.env);
+  const resend = createResend(locals.env);
   const origin = request.headers.get("origin");
 
   let accessKey: string | undefined;
@@ -77,7 +77,7 @@ export const POST: APIRoute = async (ctx) => {
     );
 
     if (!parsedData.success) {
-      logger.validationFailed(accessKey, parsedData.error.errors);
+      logger.validationFailed(accessKey, parsedData.error.issues);
       return failureResponse("Invalid form data");
     }
 

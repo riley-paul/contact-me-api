@@ -17,7 +17,7 @@ const getMessageCount = async (db: Db, projectId: string) => {
 export const getAll = defineAction({
   input: z.object({ search: z.string().optional() }),
   handler: async ({ search }, c): Promise<ProjectSelect[]> => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
 
     const searchTerm = `%${search}%`;
@@ -44,7 +44,7 @@ export const getAll = defineAction({
 export const getOne = defineAction({
   input: z.object({ projectId: z.string() }),
   handler: async ({ projectId }, c): Promise<ProjectSelect> => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
 
     const [project] = await db
@@ -65,7 +65,7 @@ export const getOne = defineAction({
 export const create = defineAction({
   input: z.object({ data: zProjectInsert }),
   handler: async ({ data }, c): Promise<ProjectSelect> => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
 
     const [project] = await db
@@ -81,7 +81,7 @@ export const create = defineAction({
 export const update = defineAction({
   input: z.object({ projectId: z.string(), data: zProjectInsert }),
   handler: async ({ projectId, data }, c): Promise<ProjectSelect> => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
 
     const [project] = await db
@@ -103,7 +103,7 @@ export const update = defineAction({
 export const remove = defineAction({
   input: z.object({ projectId: z.string() }),
   handler: async ({ projectId }, c) => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
 
     const { rowsAffected } = await db

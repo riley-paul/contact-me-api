@@ -7,7 +7,7 @@ import { subDays, subHours } from "date-fns";
 
 export const getStats = defineAction({
   handler: async (_, c) => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
 
     // Get total messages count

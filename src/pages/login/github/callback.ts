@@ -12,7 +12,7 @@ import {
 } from "@/lib/server/lucia";
 
 export async function GET(context: APIContext): Promise<Response> {
-  const db = createDb(context.locals.runtime.env);
+  const db = createDb(context.locals.env);
   const github = createGithub(context);
 
   const code = context.url.searchParams.get("code");

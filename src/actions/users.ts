@@ -7,7 +7,7 @@ import { ensureAuthorized } from "./helpers";
 
 export const getOne = defineAction<UserSelect>({
   handler: async (_, c) => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
     const [user] = await db.select().from(User).where(eq(User.id, userId));
     if (!user)
@@ -18,7 +18,7 @@ export const getOne = defineAction<UserSelect>({
 
 export const remove = defineAction<true>({
   handler: async (_, c) => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
     const { rowsAffected } = await db.delete(User).where(eq(User.id, userId));
     const didSomething = rowsAffected > 0;

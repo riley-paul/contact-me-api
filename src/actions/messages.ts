@@ -29,7 +29,7 @@ export const getAll = defineAction({
     { search, projectId, page = 1 },
     c,
   ): Promise<{ messages: MessageSelect[]; pagination: PaginationInfo }> => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
 
     const searchTerm = `%${search}%`;
@@ -87,7 +87,7 @@ export const getAll = defineAction({
 export const getOne = defineAction({
   input: z.object({ messageId: z.string() }),
   handler: async ({ messageId }, c): Promise<MessageSelect> => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
 
     const [message] = await db
@@ -121,7 +121,7 @@ export const getOne = defineAction({
 export const create = defineAction({
   input: z.object({ data: zMessageInsert }),
   handler: async ({ data }, c) => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
 
     const [project] = await db
@@ -150,7 +150,7 @@ export const create = defineAction({
 export const remove = defineAction({
   input: z.object({ messageId: z.string() }),
   handler: async ({ messageId }, c) => {
-    const db = createDb(c.locals.runtime.env);
+    const db = createDb(c.locals.env);
     const userId = ensureAuthorized(c).id;
 
     const [message] = await db

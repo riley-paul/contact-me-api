@@ -41,14 +41,14 @@ export type PaginationInfo = {
 
 export const contactFormSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100, "Name too long"),
-  email: z.string().trim().email("Invalid email").max(100, "Email too long"),
+  email: z.email("Invalid email").trim().max(100, "Email too long"),
   message: z
     .string()
     .trim()
     .min(1, "Message is required")
     .max(1000, "Message too long"),
-  access_key: z.string().trim().uuid("Invalid access key"),
-  redirect_url: z.string().trim().url("Invalid redirect URL").optional(),
+  access_key: z.uuid("Invalid access key").trim(),
+  redirect_url: z.url("Invalid redirect URL").trim().optional(),
   honeypot: z.string().optional(),
 });
 export type ContactFormData = z.infer<typeof contactFormSchema>;

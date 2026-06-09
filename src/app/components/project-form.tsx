@@ -107,7 +107,7 @@ const ProjectForm: React.FC<Props> = ({ project, onSuccess }) => {
                 placeholder="user@example.com"
                 inputType="email"
                 validate={(email) => {
-                  const result = z.string().email().safeParse(email);
+                  const result = z.email().safeParse(email);
                   return {
                     isValid: result.success,
                     errorMessage: result.success

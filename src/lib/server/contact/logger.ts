@@ -11,7 +11,7 @@ import type { APIContext } from "astro";
  * - Type-safe event logging
  */
 export function createContactLogger(context: APIContext) {
-  const isDevelopment = context.locals.runtime.env.NODE_ENV === "development";
+  const isDevelopment = context.locals.env.NODE_ENV === "development";
 
   // Get client information from request
   const clientIp =
@@ -41,7 +41,7 @@ export function createContactLogger(context: APIContext) {
     // Base fields included in all logs
     base: {
       service: "contact-form",
-      environment: context.locals.runtime.env.NODE_ENV,
+      environment: context.locals.env.NODE_ENV,
     },
   });
 

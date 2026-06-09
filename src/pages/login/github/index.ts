@@ -4,7 +4,7 @@ import type { APIContext } from "astro";
 import { createGithub } from "@/lib/server/oauth";
 
 export async function GET(context: APIContext): Promise<Response> {
-  const secure = context.locals.runtime.env.NODE_ENV === "production";
+  const secure = context.locals.env.NODE_ENV === "production";
   const github = createGithub(context);
 
   const state = generateState();

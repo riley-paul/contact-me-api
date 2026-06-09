@@ -8,7 +8,6 @@ import { tanstackRouter } from "@tanstack/router-plugin/vite";
 // https://astro.build/config
 export default defineConfig({
   adapter: cloudflare({
-    platformProxy: { enabled: true },
     imageService: "cloudflare",
   }),
   security: { checkOrigin: false },
