@@ -9,7 +9,11 @@ const router = createRouter({
   routeTree,
   defaultPreload: "intent",
   defaultPreloadStaleTime: 0,
-  defaultPendingComponent: Spinner,
+  defaultPendingComponent: () => (
+    <div className="flex h-full w-full items-center justify-center">
+      <Spinner />
+    </div>
+  ),
 
   // defaultErrorComponent: ({ error }) => <ErrorPage error={error} goHome />,
 });
