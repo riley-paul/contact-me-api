@@ -5,6 +5,20 @@ import {
   setSessionTokenCookie,
   validateSessionToken,
 } from "./lib/server/lucia";
+import { parseEnv } from "./envs";
+
+const injectEnv = defineMiddleware(async (context, next) => {
+  const isTesting = import.meta.env.NODE_ENV === "test";
+
+  if (isTesting) {
+    context.locals.env = parseEnv(import.meta.env);
+    return next();
+  }
+
+  const { env } = await import("cloudflare:workers");
+  context.locals.env = env;
+  return next();
+});
 
 const userValidation = defineMiddleware(async (context, next) => {
   const token = context.cookies.get(SESSION_COOKIE_NAME)?.value ?? null;
@@ -34,4 +48,4 @@ const routeGuarding = defineMiddleware(async (context, next) => {
   return next();
 });
 
-export const onRequest = sequence(userValidation, routeGuarding);
+export const onRequest = sequence(injectEnv, userValidation, routeGuarding);
